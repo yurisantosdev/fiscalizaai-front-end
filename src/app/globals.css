@@ -1,0 +1,31 @@
+@import 'tailwindcss';
+@plugin "daisyui" {
+  themes: light --default, dark --prefersdark, cupcake;
+}
+
+@theme {
+  --color-gray-1000: #232323;
+  --color-gray-1100: #100f0f;
+  --color-gray-1200: #1e1e1e;
+  --color-gray-1300: #3a3a3a;
+  --color-gray-1400: #e8edf0;
+  --color-gray-1500: #f2f5f7;
+}
+
+@theme {
+  --color-blue-1000: #0c4ca3;
+  --color-blue-1100: #c8e1fe;
+}
+
+@theme {
+  --color-orange-1000: #f8840e;
+}
+
+main {
+  background-color: #f2f5f7;
+  height: 100vh;
+}
+
+html {
+  background-color: #f2f5f7;
+}
