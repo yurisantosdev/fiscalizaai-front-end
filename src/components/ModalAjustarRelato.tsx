@@ -232,7 +232,6 @@ export default function ModalAjustarRelato() {
 
           <div className="mt-4">
             <InputFotos
-              error={errors.fotos}
               textError={errors.fotos && <TextRequired />}
               onChange={(novasFotos: any) => {
                 setValue(
