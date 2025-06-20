@@ -115,7 +115,7 @@ export default function HomePage() {
     }
   }, [user.uscodigo])
 
-  const relatosFiltrados = meusRelatos.filter(relato =>
+  const relatosFiltrados = meusRelatos.filter((relato) =>
     filtroStatus === 'TODOS' ? true : relato.destatus === filtroStatus
   )
 
@@ -156,7 +156,7 @@ export default function HomePage() {
         )}
 
         <div className="mt-6">
-          <h2 className="text-gray-600 text-lg font-semibold text-center mb-3">
+          <h2 className="text-gray-600 md:text-lg text-md font-semibold text-center mb-3">
             Situações na sua área e contribuições suas
           </h2>
 
@@ -173,8 +173,7 @@ export default function HomePage() {
             <Mapa
               className="w-full h-full"
               locAtual={false}
-              position={position}
-            >
+              position={position}>
               <MarkerMapa
                 tipoIcone="Casa"
                 childrenPop={

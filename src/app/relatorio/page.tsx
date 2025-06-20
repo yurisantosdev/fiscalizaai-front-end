@@ -115,15 +115,6 @@ export default function Relatorio() {
     }
   }
 
-  const getTotalPorStatus = (status: string) => {
-    return problemas.filter((problema) => problema.destatus === status).length
-  }
-
-  const getTotalPorCategoria = (categoria: string) => {
-    return problemas.filter((problema) => problema.decategoria === categoria)
-      .length
-  }
-
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'TODOS':

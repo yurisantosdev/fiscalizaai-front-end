@@ -15,4 +15,5 @@ export interface CardRelatoInterface extends ComponentProps<'div'> {
   mostrarFotos?: boolean;
   onClickProximaEtapaRelato?: () => void;
   onClickConcluirRelato?: () => void;
+  botoesProximaEtapaConcluir?: boolean;
 }

@@ -64,7 +64,9 @@ export default function CadastroCategoria() {
       )
 
       reset()
+      window.dispatchEvent(new Event('categoriasAtualizar'))
       router.push('/categorias')
+      router.refresh()
       dispatch(setLoading(false))
     }
   }

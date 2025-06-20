@@ -98,17 +98,18 @@ export default function Relatos() {
         <div className="space-y-6">
           {/* Filtros */}
           <div className="bg-white rounded-lg p-4 shadow-sm">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="flex items-center gap-2 text-gray-700">
+            <div className="md:flex md:items-center md:gap-4 mb-4">
+              <div className="flex items-center justify-center md:mb-0 mb-2 gap-2 text-gray-700">
                 <FunnelSimple size={20} />
                 <span className="font-medium">Filtrar por status:</span>
               </div>
-              <div className="flex flex-wrap gap-2">
+
+              <div className="md:flex md:flex-wrap gap-2 grid grid-cols-3">
                 {statusOptions.map((status) => (
                   <button
                     key={status.value}
                     onClick={() => setFiltroStatus(status.value)}
-                    className={`px-4 py-2 rounded-lg text-sm cursor-pointer font-medium transition-colors ${
+                    className={`px-4 py-2 rounded-lg text-sm cursor-pointer font-medium transition-colors break-words ${
                       filtroStatus === status.value
                         ? getStatusColor(status.value)
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -129,6 +130,7 @@ export default function Relatos() {
                     key={index}
                     mostrarFotos={false}
                     problema={relato}
+                    botoesProximaEtapaConcluir
                     onClickProximaEtapaRelato={() => {
                       CLickLabel('modalProximaEtapaRelato')
                       setProblemaSelecionado(relato)

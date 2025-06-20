@@ -23,8 +23,7 @@ export default function AbaPerfil() {
         <label
           htmlFor="abaLateralPerfil"
           aria-label="close sidebar"
-          className="drawer-overlay"
-        ></label>
+          className="drawer-overlay"></label>
         <div className="bg-gradient-to-b from-gray-1200 to-gray-1100 p-3 h-screen rounded-r-md md:w-[50%] w-[80%] pt-4">
           <div className="relative">
             <h1 className="text-white text-lg font-bold text-center">
@@ -33,8 +32,7 @@ export default function AbaPerfil() {
 
             <label
               className="absolute -top-2 right-1 cursor-pointer hover:bg-white/80 p-1 rounded-full text-white hover:text-black transition-all duration-300"
-              htmlFor="abaLateralPerfil"
-            >
+              htmlFor="abaLateralPerfil">
               <X size={20} />
             </label>
           </div>
@@ -74,16 +72,16 @@ export default function AbaPerfil() {
                   </div>
                   <div>
                     <label className="text-gray-400 text-sm">Endereço</label>
-                    <div className="flex justify-start items-center gap-2">
-                      <span className="text-white font-medium">
+                    <div className="flex flex-wrap justify-start items-center gap-2 break-words max-w-[180px]">
+                      <span className="text-white font-medium break-words">
                         {user.endereco.edbairro},
                       </span>
 
-                      <span className="text-white font-medium">
+                      <span className="text-white font-medium break-words">
                         {user.endereco.municipio.mcmunicipio} -
                       </span>
 
-                      <span className="text-white font-medium">
+                      <span className="text-white font-medium break-words">
                         {user.endereco.estado.essigla}
                       </span>
                     </div>

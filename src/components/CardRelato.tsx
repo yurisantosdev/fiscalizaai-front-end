@@ -34,6 +34,7 @@ export default function CardRelato({
   mostrarFotos = true,
   onClickProximaEtapaRelato,
   onClickConcluirRelato,
+  botoesProximaEtapaConcluir = false,
   ordem,
   ...props
 }: CardRelatoInterface) {
@@ -277,32 +278,33 @@ export default function CardRelato({
             </div>
           )}
 
-          {problema.destatus == 'PENDENTE' && user.usmaster && (
-            <div className="mt-10 flex justify-center items-center gap-2">
-              <Button
-                title="Próxima etapa"
-                className="bg-blue-1000 hover:bg-blue-1000/80 active:bg-blue-1000 text-white px-4 py-2 rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg flex items-center gap-2 w-full"
-                iconLeft={<Check size={20} />}
-                onClick={onClickProximaEtapaRelato}
-              />
-              <Button
-                title="Concluir"
-                className="bg-green-800 hover:bg-green-800/80 active:bg-green-800 text-white px-4 py-2 rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg flex items-center gap-2 w-full"
-                iconLeft={<Check size={20} />}
-                onClick={onClickConcluirRelato}
-              />
-            </div>
-          )}
+          {botoesProximaEtapaConcluir && (
+            <span>
+              {problema.destatus == 'PENDENTE' && user.usmaster && (
+                <div className="mt-10 flex justify-center items-center gap-2">
+                  <Button
+                    title="Próxima etapa"
+                    className="bg-blue-1000 hover:bg-blue-1000/80 active:bg-blue-1000 text-white px-4 py-2 rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg flex items-center gap-2 w-full truncate"
+                    onClick={onClickProximaEtapaRelato}
+                  />
+                  <Button
+                    title="Concluir"
+                    className="bg-green-800 hover:bg-green-800/80 active:bg-green-800 text-white px-4 py-2 rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg flex items-center gap-2 w-full"
+                    onClick={onClickConcluirRelato}
+                  />
+                </div>
+              )}
 
-          {problema.destatus == 'EM_ANDAMENTO' && user.usmaster && (
-            <div className="mt-10 flex justify-center items-center gap-2">
-              <Button
-                title="Concluir"
-                className="bg-green-800 hover:bg-green-800/80 active:bg-green-800 text-white px-4 py-2 rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg flex items-center gap-2 w-full"
-                iconLeft={<Check size={20} />}
-                onClick={onClickConcluirRelato}
-              />
-            </div>
+              {problema.destatus == 'EM_ANDAMENTO' && user.usmaster && (
+                <div className="mt-10 flex justify-center items-center gap-2">
+                  <Button
+                    title="Concluir"
+                    className="bg-green-800 hover:bg-green-800/80 active:bg-green-800 text-white px-4 py-2 rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg flex items-center gap-2 w-full"
+                    onClick={onClickConcluirRelato}
+                  />
+                </div>
+              )}
+            </span>
           )}
         </div>
       </div>

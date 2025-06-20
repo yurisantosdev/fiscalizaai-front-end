@@ -76,15 +76,15 @@ export default function Home() {
       loading={loading}
       styleBase={false}
       menu={false}
-      adicionarItens={false}
-    >
+      adicionarItens={false}>
       <main className="flex justify-center items-end lg:items-center">
         <Image
           src={logomarca}
           alt={''}
           className="absolute top-1 md:w-52 md:h-52 w-60 h-60 z-10"
         />
-        <div className="bg-gray-1000 md:py-4 md:mt-16 md:p-0 p-3 rounded-md w-[90%] lg:w-[34%] md:mb-0 mb-24  z-20">
+
+        <div className="bg-gray-1000 md:py-4 md:mt-16 md:p-0 p-3 rounded-md w-[90%] lg:w-[34%] md:mb-0 mb-14 z-20">
           <div className="md:mb-4 mb-3">
             <h1 className="md:text-[21px] text-lg text-white font-bold text-center select-none">
               Acessar
@@ -102,7 +102,7 @@ export default function Home() {
               {...register('email', { required: true })}
               textError={errors.email && <TextRequired />}
               error={errors.email}
-              onKeyDown={e => {
+              onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   handleSubmit(onLogin)()
                 }
@@ -131,7 +131,7 @@ export default function Home() {
               {...register('senha', { required: true })}
               textError={errors.senha && <TextRequired />}
               error={errors.senha}
-              onKeyDown={e => {
+              onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   handleSubmit(onLogin)()
                 }
@@ -142,8 +142,7 @@ export default function Home() {
               className="text-sm text-gray-1400 hover:underline cursor-pointer w-max select-none"
               onClick={() => {
                 router.push('/esqueciSenha')
-              }}
-            >
+              }}>
               Esqueci senha
             </p>
           </div>
