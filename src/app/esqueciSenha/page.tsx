@@ -27,7 +27,6 @@ export default function EsqueciSenha() {
   })
 
   const dispatch = useDispatch()
-  const loading = useSelector((state: any) => state.loadingReducer.loading)
 
   useEffect(() => {
     dispatch(setLoading(false))
@@ -39,7 +38,7 @@ export default function EsqueciSenha() {
 
     if (response != undefined) {
       toast.success('Email de recuperação enviado com sucesso!')
-      router.push('/')
+      router.push('/redefinirSenha')
     } else {
       dispatch(setLoading(false))
     }
@@ -51,8 +50,7 @@ export default function EsqueciSenha() {
       buttonVoltar
       styleBase={false}
       menu={false}
-      adicionarItens={false}
-    >
+      adicionarItens={false}>
       <div className="space-y-6">
         <p className="text-gray-600 text-center mb-6">
           Digite seu email cadastrado para receber as instruções de recuperação
@@ -71,7 +69,7 @@ export default function EsqueciSenha() {
           {...register('email', {
             required: true,
             validate: {
-              validEmail: value => validateEmail(value) || 'Email inválido'
+              validEmail: (value) => validateEmail(value) || 'Email inválido'
             }
           })}
           textError={

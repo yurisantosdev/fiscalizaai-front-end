@@ -44,8 +44,10 @@ export default function CadastroCategoria() {
       setValue('cacategoria', categoriaSelecionada.cacategoria)
       setValue('cadescricao', categoriaSelecionada.cadescricao)
       setValue('cacodigo', categoriaSelecionada.cacodigo)
+      dispatch(setLoading(false))
     } else {
       dispatch(resetCategoria())
+      dispatch(setLoading(false))
     }
   }, [categoriaSelecionada])
 

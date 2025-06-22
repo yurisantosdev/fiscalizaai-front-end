@@ -13,5 +13,6 @@ export interface BaseLayoutInterface {
   menu?: boolean
   adicionarItens?: boolean,
   extraComponentLeft?: ReactNode,
-  extraComponentRigth?: ReactNode
+  extraComponentRigth?: ReactNode,
+  description?: string,
 }

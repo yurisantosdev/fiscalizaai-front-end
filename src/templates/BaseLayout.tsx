@@ -18,7 +18,8 @@ export default function BaseLayout({
   menu = true,
   adicionarItens = true,
   extraComponentLeft,
-  extraComponentRigth
+  extraComponentRigth,
+  description
 }: BaseLayoutInterface) {
   const router = useRouter()
   const loading = useSelector((state: any) => state.loadingReducer.loading)
@@ -54,9 +55,13 @@ export default function BaseLayout({
               </div>
 
               <div className="w-[70%] flex justify-center items-center">
-                <h1 className="text-2xl font-bold text-gray-700 text-center">
-                  {title}
-                </h1>
+                <div>
+                  <h1 className="text-2xl font-bold text-gray-700 text-center">
+                    {title}
+                  </h1>
+
+                  <p className="text-gray-400 text-center">{description}</p>
+                </div>
               </div>
 
               <div className="w-[20%] flex justify-end items-center">

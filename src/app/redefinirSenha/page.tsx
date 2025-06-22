@@ -61,11 +61,11 @@ export default function RedefinirSenha() {
   return (
     <BaseLayout
       title="Redefinir Senha"
+      description="Enviamos um código de verificação para o e-mail cadastrado. Insira o código abaixo para continuar com a redefinição da sua senha."
       buttonVoltar
       styleBase={false}
       menu={false}
-      adicionarItens={false}
-    >
+      adicionarItens={false}>
       <div className="space-y-6">
         <InputComponent
           id="codigo"
@@ -168,7 +168,7 @@ export default function RedefinirSenha() {
           }}
           {...register('confirmarSenha', {
             required: true,
-            validate: value =>
+            validate: (value) =>
               value === watch('novaSenha') || 'As senhas não coincidem'
           })}
           textError={
