@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import Image from 'next/image'
-import iconeSemFundo from '../../../public/icones/iconeSemFundo.png'
+import iconeSemFundo from '../../../public/logoCentral.png'
 import { logoutUser } from '@/redux/user/actions'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -213,7 +213,7 @@ export default function BarraMenu() {
           onClick={() => {
             router.push('/home')
           }}>
-          <Image src={iconeSemFundo} alt={''} className="w-[60px] h-[60px]" />
+          <Image src={iconeSemFundo} alt={''} />
         </div>
 
         <div className="navbar-end">
