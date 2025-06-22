@@ -14,11 +14,14 @@ L.Icon.Default.mergeOptions({
   shadowSize: [41, 41]
 })
 
-const Marker = dynamic(() => import('react-leaflet').then(mod => mod.Marker), {
-  ssr: false
-})
+const Marker = dynamic(
+  () => import('react-leaflet').then((mod) => mod.Marker),
+  {
+    ssr: false
+  }
+)
 
-const Popup = dynamic(() => import('react-leaflet').then(mod => mod.Popup), {
+const Popup = dynamic(() => import('react-leaflet').then((mod) => mod.Popup), {
   ssr: false
 })
 
@@ -33,27 +36,27 @@ export default function MarkerMapa({
   function defineIconeMapa(tipo: any) {
     let icone = '/icones/iconeSemFundo.png'
 
-    switch (tipo) {
-      case 'Infraestrutura e Mobilidade Urbana':
-        icone = '/icones/iconeBuraco.png'
-        break
+    // switch (tipo) {
+    //   case 'Infraestrutura e Mobilidade Urbana':
+    //     icone = '/icones/iconeBuraco.png'
+    //     break
 
-      case 'Iluminação':
-        icone = '/icones/iconeLuz.png'
-        break
+    //   case 'Iluminação':
+    //     icone = '/icones/iconeLuz.png'
+    //     break
 
-      case 'Limpeza Urbana e Coleta de Lixo':
-        icone = '/icones/iconeLixo.png'
-        break
+    //   case 'Limpeza Urbana e Coleta de Lixo':
+    //     icone = '/icones/iconeLixo.png'
+    //     break
 
-      case 'Casa':
-        icone = '/icones/casa.png'
-        break
+    //   case 'Casa':
+    //     icone = '/icones/casa.png'
+    //     break
 
-      default:
-        icone = '/icones/iconeSemFundo.png'
-        break
-    }
+    //   default:
+    //     icone = '/icones/iconeSemFundo.png'
+    //     break
+    // }
 
     return icone
   }
@@ -73,8 +76,7 @@ export default function MarkerMapa({
       eventHandlers={{
         dragend: dragedFunction,
         click: () => setShowPopup(true)
-      }}
-    >
+      }}>
       {childrenPop && showPopup && (
         <Popup className="w-[300px]" position={position}>
           {childrenPop}
