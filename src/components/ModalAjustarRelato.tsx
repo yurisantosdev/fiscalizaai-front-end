@@ -19,12 +19,18 @@ import {
 import { FormData } from '@/Interfaces/ModalAjudarRelatoInterface'
 import { ajustarProblema } from '@/store/Problemas'
 import { CLickLabel } from '@/services/clickLabel'
+import { ProblemaLocalizacaoType } from '@/types/ProblemasType'
 
-export default function ModalAjustarRelato() {
+interface ModalAjusteRelatoProps {
+  problema: ProblemaLocalizacaoType
+}
+
+export default function ModalAjustarRelato({
+  problema
+}: ModalAjusteRelatoProps) {
   const dispatch = useDispatch()
   const [position, setPosition] = useState<[number, number]>([0, 0])
   const [localizacaoAtual, setLocalizacaoAtual] = useState<string>('---')
-  const problema = useSelector((state: any) => state.relatoSelecionadoReducer)
 
   const {
     handleSubmit,
@@ -44,10 +50,15 @@ export default function ModalAjustarRelato() {
   })
 
   useEffect(() => {
-    if (!problema) return
-
     const consultarDados = async () => {
       dispatch(setLoading(true))
+
+      setValue(
+        'fotos',
+        problema?.FotosProblemas?.map((foto: any) => ({
+          fdfoto: foto.fdfoto
+        })) || []
+      )
 
       if (
         problema.localizacao?.edlatitude &&
@@ -56,6 +67,7 @@ export default function ModalAjustarRelato() {
         const lat = parseFloat(problema.localizacao.edlatitude)
         const lng = parseFloat(problema.localizacao.edlongitude)
         setPosition([lat, lng])
+
         atualizarLocalizacao(lat, lng)
       }
 

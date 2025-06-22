@@ -4,7 +4,6 @@ import { Toaster } from 'react-hot-toast'
 import { BaseAppInterface } from '@/Interfaces/BaseAppInterface'
 import BarraMenu from './BarraMenu/BarraMenu'
 import AdicionarItens from './AdicionarItens'
-import ModalAjustarRelato from './ModalAjustarRelato'
 
 export default function BaseApp({
   children,
@@ -20,15 +19,12 @@ export default function BaseApp({
         className={`${
           styleBase &&
           'md:w-[80%] w-full md:m-auto bg-gray-1400 rounded-md p-2 '
-        }`}
-      >
+        }`}>
         {adicionarItens && <AdicionarItens />}
         {menu && <BarraMenu />}
         {extraComponentTitle && extraComponentTitle}
 
         {children}
-
-        <ModalAjustarRelato />
       </div>
 
       <Toaster

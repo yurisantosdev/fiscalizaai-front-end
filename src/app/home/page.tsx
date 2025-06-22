@@ -23,6 +23,7 @@ import CardRelato from '@/components/CardRelato'
 import { CLickLabel } from '@/services/clickLabel'
 import { selecionarRelato } from '@/redux/relatoSelecionado/actions'
 import ModalConfirmacaoCancelarProblema from '@/components/ModalConfirmacaoCancelarProblema'
+import ModalAjustarRelato from '@/components/ModalAjustarRelato'
 
 export default function HomePage() {
   AuthUser()
@@ -41,44 +42,6 @@ export default function HomePage() {
   const [filtroStatus, setFiltroStatus] = useState<string>('CORRIGIR')
   const [problemaSelecionadoCancelar, setProblemaSelecionadoCancelar] =
     useState<ProblemaLocalizacaoType>()
-
-  useEffect(() => {
-    if (user.uscodigo) {
-      dispatch(setLoading(true))
-
-      const consultaDados = async () => {
-        const responseProblemasLocalizacao =
-          await getProblemasLocalizacaoUsuario({
-            uscodigo: user.uscodigo
-          })
-
-        if (responseProblemasLocalizacao != undefined) {
-          setProblemas(responseProblemasLocalizacao.problemas)
-        }
-
-        const obj: ConsultaProblemasLocalizacaoUsuarioType = {
-          uscodigo: user.uscodigo
-        }
-
-        const responseMeusRelatos = await getMeusRelatos(obj)
-
-        if (responseMeusRelatos != undefined) {
-          setMeusRelatos(responseMeusRelatos.problemas)
-        }
-
-        dispatch(setLoading(false))
-      }
-
-      setPosition([
-        user.endereco.municipio.mclatitude,
-        user.endereco.municipio.mclongitude
-      ])
-
-      consultaDados()
-    } else {
-      dispatch(setLoading(false))
-    }
-  }, [user])
 
   useEffect(() => {
     const handleRelatoAtualizado = async () => {
@@ -107,6 +70,8 @@ export default function HomePage() {
         dispatch(setLoading(false))
       }
     }
+
+    handleRelatoAtualizado()
 
     window.addEventListener('relatoAtualizado', handleRelatoAtualizado)
 
@@ -140,6 +105,7 @@ export default function HomePage() {
                         problema={relato}
                         onClickAjustarRelato={() => {
                           dispatch(selecionarRelato(relato))
+                          setProblemaSelecionadoCancelar(relato)
                           CLickLabel('modalAjusteRelato')
                         }}
                         onClickCancelarRelato={() => {
@@ -244,6 +210,10 @@ export default function HomePage() {
         <ModalConfirmacaoCancelarProblema
           decodigo={problemaSelecionadoCancelar.decodigo}
         />
+      )}
+
+      {problemaSelecionadoCancelar && (
+        <ModalAjustarRelato problema={problemaSelecionadoCancelar} />
       )}
     </span>
   )

@@ -16,6 +16,7 @@ import { selecionarRelato } from '@/redux/relatoSelecionado/actions'
 import { CLickLabel } from '@/services/clickLabel'
 import ModalConfirmacaoCancelarProblema from '@/components/ModalConfirmacaoCancelarProblema'
 import { FunnelSimple } from '@phosphor-icons/react'
+import ModalAjustarRelato from '@/components/ModalAjustarRelato'
 
 export default function MeusRelatos() {
   AuthUser()
@@ -143,6 +144,7 @@ export default function MeusRelatos() {
                       problema={relato}
                       onClickAjustarRelato={() => {
                         dispatch(selecionarRelato(relato))
+                        setProblemaSelecionadoCancelar(relato)
                         CLickLabel('modalAjusteRelato')
                       }}
                       onClickCancelarRelato={() => {
@@ -164,6 +166,10 @@ export default function MeusRelatos() {
         <ModalConfirmacaoCancelarProblema
           decodigo={problemaSelecionadoCancelar.decodigo}
         />
+      )}
+
+      {problemaSelecionadoCancelar && (
+        <ModalAjustarRelato problema={problemaSelecionadoCancelar} />
       )}
     </div>
   )

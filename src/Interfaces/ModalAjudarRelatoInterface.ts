@@ -1,7 +1,7 @@
 export interface FormData {
   edpontoreferencia: string
   dedescricao: string
-  fotos: Array<string>
+  fotos: Array<any>
   edbairro?: string
   edrua?: string
   edmunicipio?: string
