@@ -27,11 +27,6 @@ export function AuthUser() {
           router.push('/home')
         }
       }
-
-      if (pathname == '/') {
-        router.push('/home')
-      }
-
     } else {
       router.push('/')
     }
