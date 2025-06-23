@@ -413,25 +413,22 @@ export default function Relatorio() {
         {problemas.length > 0 ? (
           <>
             <div className="bg-white rounded-lg p-6 shadow-sm">
-              <div className="flex flex-col md:flex-row md:items-center gap-4 mb-4">
-                <div className="flex items-center gap-2 text-gray-700">
-                  <FunnelSimple size={24} />
-                  <h3 className="text-lg font-semibold">Filtrar por Status</h3>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  {statusOptions.map((status) => (
-                    <button
-                      key={status.value}
-                      onClick={() => setFiltroStatus(status.value)}
-                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 transform hover:scale-105 cursor-pointer ${
-                        filtroStatus === status.value
-                          ? status.color + ' shadow-md'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }`}>
-                      {status.label}
-                    </button>
-                  ))}
-                </div>
+              <div className="flex flex-wrap gap-2 mb-4 items-center justify-center">
+                {statusOptions.map((status, idx) => (
+                  <button
+                    key={status.value}
+                    onClick={() => setFiltroStatus(status.value)}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 hover:shadow-md border cursor-pointer border-gray-200 ${
+                      status.color
+                    } ${
+                      filtroStatus === status.value
+                        ? 'ring-2 ring-blue-700 ring-offset-2'
+                        : ''
+                    }`}>
+                    {getStatusIcon(status.value)}
+                    {status.label}
+                  </button>
+                ))}
               </div>
             </div>
 

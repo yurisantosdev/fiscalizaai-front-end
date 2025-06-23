@@ -213,7 +213,7 @@ export default function BarraMenu() {
           onClick={() => {
             router.push('/home')
           }}>
-          <Image src={iconeSemFundo} alt={''} />
+          <Image src={iconeSemFundo} className="w-[120px]" alt={''} />
         </div>
 
         <div className="navbar-end">
