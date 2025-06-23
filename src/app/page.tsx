@@ -13,8 +13,6 @@ import { loginUser, logoutUser } from '@/redux/user/actions'
 import { useRouter } from 'next/navigation'
 import { AuthUser } from '@/services/auth'
 import { setLoading } from '@/redux/loading/actions'
-import Image from 'next/image'
-import logomarca from '../../public/logo.png'
 
 export default function Home() {
   const {

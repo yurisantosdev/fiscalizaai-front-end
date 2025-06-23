@@ -73,7 +73,7 @@ export default function RedefinirSenha() {
               id="codigo"
               type="text"
               placeholder="Digite o código de 6 dígitos"
-              className="w-full bg-gray-50 text-gray-900 transition-all duration-300 focus:ring-2 focus:ring-orange-1000/50"
+              className="w-full bg-gray-50 text-gray-900 transition-all duration-300 focus:ring-2 focus:ring-orange-1000/50 mb-5"
               icon={<Key size={22} className="text-gray-500" />}
               textLabel="Código de Recuperação"
               styleLabel="text-gray-700 font-medium"
@@ -116,7 +116,7 @@ export default function RedefinirSenha() {
               id="novaSenha"
               type={typeNovaSenha}
               placeholder="Digite sua nova senha"
-              className="w-full bg-gray-50 text-gray-900 transition-all duration-300 focus:ring-2 focus:ring-orange-1000/50"
+              className="w-full bg-gray-50 text-gray-900 transition-all duration-300 focus:ring-2 focus:ring-orange-1000/50 mb-5"
               icon={<Lock size={22} className="text-gray-500" />}
               textLabel="Nova Senha"
               styleLabel="text-gray-700 font-medium"
@@ -163,7 +163,7 @@ export default function RedefinirSenha() {
               id="confirmarSenha"
               type={typeConfirmarSenha}
               placeholder="Confirme sua nova senha"
-              className="w-full bg-gray-50 text-gray-900 transition-all duration-300 focus:ring-2 focus:ring-orange-1000/50"
+              className="w-full bg-gray-50 text-gray-900 transition-all duration-300 focus:ring-2 focus:ring-orange-1000/50 mb-5"
               icon={<Lock size={22} className="text-gray-500" />}
               textLabel="Confirmar Senha"
               styleLabel="text-gray-700 font-medium"

@@ -68,7 +68,7 @@ export default function EsqueciSenha() {
               id="email"
               type="email"
               placeholder="Informe seu email"
-              className="w-full bg-gray-50 text-gray-900 transition-all duration-300 focus:ring-2 focus:ring-orange-1000/50"
+              className="w-full bg-gray-50 text-gray-900 transition-all duration-300 focus:ring-2 focus:ring-orange-1000/50 mb-5"
               icon={<Envelope size={22} className="text-gray-500" />}
               textLabel="Email"
               styleLabel="text-gray-700 font-medium"

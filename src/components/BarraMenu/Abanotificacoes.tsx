@@ -5,13 +5,13 @@ import {
   NotificacoesSimplesConsultaType,
   NotificacoesType
 } from '@/types/NotificacoesType'
-import CardNotificacao from '../CardNotificacao'
 import { X, Bell, CheckCircle } from '@phosphor-icons/react'
 import { FormatarData } from '@/services/formatters'
 import { letTodasNotificacoes } from '@/store/Notificacoes'
 import toast from 'react-hot-toast'
 import { CLickLabel } from '@/services/clickLabel'
 import { atualizarNotificacoes } from '@/services/atualizarNotificacoes'
+import { useRouter } from 'next/navigation'
 
 export default function AbaNotificacoes() {
   const user: UsuarioConsultaType = useSelector(
@@ -20,6 +20,7 @@ export default function AbaNotificacoes() {
   const notificacoes: NotificacoesSimplesConsultaType = useSelector(
     (state: any) => state.notificacoesReducer
   )
+  const router = useRouter()
 
   async function onLerNotificacoes() {
     if (user.uscodigo) {
@@ -77,7 +78,12 @@ export default function AbaNotificacoes() {
                 (notificacao: NotificacoesType, index: number) => (
                   <div
                     key={index}
-                    className={`mb-4 rounded-xl shadow-sm p-4 flex items-start gap-3 transition-all duration-200 bg-white dark:bg-gray-1200 border border-gray-100 dark:border-gray-900 ${
+                    onClick={() => {
+                      if (notificacao.ntlink != null) {
+                        router.push(notificacao.ntlink)
+                      }
+                    }}
+                    className={`cursor-pointer mb-4 rounded-xl shadow-sm p-4 flex items-start gap-3 transition-all duration-200 bg-white dark:bg-gray-1200 border border-gray-100 dark:border-gray-900 ${
                       !notificacao.ntlida ? 'ring-2 ring-blue-500/30' : ''
                     }`}>
                     <div className="pt-1">
