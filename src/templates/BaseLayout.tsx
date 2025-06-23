@@ -32,7 +32,7 @@ export default function BaseLayout({
       adicionarItens={adicionarItens}>
       <div className="min-h-screen bg-gradient-to-b from-gray-200 to-gray-300 p-2">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-gray-300">
+          <div className="bg-white/80 backdrop-blur-sm p-3 rounded-xl shadow-lg border border-gray-300">
             {/* Cabeçalho */}
             {buttonVoltar && (
               <div className="flex items-center justify-between mb-6">
@@ -70,7 +70,7 @@ export default function BaseLayout({
             </div>
 
             {/* Conteúdo */}
-            <div className="space-y-6">{children}</div>
+            <div>{children}</div>
           </div>
         </div>
       </div>

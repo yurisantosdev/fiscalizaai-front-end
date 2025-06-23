@@ -5,23 +5,23 @@ import DadosUsuario from './_components/DadosUsuario'
 import { useDispatch, useSelector } from 'react-redux'
 import { setLoading } from '@/redux/loading/actions'
 import Mapa from '@/components/Mapa/Mapa'
-import {
-  getMeusRelatos,
-  getProblemasLocalizacaoUsuario
-} from '@/store/Problemas'
+import { getProblemasLocalizacaoUsuario } from '@/store/Problemas'
 import { UsuarioConsultaType } from '@/types/UsuariosType'
 import MarkerMapa from '@/components/Mapa/Marker'
-import {
-  ConsultaProblemasLocalizacaoUsuarioType,
-  ProblemaLocalizacaoType
-} from '@/types/ProblemasType'
+import { ProblemaLocalizacaoType } from '@/types/ProblemasType'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/Button'
-import { Plus } from '@phosphor-icons/react'
+import {
+  Plus,
+  MapPin,
+  Calendar,
+  ArrowClockwise,
+  WarningCircle,
+  CheckCircle,
+  Clock,
+  SealQuestion
+} from '@phosphor-icons/react'
 import BaseLayout from '@/templates/BaseLayout'
-import CardRelato from '@/components/CardRelato'
-import { CLickLabel } from '@/services/clickLabel'
-import { selecionarRelato } from '@/redux/relatoSelecionado/actions'
 import ModalConfirmacaoCancelarProblema from '@/components/ModalConfirmacaoCancelarProblema'
 import ModalAjustarRelato from '@/components/ModalAjustarRelato'
 
@@ -36,165 +36,243 @@ export default function HomePage() {
   const user: UsuarioConsultaType = useSelector(
     (state: any) => state.userReducer
   )
-  const [meusRelatos, setMeusRelatos] = useState<
-    Array<ProblemaLocalizacaoType>
-  >([])
-  const [filtroStatus, setFiltroStatus] = useState<string>('CORRIGIR')
   const [problemaSelecionadoCancelar, setProblemaSelecionadoCancelar] =
     useState<ProblemaLocalizacaoType>()
+  const [filtroStatus, setFiltroStatus] = useState<string>('TODOS')
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false)
+
+  const total = problemas.length
+  const pendentes = problemas.filter((p) => p.destatus === 'PENDENTE').length
+  const emAndamento = problemas.filter(
+    (p) => p.destatus === 'EM_ANDAMENTO'
+  ).length
+  const resolvidos = problemas.filter((p) => p.destatus === 'RESOLVIDO').length
+
+  const statusOptions = [
+    {
+      value: 'TODOS',
+      label: 'Todos',
+      color: 'bg-gray-100 text-gray-800',
+      icon: <WarningCircle size={20} />
+    },
+    {
+      value: 'PENDENTE',
+      label: 'Pendentes',
+      color: 'bg-yellow-100 text-yellow-800',
+      icon: <WarningCircle size={20} />
+    },
+    {
+      value: 'EM_ANDAMENTO',
+      label: 'Em Andamento',
+      color: 'bg-orange-100 text-orange-800',
+      icon: <Clock size={20} />
+    },
+    {
+      value: 'RESOLVIDO',
+      label: 'Resolvidos',
+      color: 'bg-green-100 text-green-800',
+      icon: <CheckCircle size={20} />
+    }
+  ]
 
   useEffect(() => {
     const handleRelatoAtualizado = async () => {
       if (user.uscodigo) {
         dispatch(setLoading(true))
-
+        setIsRefreshing(true)
         const responseProblemasLocalizacao =
           await getProblemasLocalizacaoUsuario({
             uscodigo: user.uscodigo
           })
-
         if (responseProblemasLocalizacao != undefined) {
           setProblemas(responseProblemasLocalizacao.problemas)
         }
-
-        const obj: ConsultaProblemasLocalizacaoUsuarioType = {
-          uscodigo: user.uscodigo
-        }
-
-        const responseMeusRelatos = await getMeusRelatos(obj)
-
-        if (responseMeusRelatos != undefined) {
-          setMeusRelatos(responseMeusRelatos.problemas)
-        }
-
         dispatch(setLoading(false))
+        setIsRefreshing(false)
       }
     }
-
     handleRelatoAtualizado()
-
     window.addEventListener('relatoAtualizado', handleRelatoAtualizado)
-
     return () => {
       window.removeEventListener('relatoAtualizado', handleRelatoAtualizado)
     }
   }, [user.uscodigo])
 
-  const relatosFiltrados = meusRelatos.filter((relato) =>
-    filtroStatus === 'TODOS' ? true : relato.destatus === filtroStatus
-  )
+  const problemasFiltrados =
+    filtroStatus === 'TODOS'
+      ? problemas
+      : problemas.filter((p) => p.destatus === filtroStatus)
+
+  const nome = user.usnome?.split(' ')[0] || 'Usuário'
+
+  const handleRefresh = () => {
+    setIsRefreshing(true)
+    window.dispatchEvent(new Event('relatoAtualizado'))
+  }
 
   return (
     <span>
       <BaseLayout>
-        <DadosUsuario />
+        <div className="mt-4 mb-2 flex flex-col items-center justify-center">
+          <h1 className="text-2xl font-bold text-gray-800 mb-1">
+            Olá, {nome}!
+          </h1>
+          <p className="text-gray-600 text-center max-w-xl">
+            Obrigado por contribuir para uma cidade melhor. Fique à vontade para
+            registrar novos problemas ou acompanhar o que acontece na sua
+            região.
+          </p>
+        </div>
 
-        {relatosFiltrados.length > 0 && (
-          <div className="mt-5 mb-5 max-h-[500px] overflow-x-scroll">
-            <div className="space-y-4">
-              <div>
-                <p className="text-center text-lg font-bold text-gray-600 mb-2">
-                  Relatos com necessidade de correção
-                </p>
-                {relatosFiltrados.map(
-                  (relato: ProblemaLocalizacaoType, index: number) => {
-                    return (
-                      <CardRelato
-                        resumido
-                        key={index}
-                        problema={relato}
-                        onClickAjustarRelato={() => {
-                          dispatch(selecionarRelato(relato))
-                          setProblemaSelecionadoCancelar(relato)
-                          CLickLabel('modalAjusteRelato')
-                        }}
-                        onClickCancelarRelato={() => {
-                          CLickLabel('modalConfirmacaoCancelarProblema')
-                          setProblemaSelecionadoCancelar(relato)
-                        }}
-                      />
-                    )
-                  }
-                )}
+        {/* Cards de resumo rápido */}
+        <div className="flex justify-center my-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl">
+            <div className="bg-gray-100 rounded-xl p-4 flex flex-col items-center shadow hover:shadow-lg transition-all">
+              <span className="text-2xl font-bold text-gray-800">{total}</span>
+              <span className="text-sm text-gray-500">Total de problemas</span>
+            </div>
+            <div className="bg-yellow-100 rounded-xl p-4 flex flex-col items-center shadow hover:shadow-lg transition-all">
+              <span className="text-2xl font-bold text-yellow-800">
+                {pendentes}
+              </span>
+              <span className="text-sm text-yellow-800">Pendentes</span>
+            </div>
+            <div className="bg-orange-100 rounded-xl p-4 flex flex-col items-center shadow hover:shadow-lg transition-all">
+              <span className="text-2xl font-bold text-orange-800">
+                {emAndamento}
+              </span>
+              <span className="text-sm text-orange-800">Em andamento</span>
+            </div>
+            <div className="bg-green-100 rounded-xl p-4 flex flex-col items-center shadow hover:shadow-lg transition-all">
+              <span className="text-2xl font-bold text-green-800">
+                {resolvidos}
+              </span>
+              <span className="text-sm text-green-800">Resolvidos</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Banner de chamada para ação */}
+        <div className="w-full mb-6 flex flex-col items-center justify-center">
+          <div className="bg-gradient-to-r from-orange-1000 to-orange-600 rounded-xl shadow-lg p-6 flex flex-col md:flex-row items-center justify-between w-full max-w-3xl">
+            <div className="mb-4 md:mb-0">
+              <h2 className="text-lg font-bold text-white mb-1 md:text-start text-center">
+                Notou algum problema na sua cidade?
+              </h2>
+              <p className="text-white text-sm md:text-start text-center">
+                Ajude a melhorar sua comunidade registrando um novo problema!
+              </p>
+            </div>
+            <Button
+              title="Registrar Novo Problema"
+              iconLeft={<Plus size={20} />}
+              onClick={() => router.push('/registrarProblema')}
+              className="bg-white text-orange-1000 font-bold px-6 py-3 rounded-lg shadow hover:bg-orange-1000 hover:text-white transition-all duration-300 mt-4 md:mt-0"
+            />
+          </div>
+        </div>
+
+        {/* Filtros rápidos para o mapa */}
+        <div className="flex flex-wrap gap-2 mb-4 items-center justify-center">
+          {statusOptions.map((status, idx) => (
+            <button
+              key={idx}
+              onClick={() => setFiltroStatus(status.value)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 hover:shadow-md border cursor-pointer border-gray-200 ${
+                status.color
+              } ${
+                filtroStatus === status.value
+                  ? 'ring-2 ring-orange-1000 ring-offset-2'
+                  : ''
+              }`}>
+              {status.icon}
+              {status.label}
+            </button>
+          ))}
+        </div>
+        <div className="flex justify-center items-center mb-3">
+          <button
+            onClick={handleRefresh}
+            className="ml-2 flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium bg-white border text-black  border-gray-300 shadow hover:bg-gray-100 transition-all duration-300 cursor-pointer"
+            title="Atualizar Mapa">
+            <ArrowClockwise
+              size={20}
+              className={isRefreshing ? 'animate-spin' : ''}
+            />
+            Atualizar
+          </button>
+        </div>
+
+        {/* Mapa Interativo */}
+        <div className="bg-white rounded-xl shadow-lg p-6">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+            <div>
+              <h2 className="text-xl font-bold text-gray-800 mb-2 md:text-start text-center">
+                Situações na sua área e suas contribuições
+              </h2>
+              <p className="text-gray-600 md:text-start text-center">
+                Visualize problemas reportados e contribua para melhorar sua
+                comunidade
+              </p>
+            </div>
+            <div className="flex items-center gap-2 md:justify-start justify-center bg-orange-1000 p-2 rounded-3xl">
+              <div className="text-sm text-white">
+                {problemasFiltrados.length} problemas exibidos
               </div>
             </div>
           </div>
-        )}
-
-        <div className="mt-6">
-          <h2 className="text-gray-600 md:text-lg text-md font-semibold text-center mb-3">
-            Situações na sua área e contribuições suas
-          </h2>
-
-          <div className="w-full mb-2">
-            <Button
-              title="Registrar Problema"
-              iconLeft={<Plus size={20} />}
-              onClick={() => router.push('/registrarProblema')}
-              className="bg-orange-1000 hover:bg-orange-1000/80 active:bg-orange-1000 text-white px-4 py-2 rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg flex items-center gap-2 w-full"
-            />
-          </div>
-
-          <div className="h-[600px] rounded-lg overflow-hidden border border-gray-200">
+          <div className="h-[600px] rounded-lg overflow-hidden border border-gray-200 shadow-lg relative">
             <Mapa
               className="w-full h-full"
               locAtual={false}
               position={position}>
-              <MarkerMapa
-                tipoIcone="Casa"
-                childrenPop={
-                  <div>
-                    <div className="flex justify-start items-center gap-2 mt-2">
-                      <span className="font-light text-sm">
-                        {user.endereco.edrua},
-                      </span>
-
-                      <span className="font-light text-sm">
-                        {user.endereco.municipio.mcmunicipio} -
-                      </span>
-
-                      <span className="font-light text-sm">
-                        {user.endereco.estado.essigla}
-                      </span>
-                    </div>
-                  </div>
-                }
-                position={[
-                  user.localizacaoCasaUsuario.latitude,
-                  user.localizacaoCasaUsuario.longitude
-                ]}
-              />
-
-              {problemas.map(
+              {problemasFiltrados.map(
                 (problema: ProblemaLocalizacaoType, index: number) => {
                   return (
                     <div key={index}>
                       <MarkerMapa
                         tipoIcone={problema.categoria.cacategoria}
                         childrenPop={
-                          <div>
-                            <span className="block font-bold text-lg">
-                              {problema.categoria.cacategoria}
-                            </span>
-
-                            <span className="font-light text-sm">
-                              {problema.categoria.cadescricao}
-                            </span>
-
-                            <div className="flex justify-start items-center gap-2 mt-2">
-                              <span className="font-light text-sm">
-                                {problema.localizacao.edrua},
+                          <div className="bg-white p-4 rounded-lg shadow-lg border border-gray-200 max-w-xs">
+                            <div className="flex items-center gap-2 mb-2">
+                              <div
+                                className={`w-3 h-3 rounded-full ${
+                                  problema.destatus === 'PENDENTE'
+                                    ? 'bg-yellow-500'
+                                    : problema.destatus === 'EM_ANALISE'
+                                    ? 'bg-blue-500'
+                                    : problema.destatus === 'EM_ANDAMENTO'
+                                    ? 'bg-orange-500'
+                                    : problema.destatus === 'RESOLVIDO'
+                                    ? 'bg-green-500'
+                                    : 'bg-red-500'
+                                }`}></div>
+                              <span className="font-bold text-gray-800">
+                                {problema.categoria.cacategoria}
                               </span>
-
-                              <span className="font-light text-sm">
-                                {problema.localizacao.edbairro}
+                            </div>
+                            <p className="text-sm text-gray-600 mb-2">
+                              {problema.categoria.cadescricao}
+                            </p>
+                            <div className="text-xs text-gray-500 mb-2">
+                              <p>{problema.localizacao?.edrua},</p>
+                              <p>{problema.localizacao?.edbairro}</p>
+                            </div>
+                            <div className="flex items-center gap-2 text-xs">
+                              <Calendar size={12} className="text-gray-400" />
+                              <span className="text-gray-500">
+                                {problema.dedata
+                                  ? new Date(
+                                      problema.dedata
+                                    ).toLocaleDateString('pt-BR')
+                                  : ''}
                               </span>
                             </div>
                           </div>
                         }
                         position={[
-                          problema.localizacao.edlatitude,
-                          problema.localizacao.edlongitude
+                          problema.localizacao?.edlatitude ?? 0,
+                          problema.localizacao?.edlongitude ?? 0
                         ]}
                       />
                     </div>
@@ -205,13 +283,11 @@ export default function HomePage() {
           </div>
         </div>
       </BaseLayout>
-
       {problemaSelecionadoCancelar && (
         <ModalConfirmacaoCancelarProblema
           decodigo={problemaSelecionadoCancelar.decodigo}
         />
       )}
-
       {problemaSelecionadoCancelar && (
         <ModalAjustarRelato problema={problemaSelecionadoCancelar} />
       )}

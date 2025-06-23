@@ -120,8 +120,6 @@ export default function RegistrarProblema() {
       data.deusuario = user.uscodigo
       data.dedata = exibirDataHoraAtual()
 
-      console.log(exibirDataHoraAtual())
-
       const objSalvarProblema: ProblemasCriateType = {
         endereco: {
           edrua: data.edrua,
