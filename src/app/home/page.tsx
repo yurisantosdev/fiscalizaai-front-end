@@ -125,23 +125,23 @@ export default function HomePage() {
         {/* Cards de resumo rápido */}
         <div className="flex justify-center my-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl">
-            <div className="bg-gray-100 rounded-xl p-4 flex flex-col items-center shadow hover:shadow-lg transition-all">
+            <div className="bg-gray-100 rounded-xl p-4 flex flex-col items-center shadow hover:shadow-lg transition-all animate-slide-up">
               <span className="text-2xl font-bold text-gray-800">{total}</span>
               <span className="text-sm text-gray-500">Total de relatos</span>
             </div>
-            <div className="bg-yellow-100 rounded-xl p-4 flex flex-col items-center shadow hover:shadow-lg transition-all">
+            <div className="bg-yellow-100 rounded-xl p-4 flex flex-col items-center shadow hover:shadow-lg transition-all animate-slide-up">
               <span className="text-2xl font-bold text-yellow-800">
                 {pendentes}
               </span>
               <span className="text-sm text-yellow-800">Pendentes</span>
             </div>
-            <div className="bg-orange-100 rounded-xl p-4 flex flex-col items-center shadow hover:shadow-lg transition-all">
+            <div className="bg-orange-100 rounded-xl p-4 flex flex-col items-center shadow hover:shadow-lg transition-all animate-slide-up">
               <span className="text-2xl font-bold text-orange-800">
                 {emAndamento}
               </span>
               <span className="text-sm text-orange-800">Em andamento</span>
             </div>
-            <div className="bg-green-100 rounded-xl p-4 flex flex-col items-center shadow hover:shadow-lg transition-all">
+            <div className="bg-green-100 rounded-xl p-4 flex flex-col items-center shadow hover:shadow-lg transition-all animate-slide-up">
               <span className="text-2xl font-bold text-green-800">
                 {resolvidos}
               </span>
@@ -152,7 +152,7 @@ export default function HomePage() {
 
         {/* Banner de chamada para ação */}
         <div className="w-full mb-6 flex flex-col items-center justify-center">
-          <div className="bg-gradient-to-r from-orange-1000 to-orange-600 rounded-xl shadow-lg p-6 flex flex-col md:flex-row items-center justify-between w-full max-w-3xl">
+          <div className="bg-gradient-to-r from-orange-1000 to-orange-600 rounded-xl shadow-lg p-6 flex flex-col md:flex-row items-center justify-between w-full max-w-3xl animate-slide-up">
             <div className="mb-4 md:mb-0">
               <h2 className="text-lg font-bold text-white mb-1 md:text-start text-center">
                 Notou algum problema na sua cidade?
@@ -289,6 +289,21 @@ export default function HomePage() {
       {problemaSelecionadoCancelar && (
         <ModalAjustarRelato problema={problemaSelecionadoCancelar} />
       )}
+      <style jsx global>{`
+        .animate-slide-up {
+          animation: slideUp 0.7s cubic-bezier(0.4, 2, 0.6, 1);
+        }
+        @keyframes slideUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </span>
   )
 }

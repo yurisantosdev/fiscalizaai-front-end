@@ -48,6 +48,10 @@ export default function MeusRelatos() {
   const resolvidos = meusRelatos.filter(
     (p) => p.destatus === 'RESOLVIDO'
   ).length
+  const emAnalise = meusRelatos.filter(
+    (p) => p.destatus === 'EM_ANALISE'
+  ).length
+  const corrigir = meusRelatos.filter((p) => p.destatus === 'CORRIGIR').length
 
   const statusOptions = [
     {
@@ -142,7 +146,7 @@ export default function MeusRelatos() {
       <BaseLayout title="Meus Relatos">
         {/* Cards de resumo rápido */}
         <div className="flex justify-center my-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl">
+          <div className="grid grid-cols-2 md:grid-cols-6 gap-4 max-w-7xl">
             <div className="bg-gray-100 rounded-xl p-4 flex flex-col items-center shadow hover:shadow-lg transition-all">
               <span className="text-2xl font-bold text-gray-800">{total}</span>
               <span className="text-sm text-gray-500">Total de relatos</span>
@@ -164,6 +168,18 @@ export default function MeusRelatos() {
                 {resolvidos}
               </span>
               <span className="text-sm text-green-800">Resolvidos</span>
+            </div>
+            <div className="bg-blue-100 rounded-xl p-4 flex flex-col items-center shadow hover:shadow-lg transition-all">
+              <span className="text-2xl font-bold text-blue-800">
+                {emAnalise}
+              </span>
+              <span className="text-sm text-blue-800">Em análise</span>
+            </div>
+            <div className="bg-red-100 rounded-xl p-4 flex flex-col items-center shadow hover:shadow-lg transition-all">
+              <span className="text-2xl font-bold text-red-800">
+                {corrigir}
+              </span>
+              <span className="text-sm text-red-800">Corrigir</span>
             </div>
           </div>
         </div>

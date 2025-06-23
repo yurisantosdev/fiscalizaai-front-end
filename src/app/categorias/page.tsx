@@ -188,7 +188,7 @@ export default function Categorias() {
                 (categoria: SelectValuesType, index: number) => (
                   <div
                     key={index}
-                    className="bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 transform hover:scale-[1.02]">
+                    className="bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 transform hover:scale-[1.02] animate-slide-up">
                     <div className="p-6">
                       <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center space-x-4">
@@ -283,6 +283,21 @@ export default function Categorias() {
       </BaseLayout>
 
       <ModalConfirmacaoDesativarCategoria />
+      <style jsx global>{`
+        .animate-slide-up {
+          animation: slideUp 0.7s cubic-bezier(0.4, 2, 0.6, 1);
+        }
+        @keyframes slideUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </div>
   )
 }
