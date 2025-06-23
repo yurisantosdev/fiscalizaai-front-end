@@ -519,7 +519,7 @@ export default function Relatorio() {
                   <div className="flex items-center gap-2 mb-4">
                     <ChartBar size={24} className="text-gray-700" />
                     <h3 className="text-lg font-semibold text-gray-700">
-                      Problemas por Categoria
+                      Relatos por Categoria
                     </h3>
                   </div>
                   <div className="relative h-[250px] w-full">

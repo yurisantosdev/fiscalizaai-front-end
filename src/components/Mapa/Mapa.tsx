@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import 'leaflet/dist/leaflet.css'
 import '@/styles/markercluster.css'
-import { useMapEvents } from 'react-leaflet'
+import { useMapEvents, useMap } from 'react-leaflet'
 
 const MapContainer = dynamic(
   () => import('react-leaflet').then((mod) => mod.MapContainer),
@@ -46,12 +46,47 @@ function MapEvents() {
   return null
 }
 
+function MapTypeControl({
+  mapType,
+  onMapTypeChange
+}: {
+  mapType: 'satellite' | 'normal'
+  onMapTypeChange: (type: 'satellite' | 'normal') => void
+}) {
+  const map = useMap()
+
+  const handleMapTypeChange = () => {
+    const newType = mapType === 'satellite' ? 'normal' : 'satellite'
+    onMapTypeChange(newType)
+  }
+
+  return (
+    <div className="absolute top-4 right-4 z-[1000]">
+      <button
+        onClick={handleMapTypeChange}
+        className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow-lg transition-colors duration-200 cursor-pointer"
+        title={
+          mapType === 'satellite'
+            ? 'Mudar para mapa normal'
+            : 'Mudar para satélite'
+        }>
+        {mapType === 'satellite' ? '🗺️ Mapa' : '🛰️ Satélite'}
+      </button>
+    </div>
+  )
+}
+
 export default function Mapa({ children, className, position }: MapaProps) {
   const [mounted, setMounted] = useState(false)
+  const [mapType, setMapType] = useState<'satellite' | 'normal'>('normal')
 
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  const handleMapTypeChange = (type: 'satellite' | 'normal') => {
+    setMapType(type)
+  }
 
   if (!mounted) {
     return (
@@ -60,16 +95,24 @@ export default function Mapa({ children, className, position }: MapaProps) {
   }
 
   return (
-    <div className={className}>
+    <div className={`${className} relative`}>
       <MapContainer
         center={position}
-        zoom={13}
+        zoom={12}
         style={{ width: '100%', height: '100%' }}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+          url={
+            mapType === 'satellite'
+              ? 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+              : 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png'
+          }
         />
         <MapEvents />
+        <MapTypeControl
+          mapType={mapType}
+          onMapTypeChange={handleMapTypeChange}
+        />
         <MarkerClusterGroup
           chunkedLoading
           maxClusterRadius={50}

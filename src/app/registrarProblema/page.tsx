@@ -375,7 +375,7 @@ export default function RegistrarProblema() {
                 />
               </div>
 
-              <div className="bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-blue-200 transition-colors">
+              <div className="bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-blue-200 transition-colors md:mb-2 mb-24">
                 <div className="flex items-center gap-2 mb-3">
                   <ChatTeardropText size={22} className="text-blue-1000" />
                   <h3 className="text-gray-700 font-medium">
