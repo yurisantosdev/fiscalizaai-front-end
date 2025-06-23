@@ -9,11 +9,11 @@ import {
 } from '@/types/ProblemasType'
 import { setLoading } from '@/redux/loading/actions'
 import 'leaflet/dist/leaflet.css'
-import { gerRelatosGeral, getMeusRelatos } from '@/store/Problemas'
+import { gerRelatosGeral } from '@/store/Problemas'
 import CardRelato from '@/components/CardRelato'
 import BaseLayout from '@/templates/BaseLayout'
 import { CLickLabel } from '@/services/clickLabel'
-import { FunnelSimple } from '@phosphor-icons/react'
+import { FunnelSimple, WarningCircle, Clock } from '@phosphor-icons/react'
 import ModalProximaEtapaRelato from './_components/ModalProximaEtapaRelato'
 import ModalConcluirRelato from './_components/ModalConcluirRelato'
 
@@ -30,24 +30,35 @@ export default function Relatos() {
     useState<ProblemaLocalizacaoType>()
 
   const statusOptions = [
-    { value: 'TODOS', label: 'Todos' },
-    { value: 'PENDENTE', label: 'Pendente' },
-    { value: 'EM_ANDAMENTO', label: 'Em Andamento' }
+    {
+      value: 'TODOS',
+      label: 'Todos',
+      color: 'bg-gray-100 text-gray-700',
+      icon: <WarningCircle size={20} />
+    },
+    {
+      value: 'PENDENTE',
+      label: 'Pendentes',
+      color: 'bg-yellow-100 text-yellow-800',
+      icon: <WarningCircle size={20} />
+    },
+    {
+      value: 'EM_ANDAMENTO',
+      label: 'Em Andamento',
+      color: 'bg-orange-100 text-orange-800',
+      icon: <Clock size={20} />
+    }
   ]
 
   useEffect(() => {
     const consultarDados = async () => {
       dispatch(setLoading(true))
-
       const response = await gerRelatosGeral()
-
       if (response != undefined) {
         setRelatos(response.problemas)
       }
-
       dispatch(setLoading(false))
     }
-
     consultarDados()
   }, [])
 
@@ -55,19 +66,14 @@ export default function Relatos() {
     const handleRelatoAtualizado = async () => {
       if (user.uscodigo) {
         dispatch(setLoading(true))
-
         const response = await gerRelatosGeral()
-
         if (response != undefined) {
           setRelatos(response.problemas)
         }
-
         dispatch(setLoading(false))
       }
     }
-
     window.addEventListener('relatoAtualizado', handleRelatoAtualizado)
-
     return () => {
       window.removeEventListener('relatoAtualizado', handleRelatoAtualizado)
     }
@@ -79,46 +85,59 @@ export default function Relatos() {
       : relato.destatus === filtroStatus
   )
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'TODOS':
-        return 'bg-gray-100 text-gray-700'
-      case 'PENDENTE':
-        return 'bg-yellow-100 text-yellow-800'
-      case 'EM_ANDAMENTO':
-        return 'bg-orange-100 text-orange-800'
-      default:
-        return 'bg-gray-100 text-gray-700'
-    }
-  }
+  const total = relatos.filter(
+    (r) => r.destatus === 'PENDENTE' || r.destatus === 'EM_ANDAMENTO'
+  ).length
+  const pendentes = relatos.filter((r) => r.destatus === 'PENDENTE').length
+  const emAndamento = relatos.filter(
+    (r) => r.destatus === 'EM_ANDAMENTO'
+  ).length
 
   return (
     <div>
       <BaseLayout title="Relatos">
         <div className="space-y-6">
-          {/* Filtros */}
-          <div className="bg-white rounded-lg p-4 shadow-sm">
-            <div className="md:flex md:items-center md:gap-4 mb-4">
-              <div className="flex items-center justify-center md:mb-0 mb-2 gap-2 text-gray-700">
-                <FunnelSimple size={20} />
-                <span className="font-medium">Filtrar por status:</span>
+          {/* Cards de Resumo */}
+          <div className="flex justify-center my-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-2xl w-full">
+              <div className="bg-gray-100 rounded-xl p-4 flex flex-col items-center shadow hover:shadow-lg transition-all">
+                <span className="text-2xl font-bold text-gray-800">
+                  {total}
+                </span>
+                <span className="text-sm text-gray-500">Total de relatos</span>
               </div>
-
-              <div className="md:flex md:flex-wrap gap-2 grid grid-cols-3">
-                {statusOptions.map((status) => (
-                  <button
-                    key={status.value}
-                    onClick={() => setFiltroStatus(status.value)}
-                    className={`px-4 py-2 rounded-lg text-sm cursor-pointer font-medium transition-colors break-words ${
-                      filtroStatus === status.value
-                        ? getStatusColor(status.value)
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}>
-                    {status.label}
-                  </button>
-                ))}
+              <div className="bg-yellow-100 rounded-xl p-4 flex flex-col items-center shadow hover:shadow-lg transition-all">
+                <span className="text-2xl font-bold text-yellow-800">
+                  {pendentes}
+                </span>
+                <span className="text-sm text-yellow-800">Pendentes</span>
+              </div>
+              <div className="bg-orange-100 rounded-xl p-4 flex flex-col items-center shadow hover:shadow-lg transition-all">
+                <span className="text-2xl font-bold text-orange-800">
+                  {emAndamento}
+                </span>
+                <span className="text-sm text-orange-800">Em andamento</span>
               </div>
             </div>
+          </div>
+
+          {/* Filtros */}
+          <div className="flex flex-wrap gap-2 mb-4 items-center justify-center">
+            {statusOptions.map((status, idx) => (
+              <button
+                key={idx}
+                onClick={() => setFiltroStatus(status.value)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 hover:shadow-md border cursor-pointer border-gray-200 ${
+                  status.color
+                } ${
+                  filtroStatus === status.value
+                    ? 'ring-2 ring-blue-700 ring-offset-2'
+                    : ''
+                }`}>
+                {status.icon}
+                {status.label}
+              </button>
+            ))}
           </div>
 
           {/* Lista de Relatos */}
@@ -126,25 +145,28 @@ export default function Relatos() {
             {relatosFiltrados.length > 0 ? (
               relatosFiltrados.map(
                 (relato: ProblemaLocalizacaoType, index: number) => (
-                  <CardRelato
-                    key={index}
-                    mostrarFotos={false}
-                    problema={relato}
-                    botoesProximaEtapaConcluir
-                    onClickProximaEtapaRelato={() => {
-                      CLickLabel('modalProximaEtapaRelato')
-                      setProblemaSelecionado(relato)
-                    }}
-                    onClickConcluirRelato={() => {
-                      CLickLabel('modalConcluirRelato')
-                      setProblemaSelecionado(relato)
-                    }}
-                  />
+                  <div key={index}>
+                    <CardRelato
+                      mostrarFotos={false}
+                      problema={relato}
+                      botoesProximaEtapaConcluir
+                      onClickProximaEtapaRelato={() => {
+                        CLickLabel('modalProximaEtapaRelato')
+                        setProblemaSelecionado(relato)
+                      }}
+                      onClickConcluirRelato={() => {
+                        CLickLabel('modalConcluirRelato')
+                        setProblemaSelecionado(relato)
+                      }}
+                    />
+                  </div>
                 )
               )
             ) : (
-              <div className="text-center py-8">
-                <p className="text-gray-500">Nenhum relato encontrado</p>
+              <div className="bg-white rounded-lg p-6 text-center shadow-sm">
+                <p className="text-gray-700 text-lg">
+                  Nenhum relato encontrado para o filtro selecionado.
+                </p>
               </div>
             )}
           </div>

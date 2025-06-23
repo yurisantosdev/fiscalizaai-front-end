@@ -51,44 +51,52 @@ export default function EsqueciSenha() {
       styleBase={false}
       menu={false}
       adicionarItens={false}>
-      <div className="space-y-6">
-        <p className="text-gray-600 text-center mb-6">
-          Digite seu email cadastrado para receber as instruções de recuperação
-          de senha.
-        </p>
+      <div className="md:w-full max-w-md m-auto bg-white rounded-2xl shadow-xl overflow-hidden animate-fade-in-up">
+        <div className="p-8">
+          <div className="text-center mb-8">
+            <h1 className="text-2xl text-gray-800 font-bold mb-2">
+              Recuperar Senha
+            </h1>
+            <p className="text-gray-500">
+              Digite seu email cadastrado para receber as instruções de
+              recuperação de senha.
+            </p>
+          </div>
 
-        <InputComponent
-          id="email"
-          type="email"
-          placeholder="Informe seu email"
-          className="mb-4"
-          icon={<Envelope size={22} className="text-gray-500" />}
-          textLabel="Email"
-          styleLabel="text-gray-600"
-          requiredItem
-          {...register('email', {
-            required: true,
-            validate: {
-              validEmail: (value) => validateEmail(value) || 'Email inválido'
-            }
-          })}
-          textError={
-            errors.email &&
-            (errors.email.type === 'validEmail' ? (
-              <span className="text-red-500 text-sm">Email inválido</span>
-            ) : (
-              <TextRequired />
-            ))
-          }
-          error={errors.email}
-        />
+          <div className="space-y-6">
+            <InputComponent
+              id="email"
+              type="email"
+              placeholder="Informe seu email"
+              className="w-full bg-gray-50 text-gray-900 transition-all duration-300 focus:ring-2 focus:ring-orange-1000/50"
+              icon={<Envelope size={22} className="text-gray-500" />}
+              textLabel="Email"
+              styleLabel="text-gray-700 font-medium"
+              requiredItem
+              {...register('email', {
+                required: true,
+                validate: {
+                  validEmail: (value) =>
+                    validateEmail(value) || 'Email inválido'
+                }
+              })}
+              textError={
+                errors.email &&
+                (errors.email.type === 'validEmail' ? (
+                  <span className="text-red-500 text-sm">Email inválido</span>
+                ) : (
+                  <TextRequired />
+                ))
+              }
+              error={errors.email}
+            />
 
-        <div className="flex justify-center mt-8">
-          <Button
-            onClick={handleSubmit(onEnviarEmail)}
-            title="Enviar Email de Recuperação"
-            className="bg-orange-1000 hover:bg-orange-900 text-white px-8 py-3 rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg"
-          />
+            <Button
+              onClick={handleSubmit(onEnviarEmail)}
+              title="Enviar Email de Recuperação"
+              className="w-full bg-orange-1000 hover:bg-orange-900 text-white py-3 rounded-lg transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg font-medium"
+            />
+          </div>
         </div>
       </div>
     </BaseLayout>

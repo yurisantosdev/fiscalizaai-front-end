@@ -14,7 +14,9 @@ import {
   SealQuestion,
   MagnifyingGlass,
   CheckSquare,
-  Calendar
+  Calendar,
+  ChartPie,
+  ChartBar
 } from '@phosphor-icons/react'
 import { getCategorias } from '@/store/Categorias'
 import { SelectValuesType } from '@/types/GeneralTypes'
@@ -26,6 +28,27 @@ import { CLickLabel } from '@/services/clickLabel'
 import toast from 'react-hot-toast'
 import { Button } from '@/components/Button'
 import { setLoading } from '@/redux/loading/actions'
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement
+} from 'chart.js'
+import { Bar, Pie } from 'react-chartjs-2'
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement
+)
 
 export default function Relatorio() {
   AuthUser()
@@ -44,12 +67,28 @@ export default function Relatorio() {
   const loading = useSelector((state: any) => state.loadingReducer.loading)
 
   const statusOptions = [
-    { value: 'TODOS', label: 'Todos' },
-    { value: 'EM_ANALISE', label: 'Em Análise' },
-    { value: 'RESOLVIDO', label: 'Resolvido' },
-    { value: 'PENDENTE', label: 'Pendente' },
-    { value: 'EM_ANDAMENTO', label: 'Em Andamento' },
-    { value: 'CORRIGIR', label: 'Corrigir' }
+    { value: 'TODOS', label: 'Todos', color: 'bg-gray-100 text-gray-700' },
+    {
+      value: 'EM_ANALISE',
+      label: 'Em Análise',
+      color: 'bg-blue-100 text-blue-800'
+    },
+    {
+      value: 'RESOLVIDO',
+      label: 'Resolvido',
+      color: 'bg-green-100 text-green-800'
+    },
+    {
+      value: 'PENDENTE',
+      label: 'Pendente',
+      color: 'bg-yellow-100 text-yellow-800'
+    },
+    {
+      value: 'EM_ANDAMENTO',
+      label: 'Em Andamento',
+      color: 'bg-orange-100 text-orange-800'
+    },
+    { value: 'CORRIGIR', label: 'Corrigir', color: 'bg-red-100 text-red-800' }
   ]
 
   useEffect(() => {
@@ -205,6 +244,62 @@ export default function Relatorio() {
     filtroStatus === 'TODOS' ? true : problema.destatus === filtroStatus
   )
 
+  // Dados para os gráficos
+  const statusData = {
+    labels: ['Em Análise', 'Pendente', 'Em Andamento', 'Resolvido', 'Corrigir'],
+    datasets: [
+      {
+        data: [
+          problemasFiltrados.filter((p) => p.destatus === 'EM_ANALISE').length,
+          problemasFiltrados.filter((p) => p.destatus === 'PENDENTE').length,
+          problemasFiltrados.filter((p) => p.destatus === 'EM_ANDAMENTO')
+            .length,
+          problemasFiltrados.filter((p) => p.destatus === 'RESOLVIDO').length,
+          problemasFiltrados.filter((p) => p.destatus === 'CORRIGIR').length
+        ],
+        backgroundColor: [
+          'rgba(59, 130, 246, 0.7)', // Azul
+          'rgba(234, 179, 8, 0.7)', // Amarelo
+          'rgba(249, 115, 22, 0.7)', // Laranja
+          'rgba(34, 197, 94, 0.7)', // Verde
+          'rgba(239, 68, 68, 0.7)' // Vermelho
+        ],
+        borderColor: [
+          'rgb(59, 130, 246)',
+          'rgb(234, 179, 8)',
+          'rgb(249, 115, 22)',
+          'rgb(34, 197, 94)',
+          'rgb(239, 68, 68)'
+        ],
+        borderWidth: 2,
+        hoverOffset: 15,
+        hoverBorderWidth: 3
+      }
+    ]
+  }
+
+  const categoriasData = {
+    labels: categoriasSelecionadas.map((catId) => {
+      const label = categorias.find((c) => c.value === catId)?.label || ''
+      return label.length > 12 ? label.substring(0, 12) + '...' : label
+    }),
+    datasets: [
+      {
+        label: 'Problemas por Categoria',
+        data: categoriasSelecionadas.map(
+          (catId) =>
+            problemasFiltrados.filter((p) => p.decategoria === catId).length
+        ),
+        backgroundColor: 'rgba(12, 76, 163, 0.7)',
+        borderColor: 'rgb(12, 76, 163)',
+        borderWidth: 2,
+        borderRadius: 6,
+        maxBarThickness: 50,
+        hoverBackgroundColor: 'rgba(12, 76, 163, 0.85)'
+      }
+    ]
+  }
+
   if (!user.usmaster) {
     return null
   }
@@ -212,37 +307,37 @@ export default function Relatorio() {
   return (
     <BaseLayout title="Relatório">
       <div className="space-y-4">
-        <div className="bg-white rounded-lg p-4 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
+        <div className="bg-white rounded-lg p-6 shadow-sm">
+          <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2 text-gray-700">
-              <FunnelSimple size={20} />
-              <span className="font-medium">Filtrar por:</span>
+              <FunnelSimple size={24} />
+              <h2 className="text-xl font-bold">Filtros</h2>
             </div>
             <Button
               onClick={selecionarTodasCategorias}
               iconLeft={<CheckSquare size={20} />}
               className={`${
                 categoriasSelecionadas.length === categorias.length
-                  ? 'bg-blue-1000 text-white hover:bg-blue-1000'
+                  ? 'bg-blue-1000 text-white hover:bg-blue-900'
                   : 'bg-gray-200 text-black hover:bg-blue-1000 hover:text-white'
-              }`}
+              } transition-all duration-300 cursor-pointer`}
               title={
                 categoriasSelecionadas.length === categorias.length
-                  ? 'Desmarcar'
-                  : 'Marcar'
+                  ? 'Desmarcar Todas'
+                  : 'Marcar Todas'
               }
             />
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 mb-6">
             {categorias && categorias.length > 0 ? (
               categorias.map((categoria: SelectValuesType) => (
                 <button
                   key={categoria.value}
                   onClick={() => handleCategoriaChange(categoria.value)}
-                  className={`px-3 py-2 rounded-lg text-sm cursor-pointer font-medium transition-colors ${
+                  className={`px-4 py-3 rounded-lg text-sm font-medium transition-all duration-300 transform hover:scale-105 cursor-pointer ${
                     categoriasSelecionadas.includes(categoria.value)
-                      ? 'bg-blue-1000 text-white'
+                      ? 'bg-blue-1000 text-white shadow-md'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}>
                   {categoria.label}
@@ -253,90 +348,63 @@ export default function Relatorio() {
             )}
           </div>
 
-          <div className="mt-6 mb-4">
-            <div className="flex items-center gap-2 text-gray-700 mb-3">
-              <Calendar size={20} />
-              <span className="font-medium">Filtrar por período:</span>
+          <div className="mb-6">
+            <div className="flex items-center gap-2 text-gray-700 mb-4">
+              <Calendar size={24} />
+              <h3 className="text-lg font-semibold">Período</h3>
             </div>
-            <div className="flex flex-wrap gap-2 mb-4">
-              <button
-                onClick={() => definirPeriodo('hoje')}
-                className={`px-3 py-1 text-sm rounded-lg transition-colors cursor-pointer ${
-                  periodoSelecionado === 'hoje'
-                    ? 'bg-blue-1000 text-white'
-                    : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
-                }`}>
-                Hoje
-              </button>
-              <button
-                onClick={() => definirPeriodo('semana')}
-                className={`px-3 py-1 text-sm rounded-lg transition-colors cursor-pointer ${
-                  periodoSelecionado === 'semana'
-                    ? 'bg-blue-1000 text-white'
-                    : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
-                }`}>
-                Últimos 7 dias
-              </button>
-              <button
-                onClick={() => definirPeriodo('15dias')}
-                className={`px-3 py-1 text-sm rounded-lg transition-colors cursor-pointer ${
-                  periodoSelecionado === '15dias'
-                    ? 'bg-blue-1000 text-white'
-                    : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
-                }`}>
-                Últimos 15 dias
-              </button>
-              <button
-                onClick={() => definirPeriodo('mes')}
-                className={`px-3 py-1 text-sm rounded-lg transition-colors cursor-pointer ${
-                  periodoSelecionado === 'mes'
-                    ? 'bg-blue-1000 text-white'
-                    : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
-                }`}>
-                Este mês
-              </button>
-              <button
-                onClick={() => definirPeriodo('mesAnterior')}
-                className={`px-3 py-1 text-sm rounded-lg transition-colors cursor-pointer ${
-                  periodoSelecionado === 'mesAnterior'
-                    ? 'bg-blue-1000 text-white'
-                    : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
-                }`}>
-                Mês anterior
-              </button>
+            <div className="flex flex-wrap gap-3 mb-4">
+              {[
+                { id: 'hoje', label: 'Hoje' },
+                { id: 'semana', label: 'Últimos 7 dias' },
+                { id: '15dias', label: 'Últimos 15 dias' },
+                { id: 'mes', label: 'Este mês' },
+                { id: 'mesAnterior', label: 'Mês anterior' }
+              ].map((periodo) => (
+                <button
+                  key={periodo.id}
+                  onClick={() => definirPeriodo(periodo.id)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 cursor-pointer ${
+                    periodoSelecionado === periodo.id
+                      ? 'bg-blue-1000 text-white shadow-md transform scale-105'
+                      : 'bg-gray-100 hover:bg-gray-200 text-gray-700 hover:scale-105'
+                  }`}>
+                  {periodo.label}
+                </button>
+              ))}
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
                   Data Inicial
                 </label>
                 <input
                   type="date"
                   value={dataInicial}
                   onChange={(e) => handleDataChange('inicial', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-1000 focus:border-transparent text-black cursor-pointer"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-1000 focus:border-transparent text-black transition-all duration-300 cursor-pointer hover:border-blue-1000"
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
                   Data Final
                 </label>
                 <input
                   type="date"
                   value={dataFinal}
                   onChange={(e) => handleDataChange('final', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-1000 focus:border-transparent text-black cursor-pointer"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-1000 focus:border-transparent text-black transition-all duration-300 cursor-pointer hover:border-blue-1000"
                 />
               </div>
             </div>
           </div>
 
-          <div className="flex justify-center mt-4">
+          <div className="flex justify-center">
             <Button
               onClick={gerarRelatorio}
               disabled={loading || categoriasSelecionadas.length === 0}
-              iconLeft={<ChartLine size={20} />}
-              className="bg-blue-1000 hover:bg-blue-1000 px-8 py-2"
+              iconLeft={<ChartLine size={24} />}
+              className="bg-blue-1000 hover:bg-blue-900 px-8 py-3 text-lg font-medium transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 cursor-pointer"
               title={loading ? 'Gerando...' : 'Gerar Relatório'}
             />
           </div>
@@ -344,21 +412,20 @@ export default function Relatorio() {
 
         {problemas.length > 0 ? (
           <>
-            <div className="bg-white rounded-lg p-4 shadow-sm">
-              <div className="md:flex md:items-center md:gap-4 mb-4">
-                <div className="flex items-center justify-center gap-2 text-gray-700 md:mb-0 mb-2">
-                  <FunnelSimple size={20} />
-                  <span className="font-medium">Filtrar por status:</span>
+            <div className="bg-white rounded-lg p-6 shadow-sm">
+              <div className="flex flex-col md:flex-row md:items-center gap-4 mb-4">
+                <div className="flex items-center gap-2 text-gray-700">
+                  <FunnelSimple size={24} />
+                  <h3 className="text-lg font-semibold">Filtrar por Status</h3>
                 </div>
-
-                <div className="md:flex md:flex-wrap gap-2 grid grid-cols-2">
+                <div className="flex flex-wrap gap-3">
                   {statusOptions.map((status) => (
                     <button
                       key={status.value}
                       onClick={() => setFiltroStatus(status.value)}
-                      className={`px-4 py-2 rounded-lg text-sm cursor-pointer font-medium transition-colors ${
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 transform hover:scale-105 cursor-pointer ${
                         filtroStatus === status.value
-                          ? getStatusColor(status.value)
+                          ? status.color + ' shadow-md'
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}>
                       {status.label}
@@ -368,94 +435,182 @@ export default function Relatorio() {
               </div>
             </div>
 
-            <div className="bg-white rounded-lg p-4 shadow-sm">
-              <div className="flex items-center justify-between mb-2">
-                <h2 className="text-lg font-bold text-gray-800">Indicadores</h2>
+            <div className="bg-white rounded-lg p-6 shadow-sm">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+                  <ChartLine size={24} />
+                  Indicadores
+                </h2>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                <div className="bg-gray-50 rounded-lg p-3">
-                  <h3 className="text-base font-semibold text-gray-700 mb-2">
-                    Total de Relatos
-                  </h3>
-                  <div className="flex items-center justify-between">
-                    <span className="text-2xl font-bold text-blue-1000">
-                      {problemasFiltrados.length}
-                    </span>
-                    <ChartLine
-                      size={28}
-                      className="text-blue-1000"
-                      weight="fill"
-                    />
-                  </div>
-                </div>
 
-                <div className="bg-gray-50 rounded-lg p-3">
-                  <h3 className="text-base font-semibold text-gray-700 mb-2">
-                    Por Status
-                  </h3>
-                  <div className="h-[150px] overflow-y-auto pr-2 space-y-1 custom-scrollbar">
-                    {[
-                      'EM_ANALISE',
-                      'PENDENTE',
-                      'EM_ANDAMENTO',
-                      'RESOLVIDO',
-                      'CORRIGIR'
-                    ].map((status) => (
-                      <div
-                        key={status}
-                        className="flex items-center justify-between bg-white p-1.5 rounded-lg">
-                        <div className="flex items-center gap-1.5">
-                          {getStatusIcon(status)}
-                          <span className="text-sm font-medium text-gray-600">
-                            {status === 'EM_ANALISE' && 'Em Análise'}
-                            {status === 'PENDENTE' && 'Pendente'}
-                            {status === 'EM_ANDAMENTO' && 'Em Andamento'}
-                            {status === 'RESOLVIDO' && 'Resolvido'}
-                            {status === 'CORRIGIR' && 'Corrigir'}
-                          </span>
-                        </div>
-                        <span
-                          className={`px-2 py-0.5 rounded-full text-sm font-medium ${getStatusColor(
-                            status
-                          )}`}>
-                          {
-                            problemasFiltrados.filter(
-                              (problema) => problema.destatus === status
-                            ).length
-                          }
-                        </span>
-                      </div>
-                    ))}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="bg-gray-50 rounded-lg p-6 transform transition-all duration-300 hover:shadow-lg">
+                  <div className="flex items-center gap-2 mb-4">
+                    <ChartPie size={24} className="text-gray-700" />
+                    <h3 className="text-lg font-semibold text-gray-700">
+                      Distribuição por Status
+                    </h3>
                   </div>
-                </div>
-
-                <div className="bg-gray-50 rounded-lg p-3">
-                  <h3 className="text-base font-semibold text-gray-700 mb-2">
-                    Por Categoria
-                  </h3>
-                  <div className="h-[150px] overflow-y-auto pr-2 space-y-1 custom-scrollbar">
-                    {categoriasSelecionadas.map((categoriaId) => {
-                      const categoria = categorias.find(
-                        (c) => c.value === categoriaId
-                      )
-                      return (
-                        <div
-                          key={categoriaId}
-                          className="flex items-center justify-between bg-white p-1.5 rounded-lg">
-                          <span className="text-sm font-medium text-gray-600">
-                            {categoria?.label}
-                          </span>
-                          <span className="px-2 py-0.5 rounded-full text-sm font-medium bg-blue-1000/10 text-blue-1000">
-                            {
-                              problemasFiltrados.filter(
-                                (problema) =>
-                                  problema.decategoria === categoriaId
-                              ).length
+                  <div className="relative h-[250px] w-full">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <Pie
+                        data={statusData}
+                        options={{
+                          responsive: true,
+                          maintainAspectRatio: false,
+                          layout: {
+                            padding: {
+                              left: 15,
+                              right: 15,
+                              top: 5,
+                              bottom: 5
                             }
-                          </span>
-                        </div>
-                      )
-                    })}
+                          },
+                          plugins: {
+                            legend: {
+                              position: 'right',
+                              align: 'center',
+                              labels: {
+                                boxWidth: 15,
+                                boxHeight: 15,
+                                padding: 15,
+                                font: {
+                                  size: 11,
+                                  family: 'Inter, system-ui, sans-serif',
+                                  weight: 500
+                                },
+                                usePointStyle: true
+                              }
+                            },
+                            tooltip: {
+                              enabled: true,
+                              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                              titleFont: {
+                                size: 13,
+                                family: 'Inter, system-ui, sans-serif',
+                                weight: 600
+                              },
+                              bodyFont: {
+                                size: 12,
+                                family: 'Inter, system-ui, sans-serif'
+                              },
+                              padding: 12,
+                              cornerRadius: 8,
+                              displayColors: true,
+                              callbacks: {
+                                label: (context) => {
+                                  const value = context.raw as number
+                                  const sum = (
+                                    context.dataset.data as number[]
+                                  ).reduce((a, b) => a + b, 0)
+                                  const percentage = (
+                                    (value / sum) *
+                                    100
+                                  ).toFixed(1)
+                                  return ` ${value} (${percentage}%)`
+                                }
+                              }
+                            }
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-gray-50 rounded-lg p-6 transform transition-all duration-300 hover:shadow-lg">
+                  <div className="flex items-center gap-2 mb-4">
+                    <ChartBar size={24} className="text-gray-700" />
+                    <h3 className="text-lg font-semibold text-gray-700">
+                      Problemas por Categoria
+                    </h3>
+                  </div>
+                  <div className="relative h-[250px] w-full">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <Bar
+                        data={categoriasData}
+                        options={{
+                          responsive: true,
+                          maintainAspectRatio: false,
+                          layout: {
+                            padding: {
+                              left: 15,
+                              right: 15,
+                              top: 15,
+                              bottom: 5
+                            }
+                          },
+                          plugins: {
+                            legend: {
+                              display: false
+                            },
+                            tooltip: {
+                              enabled: true,
+                              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                              titleFont: {
+                                size: 13,
+                                family: 'Inter, system-ui, sans-serif',
+                                weight: 600
+                              },
+                              bodyFont: {
+                                size: 12,
+                                family: 'Inter, system-ui, sans-serif'
+                              },
+                              padding: 12,
+                              cornerRadius: 8,
+                              callbacks: {
+                                label: (context) => {
+                                  const value = context.raw as number
+                                  const sum = (
+                                    context.dataset.data as number[]
+                                  ).reduce((a, b) => a + b, 0)
+                                  const percentage = (
+                                    (value / sum) *
+                                    100
+                                  ).toFixed(1)
+                                  return ` ${value} problemas (${percentage}%)`
+                                }
+                              }
+                            }
+                          },
+                          scales: {
+                            x: {
+                              grid: {
+                                display: false
+                              },
+                              ticks: {
+                                font: {
+                                  size: 11,
+                                  family: 'Inter, system-ui, sans-serif',
+                                  weight: 500
+                                },
+                                maxRotation: 45,
+                                minRotation: 45
+                              }
+                            },
+                            y: {
+                              beginAtZero: true,
+                              grid: {
+                                color: 'rgba(0, 0, 0, 0.1)',
+                                display: true
+                              },
+                              border: {
+                                display: false
+                              },
+                              ticks: {
+                                font: {
+                                  size: 11,
+                                  family: 'Inter, system-ui, sans-serif',
+                                  weight: 500
+                                },
+                                stepSize: 1,
+                                padding: 8
+                              }
+                            }
+                          }
+                        }}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -465,24 +620,25 @@ export default function Relatorio() {
               {problemasFiltrados.length > 0 ? (
                 problemasFiltrados.map(
                   (problema: ProblemaLocalizacaoType, index: number) => (
-                    <CardRelato
-                      ordem={index + 1}
-                      buttonsAjustarCancelar={false}
-                      key={problema.decodigo}
-                      problema={problema}
-                      onClickAjustarRelato={() => {
-                        dispatch(selecionarRelato(problema))
-                        CLickLabel('modalAjusteRelato')
-                      }}
-                      onClickCancelarRelato={() => {
-                        CLickLabel('modalConfirmacaoCancelarProblema')
-                      }}
-                    />
+                    <div key={problema.decodigo}>
+                      <CardRelato
+                        ordem={index + 1}
+                        buttonsAjustarCancelar={false}
+                        problema={problema}
+                        onClickAjustarRelato={() => {
+                          dispatch(selecionarRelato(problema))
+                          CLickLabel('modalAjusteRelato')
+                        }}
+                        onClickCancelarRelato={() => {
+                          CLickLabel('modalConfirmacaoCancelarProblema')
+                        }}
+                      />
+                    </div>
                   )
                 )
               ) : (
-                <div>
-                  <p className="text-center text-black">
+                <div className="bg-white rounded-lg p-6 text-center shadow-sm">
+                  <p className="text-gray-700 text-lg">
                     Não há relatos com este status.
                   </p>
                 </div>
@@ -490,10 +646,12 @@ export default function Relatorio() {
             </div>
           </>
         ) : (
-          <div className="text-center text-gray-500 mt-4">
-            {loading
-              ? 'Gerando relatório...'
-              : 'Selecione as categorias e clique em "Gerar Relatório"'}
+          <div className="bg-white rounded-lg p-6 text-center shadow-sm">
+            <p className="text-gray-700 text-lg">
+              {loading
+                ? 'Gerando relatório...'
+                : 'Selecione as categorias e clique em "Gerar Relatório"'}
+            </p>
           </div>
         )}
       </div>

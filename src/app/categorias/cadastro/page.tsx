@@ -5,7 +5,10 @@ import BaseLayout from '@/templates/BaseLayout'
 import {
   CaretLeft,
   ChatTeardropText,
-  NavigationArrow
+  NavigationArrow,
+  X,
+  PencilSimple,
+  Check
 } from '@phosphor-icons/react'
 import InputComponent from '@/components/Input'
 import { useForm } from 'react-hook-form'
@@ -89,51 +92,65 @@ export default function CadastroCategoria() {
       extraComponentLeft={
         <ButtonIcon
           icon={<CaretLeft size={20} className="text-gray-400" />}
-          className="bg-gray-200 hover:bg-gray-200 active:bg-gray-200"
+          className="bg-gray-200 hover:bg-gray-300 active:bg-gray-200 transform transition-all duration-300 hover:scale-105"
           onClick={resetVoltarCategorias}
         />
       }>
-      <InputComponent
-        styleLabel="text-gray-600"
-        id="cacategoria"
-        type="text"
-        requiredItem
-        className={errors.cacategoria ? 'mb-4' : ''}
-        placeholder="Informe um nome da categoria"
-        icon={<NavigationArrow size={22} className="text-gray-500" />}
-        textLabel="Nome da Categoria"
-        {...register('cacategoria', { required: true })}
-        textError={errors.cacategoria && <TextRequired />}
-        error={errors.cacategoria}
-      />
+      <div className="max-w-2xl mx-auto">
+        <div className="bg-white rounded-lg shadow-sm p-6 space-y-6">
+          <InputComponent
+            styleLabel="text-gray-600"
+            id="cacategoria"
+            type="text"
+            requiredItem
+            className={errors.cacategoria ? 'mb-4' : ''}
+            placeholder="Informe um nome da categoria"
+            icon={<NavigationArrow size={22} className="text-gray-500" />}
+            textLabel="Nome da Categoria"
+            {...register('cacategoria', { required: true })}
+            textError={errors.cacategoria && <TextRequired />}
+            error={errors.cacategoria}
+          />
 
-      <Textarea
-        styleLabel="text-gray-600"
-        id="cadescricao"
-        requiredItem
-        className={errors.cadescricao ? 'mb-2' : ''}
-        placeholder="Informe uma descrição"
-        icon={<ChatTeardropText size={22} className="text-gray-500" />}
-        textLabel="Descrição"
-        {...register('cadescricao', { required: true })}
-        textError={errors.cadescricao && <TextRequired />}
-        error={errors.cadescricao}
-      />
+          <Textarea
+            styleLabel="text-gray-600"
+            id="cadescricao"
+            requiredItem
+            className={errors.cadescricao ? 'mb-2' : ''}
+            placeholder="Informe uma descrição"
+            icon={<ChatTeardropText size={22} className="text-gray-500" />}
+            textLabel="Descrição"
+            {...register('cadescricao', { required: true })}
+            textError={errors.cadescricao && <TextRequired />}
+            error={errors.cadescricao}
+          />
 
-      <div className="flex justify-center gap-2 mt-8">
-        <Button
-          title="Cancelar"
-          className="bg-red-700 hover:bg-red-800 active:bg-red-700 text-white px-8 py-3 rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg w-full"
-          onClick={resetVoltarCategorias}
-        />
+          <div className="flex justify-center gap-4 pt-4">
+            <Button
+              title="Cancelar"
+              className="bg-red-700 hover:bg-red-800 active:bg-red-700 text-white px-8 py-3 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 w-full flex items-center justify-center gap-2"
+              onClick={resetVoltarCategorias}
+              iconLeft={<X size={20} />}
+            />
 
-        <Button
-          title={
-            categoriaSelecionada.cacategoria.length > 0 ? 'Atualizar' : 'Salvar'
-          }
-          onClick={handleSubmit(onRegistrarCategoria)}
-          className="bg-green-700 hover:bg-green-800 active:bg-green-700 text-white px-8 py-3 rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg w-full"
-        />
+            <Button
+              title={
+                categoriaSelecionada.cacategoria.length > 0
+                  ? 'Atualizar'
+                  : 'Salvar'
+              }
+              onClick={handleSubmit(onRegistrarCategoria)}
+              className="bg-green-700 hover:bg-green-800 active:bg-green-700 text-white px-8 py-3 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 w-full flex items-center justify-center gap-2"
+              iconLeft={
+                categoriaSelecionada.cacategoria.length > 0 ? (
+                  <PencilSimple size={20} />
+                ) : (
+                  <Check size={20} />
+                )
+              }
+            />
+          </div>
+        </div>
       </div>
     </BaseLayout>
   )

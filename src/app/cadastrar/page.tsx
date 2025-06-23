@@ -87,7 +87,7 @@ export default function CadastrarUsuario() {
       setValue('edcep', cepFormatado)
 
       if (validateCEP(cepFormatado)) {
-        consultarCEP(cepFormatado).then(data => {
+        consultarCEP(cepFormatado).then((data) => {
           if (data) {
             setValue('edrua', data.logradouro)
             setValue('edbairro', data.bairro)
@@ -137,269 +137,320 @@ export default function CadastrarUsuario() {
   return (
     <BaseLayout
       title=" Criar Nova Conta"
+      description="Preencha os campos abaixo para se cadastrar na plataforma"
       buttonVoltar
       styleBase={false}
       menu={false}
-      adicionarItens={false}
-    >
-      {/* Dados Pessoais */}
-      <div className="space-y-4">
-        <h2 className="text-gray-600 text-lg font-semibold mb-4">
-          Dados Pessoais
-        </h2>
+      adicionarItens={false}>
+      <div className="w-full bg-white rounded-2xl shadow-xl overflow-hidden animate-fade-in-up">
+        <div className="p-8">
+          {/* Dados Pessoais */}
+          <div className="space-y-6 mb-8">
+            <div>
+              <h2 className="text-lg text-gray-700 font-semibold mb-4 flex items-center">
+                <User size={24} className="text-orange-1000 mr-2" />
+                Dados Pessoais
+              </h2>
 
-        <InputComponent
-          id="usnome"
-          type="text"
-          placeholder="Informe seu nome"
-          className="mb-4"
-          icon={<User size={22} className="text-gray-500" />}
-          textLabel="Nome completo"
-          styleLabel="text-gray-600"
-          requiredItem
-          {...register('usnome', {
-            required: true,
-            validate: {
-              validName: value => validateFullName(value) || 'Nome inválido'
-            }
-          })}
-          textError={
-            errors.usnome &&
-            (errors.usnome.type === 'validName' ? (
-              <span className="text-red-500 text-sm">Nome inválido</span>
-            ) : (
-              <TextRequired />
-            ))
-          }
-          error={errors.usnome}
-        />
+              <div className="space-y-4">
+                <InputComponent
+                  id="usnome"
+                  type="text"
+                  placeholder="Informe seu nome"
+                  className="w-full bg-gray-50 text-gray-900 transition-all duration-300 focus:ring-2 focus:ring-orange-1000/50"
+                  icon={<User size={22} className="text-gray-500" />}
+                  textLabel="Nome completo"
+                  styleLabel="text-gray-700 font-medium"
+                  requiredItem
+                  {...register('usnome', {
+                    required: true,
+                    validate: {
+                      validName: (value) =>
+                        validateFullName(value) || 'Nome inválido'
+                    }
+                  })}
+                  textError={
+                    errors.usnome &&
+                    (errors.usnome.type === 'validName' ? (
+                      <span className="text-red-500 text-sm">
+                        Nome inválido
+                      </span>
+                    ) : (
+                      <TextRequired />
+                    ))
+                  }
+                  error={errors.usnome}
+                />
 
-        <InputComponent
-          id="usemail"
-          type="email"
-          placeholder="Informe seu email"
-          className="mb-4"
-          icon={<Envelope size={22} className="text-gray-500" />}
-          textLabel="Email"
-          styleLabel="text-gray-600"
-          requiredItem
-          {...register('usemail', {
-            required: true,
-            validate: {
-              validEmail: value => validateEmail(value) || 'Email inválido'
-            }
-          })}
-          textError={
-            errors.usemail &&
-            (errors.usemail.type === 'validEmail' ? (
-              <span className="text-red-500 text-sm">Email inválido</span>
-            ) : (
-              <TextRequired />
-            ))
-          }
-          error={errors.usemail}
-        />
+                <InputComponent
+                  id="usemail"
+                  type="email"
+                  placeholder="Informe seu email"
+                  className="w-full bg-gray-50 text-gray-900 transition-all duration-300 focus:ring-2 focus:ring-orange-1000/50"
+                  icon={<Envelope size={22} className="text-gray-500" />}
+                  textLabel="Email"
+                  styleLabel="text-gray-700 font-medium"
+                  requiredItem
+                  {...register('usemail', {
+                    required: true,
+                    validate: {
+                      validEmail: (value) =>
+                        validateEmail(value) || 'Email inválido'
+                    }
+                  })}
+                  textError={
+                    errors.usemail &&
+                    (errors.usemail.type === 'validEmail' ? (
+                      <span className="text-red-500 text-sm">
+                        Email inválido
+                      </span>
+                    ) : (
+                      <TextRequired />
+                    ))
+                  }
+                  error={errors.usemail}
+                />
 
-        <InputComponent
-          id="ussenha"
-          type={typePassword}
-          placeholder="Informe sua senha"
-          className="mb-4"
-          icon={<Lock size={22} className="text-gray-500" />}
-          textLabel="Senha"
-          styleLabel="text-gray-600"
-          requiredItem
-          buttonRight={iconPassword}
-          onClickButton={() => {
-            if (typePassword === 'password') {
-              setTypePassword('text')
-              setIconPassword(<Eye className="p-1" size={30} />)
-            } else {
-              setTypePassword('password')
-              setIconPassword(<EyeSlash className="p-1" size={30} />)
-            }
-          }}
-          {...register('ussenha', { required: true })}
-          textError={
-            errors.ussenha &&
-            (errors.ussenha.type === 'validPassword' ? (
-              <span className="text-red-500 text-sm">
-                A senha deve ter no mínimo 8 caracteres, uma letra maiúscula,
-                uma minúscula e um número
-              </span>
-            ) : (
-              <TextRequired />
-            ))
-          }
-          error={errors.ussenha}
-        />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <InputComponent
+                    id="ussenha"
+                    type={typePassword}
+                    placeholder="Informe sua senha"
+                    className="w-full bg-gray-50 text-gray-900 transition-all duration-300 focus:ring-2 focus:ring-orange-1000/50"
+                    icon={<Lock size={22} className="text-gray-500" />}
+                    textLabel="Senha"
+                    styleLabel="text-gray-700 font-medium"
+                    requiredItem
+                    buttonRight={iconPassword}
+                    onClickButton={() => {
+                      if (typePassword === 'password') {
+                        setTypePassword('text')
+                        setIconPassword(
+                          <Eye
+                            className="p-1 text-gray-500 hover:text-gray-700 transition-colors"
+                            size={30}
+                          />
+                        )
+                      } else {
+                        setTypePassword('password')
+                        setIconPassword(
+                          <EyeSlash
+                            className="p-1 text-gray-500 hover:text-gray-700 transition-colors"
+                            size={30}
+                          />
+                        )
+                      }
+                    }}
+                    {...register('ussenha', { required: true })}
+                    textError={
+                      errors.ussenha &&
+                      (errors.ussenha.type === 'validPassword' ? (
+                        <span className="text-red-500 text-sm">
+                          A senha deve ter no mínimo 8 caracteres, uma letra
+                          maiúscula, uma minúscula e um número
+                        </span>
+                      ) : (
+                        <TextRequired />
+                      ))
+                    }
+                    error={errors.ussenha}
+                  />
 
-        <InputComponent
-          id="confirmarSenha"
-          type={typeConfirmPassword}
-          placeholder="Confirme sua senha"
-          className="mb-4"
-          icon={<Lock size={22} className="text-gray-500" />}
-          textLabel="Confirmar Senha"
-          styleLabel="text-gray-600"
-          requiredItem
-          buttonRight={iconConfirmPassword}
-          onClickButton={() => {
-            if (typeConfirmPassword === 'password') {
-              setTypeConfirmPassword('text')
-              setIconConfirmPassword(<Eye className="p-1" size={30} />)
-            } else {
-              setTypeConfirmPassword('password')
-              setIconConfirmPassword(<EyeSlash className="p-1" size={30} />)
-            }
-          }}
-          {...register('confirmarSenha', {
-            required: true,
-            validate: value =>
-              value === watch('ussenha') || 'As senhas não coincidem'
-          })}
-          textError={
-            errors.confirmarSenha &&
-            (errors.confirmarSenha.type === 'validate' ? (
-              <span className="text-red-500 text-sm">
-                As senhas não coincidem
-              </span>
-            ) : (
-              <TextRequired />
-            ))
-          }
-          error={errors.confirmarSenha}
-        />
-      </div>
+                  <InputComponent
+                    id="confirmarSenha"
+                    type={typeConfirmPassword}
+                    placeholder="Confirme sua senha"
+                    className="w-full bg-gray-50 text-gray-900 transition-all duration-300 focus:ring-2 focus:ring-orange-1000/50"
+                    icon={<Lock size={22} className="text-gray-500" />}
+                    textLabel="Confirmar Senha"
+                    styleLabel="text-gray-700 font-medium"
+                    requiredItem
+                    buttonRight={iconConfirmPassword}
+                    onClickButton={() => {
+                      if (typeConfirmPassword === 'password') {
+                        setTypeConfirmPassword('text')
+                        setIconConfirmPassword(
+                          <Eye
+                            className="p-1 text-gray-500 hover:text-gray-700 transition-colors"
+                            size={30}
+                          />
+                        )
+                      } else {
+                        setTypeConfirmPassword('password')
+                        setIconConfirmPassword(
+                          <EyeSlash
+                            className="p-1 text-gray-500 hover:text-gray-700 transition-colors"
+                            size={30}
+                          />
+                        )
+                      }
+                    }}
+                    {...register('confirmarSenha', {
+                      required: true,
+                      validate: (value) =>
+                        value === watch('ussenha') || 'As senhas não coincidem'
+                    })}
+                    textError={
+                      errors.confirmarSenha &&
+                      (errors.confirmarSenha.type === 'validate' ? (
+                        <span className="text-red-500 text-sm">
+                          As senhas não coincidem
+                        </span>
+                      ) : (
+                        <TextRequired />
+                      ))
+                    }
+                    error={errors.confirmarSenha}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
 
-      {/* Endereço */}
-      <div className="space-y-4">
-        <h2 className="text-gray-600 text-lg font-semibold mb-4">Endereço</h2>
+          {/* Endereço */}
+          <div className="space-y-6">
+            <h2 className="text-lg text-gray-700 font-semibold mb-4 flex items-center">
+              <MapPin size={24} className="text-orange-1000 mr-2" />
+              Endereço
+            </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <InputComponent
-            id="edcep"
-            type="text"
-            placeholder="Informe o CEP"
-            icon={<MapPin size={22} className="text-gray-500" />}
-            textLabel="CEP"
-            styleLabel="text-gray-600"
-            requiredItem
-            maxLength={9}
-            {...register('edcep', {
-              required: true,
-              validate: {
-                validCEP: (value: any) => validateCEP(value) || 'CEP inválido'
-              }
-            })}
-            textError={
-              errors.edcep &&
-              (errors.edcep.type === 'validCEP' ? (
-                <span className="text-red-500 text-sm">CEP inválido</span>
-              ) : (
-                <TextRequired className="mt-1" />
-              ))
-            }
-            error={errors.edcep}
-          />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <InputComponent
+                id="edcep"
+                type="text"
+                placeholder="Informe o CEP"
+                className="w-full bg-gray-50 text-gray-900 transition-all duration-300 focus:ring-2 focus:ring-orange-1000/50"
+                icon={<MapPin size={22} className="text-gray-500" />}
+                textLabel="CEP"
+                styleLabel="text-gray-700 font-medium"
+                requiredItem
+                maxLength={9}
+                {...register('edcep', {
+                  required: true,
+                  validate: {
+                    validCEP: (value: any) =>
+                      validateCEP(value) || 'CEP inválido'
+                  }
+                })}
+                textError={
+                  errors.edcep &&
+                  (errors.edcep.type === 'validCEP' ? (
+                    <span className="text-red-500 text-sm">CEP inválido</span>
+                  ) : (
+                    <TextRequired className="mt-1" />
+                  ))
+                }
+                error={errors.edcep}
+              />
 
-          <InputComponent
-            id="edrua"
-            type="text"
-            placeholder="Informe a rua"
-            icon={<House size={22} className="text-gray-500" />}
-            textLabel="Rua"
-            styleLabel="text-gray-600"
-            requiredItem
-            {...register('edrua', { required: true })}
-            textError={errors.edrua && <TextRequired className="mt-1" />}
-            error={errors.edrua}
-          />
+              <InputComponent
+                id="edrua"
+                type="text"
+                placeholder="Informe a rua"
+                className="w-full bg-gray-50 text-gray-900 transition-all duration-300 focus:ring-2 focus:ring-orange-1000/50"
+                icon={<House size={22} className="text-gray-500" />}
+                textLabel="Rua"
+                styleLabel="text-gray-700 font-medium"
+                requiredItem
+                {...register('edrua', { required: true })}
+                textError={errors.edrua && <TextRequired className="mt-1" />}
+                error={errors.edrua}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <InputComponent
+                id="ednumero"
+                type="text"
+                placeholder="Número"
+                className="w-full bg-gray-50 text-gray-900 transition-all duration-300 focus:ring-2 focus:ring-orange-1000/50"
+                textLabel="Número"
+                styleLabel="text-gray-700 font-medium"
+                icon={<Hash size={22} className="text-gray-500" />}
+                requiredItem
+                {...register('ednumero', { required: true })}
+                textError={errors.ednumero && <TextRequired className="mt-1" />}
+                error={errors.ednumero}
+              />
+
+              <InputComponent
+                id="edbairro"
+                type="text"
+                placeholder="Bairro"
+                className="w-full bg-gray-50 text-gray-900 transition-all duration-300 focus:ring-2 focus:ring-orange-1000/50"
+                textLabel="Bairro"
+                styleLabel="text-gray-700 font-medium"
+                icon={<MapTrifold size={22} className="text-gray-500" />}
+                requiredItem
+                {...register('edbairro', { required: true })}
+                textError={errors.edbairro && <TextRequired className="mt-1" />}
+                error={errors.edbairro}
+              />
+
+              <InputComponent
+                id="edcomplemento"
+                type="text"
+                placeholder="Complemento"
+                className="w-full bg-gray-50 text-gray-900 transition-all duration-300 focus:ring-2 focus:ring-orange-1000/50"
+                textLabel="Complemento"
+                styleLabel="text-gray-700 font-medium"
+                icon={<Signpost size={22} className="text-gray-500" />}
+                {...register('edcomplemento')}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <InputComponent
+                id="edmunicipio"
+                type="text"
+                placeholder="Município"
+                className="w-full bg-gray-50 text-gray-900 transition-all duration-300 focus:ring-2 focus:ring-orange-1000/50"
+                textLabel="Município"
+                styleLabel="text-gray-700 font-medium"
+                icon={<Buildings size={22} className="text-gray-500" />}
+                requiredItem
+                {...register('edmunicipio', { required: true })}
+                textError={
+                  errors.edmunicipio && <TextRequired className="mt-1" />
+                }
+                error={errors.edmunicipio}
+              />
+
+              <InputComponent
+                id="edestado"
+                type="text"
+                placeholder="Estado"
+                className="w-full bg-gray-50 text-gray-900 transition-all duration-300 focus:ring-2 focus:ring-orange-1000/50"
+                textLabel="Estado"
+                styleLabel="text-gray-700 font-medium"
+                icon={<Compass size={22} className="text-gray-500" />}
+                requiredItem
+                {...register('edestado', { required: true })}
+                textError={errors.edestado && <TextRequired className="mt-1" />}
+                error={errors.edestado}
+              />
+            </div>
+
+            <InputComponent
+              id="edpontoreferencia"
+              type="text"
+              placeholder="Ponto de referência"
+              className="w-full bg-gray-50 text-gray-900 transition-all duration-300 focus:ring-2 focus:ring-orange-1000/50"
+              textLabel="Ponto de referência"
+              styleLabel="text-gray-700 font-medium"
+              icon={<MapPin size={22} className="text-gray-500" />}
+              {...register('edpontoreferencia')}
+            />
+          </div>
+
+          <div className="flex justify-center mt-8">
+            <Button
+              onClick={handleSubmit(onCadastrarUsuario)}
+              title="Criar Conta"
+              className="w-full md:w-auto bg-orange-1000 hover:bg-orange-900 text-white px-12 py-3 rounded-lg transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg font-medium"
+            />
+          </div>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <InputComponent
-            id="ednumero"
-            type="text"
-            placeholder="Número"
-            textLabel="Número"
-            styleLabel="text-gray-600"
-            icon={<Hash size={22} className="text-gray-500" />}
-            requiredItem
-            {...register('ednumero', { required: true })}
-            textError={errors.ednumero && <TextRequired className="mt-1" />}
-            error={errors.ednumero}
-          />
-
-          <InputComponent
-            id="edbairro"
-            type="text"
-            placeholder="Bairro"
-            textLabel="Bairro"
-            styleLabel="text-gray-600"
-            icon={<MapTrifold size={22} className="text-gray-500" />}
-            requiredItem
-            {...register('edbairro', { required: true })}
-            textError={errors.edbairro && <TextRequired className="mt-1" />}
-            error={errors.edbairro}
-          />
-
-          <InputComponent
-            id="edcomplemento"
-            type="text"
-            placeholder="Complemento"
-            textLabel="Complemento"
-            styleLabel="text-gray-600"
-            icon={<Signpost size={22} className="text-gray-500" />}
-            {...register('edcomplemento')}
-          />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <InputComponent
-            id="edmunicipio"
-            type="text"
-            placeholder="Município"
-            textLabel="Município"
-            styleLabel="text-gray-600"
-            icon={<Buildings size={22} className="text-gray-500" />}
-            requiredItem
-            {...register('edmunicipio', { required: true })}
-            textError={errors.edmunicipio && <TextRequired className="mt-1" />}
-            error={errors.edmunicipio}
-          />
-
-          <InputComponent
-            id="edestado"
-            type="text"
-            placeholder="Estado"
-            textLabel="Estado"
-            styleLabel="text-gray-600"
-            icon={<Compass size={22} className="text-gray-500" />}
-            requiredItem
-            {...register('edestado', { required: true })}
-            textError={errors.edestado && <TextRequired className="mt-1" />}
-            error={errors.edestado}
-          />
-        </div>
-
-        <InputComponent
-          id="edpontoreferencia"
-          type="text"
-          placeholder="Ponto de referência"
-          textLabel="Ponto de referência"
-          styleLabel="text-gray-600"
-          icon={<MapPin size={22} className="text-gray-500" />}
-          {...register('edpontoreferencia')}
-        />
-      </div>
-
-      <div className="flex justify-center mt-8">
-        <Button
-          onClick={handleSubmit(onCadastrarUsuario)}
-          title="Criar Conta"
-          className="bg-orange-1000 hover:bg-orange-900 text-white px-8 py-3 rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg"
-        />
       </div>
     </BaseLayout>
   )

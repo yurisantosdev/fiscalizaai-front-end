@@ -43,14 +43,6 @@ export default function Home() {
     dispatch(setLoading(false))
   }, [])
 
-  /**
-   * Realiza o login do usuário.
-   * - Obtém os dados do formulário.
-   * - Realiza o login.
-   * - Redireciona para a página de home.
-   *
-   * @autor Yuri 🇧🇷
-   */
   async function onLogin(data: LoginType) {
     dispatch(setLoading(true))
 
@@ -77,96 +69,115 @@ export default function Home() {
       styleBase={false}
       menu={false}
       adicionarItens={false}>
-      <main className="flex justify-center items-end lg:items-center">
-        <Image
-          src={logomarca}
-          alt={''}
-          className="absolute top-1 md:w-52 md:h-52 w-60 h-60 z-10"
-        />
+      <main className="min-h-screen flex flex-col justify-center items-center px-4 py-8">
+        <div className="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden animate-fade-in-up">
+          <div className="p-8 pt-4">
+            <div className="text-center mb-8">
+              <h1 className="text-2xl text-gray-800 font-bold mb-2">
+                Bem-vindo ao FiscalizaAí
+              </h1>
+              <p className="text-gray-500">
+                Entre com suas credenciais para acessar
+              </p>
+            </div>
 
-        <div className="bg-gray-1000 md:py-4 md:mt-16 md:p-0 p-3 rounded-md w-[90%] lg:w-[34%] md:mb-0 mb-14 z-20">
-          <div className="md:mb-4 mb-3">
-            <h1 className="md:text-[21px] text-lg text-white font-bold text-center select-none">
-              Acessar
-            </h1>
-          </div>
+            <div className="space-y-6">
+              <div>
+                <InputComponent
+                  id="email"
+                  type="text"
+                  placeholder="Informe seu E-mail"
+                  className="w-full bg-gray-50 text-gray-900 transition-all duration-300 focus:ring-2 focus:ring-orange-1000/50 mb-5"
+                  icon={<User size={22} className="text-gray-500" />}
+                  textLabel="E-mail"
+                  styleLabel="text-gray-700 font-medium"
+                  {...register('email', { required: true })}
+                  textError={errors.email && <TextRequired />}
+                  error={errors.email}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleSubmit(onLogin)()
+                    }
+                  }}
+                />
+              </div>
 
-          <div className="md:w-[80%] md:m-auto">
-            <InputComponent
-              id="email"
-              type="text"
-              placeholder="Informe seu E-mail"
-              className="mb-5"
-              icon={<User size={22} />}
-              textLabel="E-mail"
-              {...register('email', { required: true })}
-              textError={errors.email && <TextRequired />}
-              error={errors.email}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  handleSubmit(onLogin)()
-                }
-              }}
-            />
-          </div>
+              <div>
+                <InputComponent
+                  id="senha"
+                  type={typePassword}
+                  className="w-full bg-gray-50 text-gray-900 transition-all duration-300 focus:ring-2 focus:ring-orange-1000/50 mb-5"
+                  textLabel="Senha"
+                  styleLabel="text-gray-700 font-medium"
+                  placeholder="Informe sua senha"
+                  icon={<Lock size={22} className="text-gray-500" />}
+                  buttonRight={iconPassword}
+                  onClickButton={() => {
+                    if (typePassword == 'password') {
+                      setTypePassword('text')
+                      setIconPassword(
+                        <Eye
+                          className="p-1 text-gray-500 hover:text-gray-700 transition-colors"
+                          size={30}
+                        />
+                      )
+                    } else {
+                      setTypePassword('password')
+                      setIconPassword(
+                        <EyeSlash
+                          className="p-1 text-gray-500 hover:text-gray-700 transition-colors"
+                          size={30}
+                        />
+                      )
+                    }
+                  }}
+                  {...register('senha', { required: true })}
+                  textError={errors.senha && <TextRequired />}
+                  error={errors.senha}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleSubmit(onLogin)()
+                    }
+                  }}
+                />
 
-          <div className="md:w-[80%] md:m-auto pb-6">
-            <InputComponent
-              id="senha"
-              type={typePassword}
-              className="mb-5"
-              textLabel="Senha"
-              placeholder="Informe sua senha"
-              icon={<Lock size={22} />}
-              buttonRight={iconPassword}
-              onClickButton={() => {
-                if (typePassword == 'password') {
-                  setTypePassword('text')
-                  setIconPassword(<Eye className="p-1" size={30} />)
-                } else {
-                  setTypePassword('password')
-                  setIconPassword(<EyeSlash className="p-1" size={30} />)
-                }
-              }}
-              {...register('senha', { required: true })}
-              textError={errors.senha && <TextRequired />}
-              error={errors.senha}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  handleSubmit(onLogin)()
-                }
-              }}
-            />
+                <p
+                  className="text-sm text-gray-500 hover:text-orange-1000 transition-colors mt-2 cursor-pointer w-max select-none"
+                  onClick={() => {
+                    router.push('/esqueciSenha')
+                  }}>
+                  Esqueci minha senha
+                </p>
+              </div>
 
-            <p
-              className="text-sm text-gray-1400 hover:underline cursor-pointer w-max select-none"
-              onClick={() => {
-                router.push('/esqueciSenha')
-              }}>
-              Esqueci senha
-            </p>
-          </div>
+              <Button
+                title="ENTRAR"
+                className="w-full bg-orange-1000 hover:bg-orange-900 text-white py-3 rounded-lg transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg font-medium"
+                onClick={handleSubmit(onLogin)}
+              />
 
-          <div className="md:w-[80%] md:m-auto">
-            <Button
-              title="ENTRAR"
-              className="w-full bg-orange-1000 active:bg-orange-1000/70 hover:bg-orange-1000/60"
-              onClick={handleSubmit(onLogin)}
-            />
-          </div>
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-200"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-white text-gray-500">ou</span>
+                </div>
+              </div>
 
-          <div className="md:w-[80%] md:m-auto md:mt-9 mt-8">
-            <p className="text-white text-sm text-center mb-2">
-              Não tem cadastro ainda?
-            </p>
-
-            <Button
-              title="Cadastrar-se"
-              className="w-full bg-blue-1000 active:bg-blue-1000/70 hover:bg-blue-1000/60"
-              onClick={() => {
-                router.push('cadastrar')
-              }}
-            />
+              <div className="text-center">
+                <p className="text-gray-500 text-sm mb-2">
+                  Não tem uma conta ainda?
+                </p>
+                <Button
+                  title="Criar Nova Conta"
+                  className="w-full bg-blue-1000 hover:bg-blue-900 text-white py-3 rounded-lg transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg font-medium"
+                  onClick={() => {
+                    router.push('cadastrar')
+                  }}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </main>

@@ -276,45 +276,53 @@ export default function RegistrarProblema() {
     <div>
       <BaseLayout adicionarItens={false}>
         {primeiraOpcao ? (
-          <div>
-            <div className="mb-3 -mt-5 bg-gray-1200 p-2 rounded-md">
-              <p className="text-white text-center mb-3 text-md font-bold">
-                Localização selecionada
-              </p>
-              <p className="text-white text-center text-lg">
-                {localizacaoAtual}
-              </p>
+          <div className="max-w-4xl mx-auto space-y-6">
+            {/* Card de Localização */}
+            <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+              <div className="bg-blue-1000 p-4">
+                <h2 className="text-white text-lg font-semibold mb-2 flex items-center gap-2">
+                  <NavigationArrow size={24} />
+                  Localização Selecionada
+                </h2>
+                <p className="text-white/90 text-base break-words">
+                  {localizacaoAtual}
+                </p>
+              </div>
+
+              {position && (
+                <div className="md:h-[300px] h-[200px] relative">
+                  <Mapa
+                    className="w-full h-full"
+                    locAtual={true}
+                    position={position}>
+                    <MarkerMapa
+                      position={position}
+                      dragedFunction={(e: any) => {
+                        const marker = e.target
+                        const newPosition: [number, number] = [
+                          marker.getLatLng().lat,
+                          marker.getLatLng().lng
+                        ]
+                        setPosition(newPosition)
+                        atualizarLocalizacao(
+                          marker.getLatLng().lat,
+                          marker.getLatLng().lng
+                        )
+                      }}
+                    />
+                  </Mapa>
+                </div>
+              )}
             </div>
 
-            {position && (
-              <div className="md:h-[300px] h-[200px] relative rounded-lg overflow-hidden">
-                <Mapa
-                  className="w-full h-full"
-                  locAtual={true}
-                  position={position}>
-                  <MarkerMapa
-                    position={position}
-                    dragedFunction={(e: any) => {
-                      const marker = e.target
-                      const newPosition: [number, number] = [
-                        marker.getLatLng().lat,
-                        marker.getLatLng().lng
-                      ]
-                      setPosition(newPosition)
-                      atualizarLocalizacao(
-                        marker.getLatLng().lat,
-                        marker.getLatLng().lng
-                      )
-                    }}
-                  />
-                </Mapa>
+            {/* Card de Detalhes */}
+            <div className="bg-white rounded-lg shadow-sm p-6 space-y-6">
+              <div className="flex items-center gap-2 border-b border-gray-200 pb-4">
+                <ChatTeardropText size={24} className="text-blue-1000" />
+                <h2 className="text-gray-700 text-lg font-semibold">
+                  Detalhes do Problema
+                </h2>
               </div>
-            )}
-
-            <div className="space-y-4 mt-2">
-              <h2 className="text-gray-600 text-lg font-semibold mb-4">
-                Detalhes do Problema
-              </h2>
 
               <InputComponent
                 styleLabel="text-gray-600"
@@ -335,7 +343,7 @@ export default function RegistrarProblema() {
                 id="dedescricao"
                 requiredItem
                 className={errors.dedescricao ? 'mb-0' : ''}
-                placeholder="Informe uma descrição"
+                placeholder="Informe uma descrição detalhada do problema"
                 icon={<ChatTeardropText size={22} className="text-gray-500" />}
                 textLabel="Descrição"
                 {...register('dedescricao', { required: true })}
@@ -343,65 +351,78 @@ export default function RegistrarProblema() {
                 error={errors.dedescricao}
               />
 
-              <SelectComponent
-                styleLabel="text-gray-600"
-                id="decategoria"
-                textLabel="Categoria"
-                options={categorias}
-                requiredItem
-                className={errors.decategoria ? 'mb-4' : ''}
-                icon={<SquaresFour size={22} className="text-gray-500" />}
-                iconRight={<Question size={22} className="text-gray-500" />}
-                iconRightFuntion={() => {
-                  CLickLabel('modalLegendaCategorias')
-                }}
-                {...register('decategoria', { required: true })}
-                textError={errors.decategoria && <TextRequired />}
-                error={errors.decategoria}
-              />
-
-              <div className="mt-4 md:pb-0 pb-32">
-                <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                  <h3 className="text-gray-700 font-medium mb-3">
-                    Fotos do Problema
-                  </h3>
-                  <p className="text-sm text-gray-500 mb-4">
-                    Adicione fotos que mostrem claramente o problema.
-                    Recomendamos pelo menos 3 fotos de diferentes ângulos.
-                  </p>
-                  <InputFotos
-                    error={!!errors.fotos}
-                    textError={errors.fotos && <TextRequired />}
-                    onChange={(novasFotos) => {
-                      setValue('fotos', novasFotos, { shouldValidate: true })
-                    }}
-                    value={watch('fotos')}
-                  />
-                </div>
+              <div className="relative">
+                <SelectComponent
+                  styleLabel="text-gray-600"
+                  id="decategoria"
+                  textLabel="Categoria"
+                  options={categorias}
+                  requiredItem
+                  className={errors.decategoria ? 'mb-4' : ''}
+                  icon={<SquaresFour size={22} className="text-gray-500" />}
+                  iconRight={
+                    <Question
+                      size={22}
+                      className="text-blue-1000 hover:text-blue-800 transition-colors cursor-pointer"
+                    />
+                  }
+                  iconRightFuntion={() => {
+                    CLickLabel('modalLegendaCategorias')
+                  }}
+                  {...register('decategoria', { required: true })}
+                  textError={errors.decategoria && <TextRequired />}
+                  error={errors.decategoria}
+                />
               </div>
 
-              <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 rounded-md p-4 md:relative md:border-none md:p-0">
-                <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-3">
-                  <Button
-                    title="Cancelar"
-                    onClick={cancelarRegistroProblema}
-                    className="bg-gray-200 hover:bg-gray-100 active:bg-gray-100 text-gray-700 px-8 py-3 rounded-lg transition-colors duration-300 shadow-sm hover:shadow-md w-full md:w-1/2"
-                  />
-                  <Button
-                    title="Salvar Relato"
-                    onClick={handleSubmit(onRegistrarProblema)}
-                    className="bg-green-700 hover:bg-green-800 active:bg-green-700 text-white px-8 py-3 rounded-lg transition-colors duration-300 shadow-sm hover:shadow-md w-full md:w-1/2"
-                  />
+              <div className="bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-blue-200 transition-colors">
+                <div className="flex items-center gap-2 mb-3">
+                  <ChatTeardropText size={22} className="text-blue-1000" />
+                  <h3 className="text-gray-700 font-medium">
+                    Fotos do Problema
+                  </h3>
                 </div>
+                <p className="text-sm text-gray-500 mb-4">
+                  Adicione fotos que mostrem claramente o problema. Recomendamos
+                  pelo menos 3 fotos de diferentes ângulos.
+                </p>
+                <InputFotos
+                  error={!!errors.fotos}
+                  textError={errors.fotos && <TextRequired />}
+                  onChange={(novasFotos) => {
+                    setValue('fotos', novasFotos, { shouldValidate: true })
+                  }}
+                  value={watch('fotos')}
+                />
+              </div>
+            </div>
+
+            {/* Barra de Ações */}
+            <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 md:relative md:border-none md:p-0 md:bg-transparent transition-transform duration-300 transform translate-y-0 hover:shadow-lg md:hover:shadow-none">
+              <div className="max-w-4xl mx-auto flex flex-col md:flex-row gap-3">
+                <Button
+                  title="Cancelar"
+                  onClick={cancelarRegistroProblema}
+                  className="bg-gray-100 hover:bg-gray-200 active:bg-gray-100 text-gray-700 px-8 py-3 rounded-lg transition-all duration-300 shadow-sm hover:shadow-md w-full md:w-1/2 transform hover:scale-[1.02]"
+                />
+                <Button
+                  title="Salvar Relato"
+                  onClick={handleSubmit(onRegistrarProblema)}
+                  className="bg-green-700 hover:bg-green-800 active:bg-green-700 text-white px-8 py-3 rounded-lg transition-all duration-300 shadow-sm hover:shadow-md w-full md:w-1/2 transform hover:scale-[1.02]"
+                />
               </div>
             </div>
           </div>
         ) : (
           <div className="flex justify-center items-center py-8">
-            <div className="w-full max-w-md">
-              <h2 className="text-gray-600 text-lg font-semibold mb-6 text-center">
+            <div className="text-center mb-8">
+              <Question size={48} className="text-blue-1000 mx-auto mb-4" />
+              <h2 className="text-gray-700 text-xl font-semibold mb-2">
                 Você está no local do problema?
               </h2>
+              <p className="text-gray-500 text-sm mb-3">
+                Sua resposta nos ajudará a obter a localização mais precisa.
+              </p>
 
               <div className="flex justify-center items-center gap-4">
                 <Button
@@ -411,14 +432,14 @@ export default function RegistrarProblema() {
                     dispatch(setLoading(true))
                     obterDadosLocalizacao()
                   }}
-                  className="bg-green-700 hover:bg-green-800 active:bg-green-700 text-white px-8 py-3 rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg"
+                  className="bg-green-700 hover:bg-green-800 active:bg-green-700 text-white px-8 py-3 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-[1.02] flex-1"
                 />
                 <Button
                   title="Não"
                   onClick={() => {
                     setPrimeiraOpcao(true)
                   }}
-                  className="bg-red-700 hover:bg-red-800 active:bg-red-700 text-white px-8 py-3 rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg"
+                  className="bg-red-700 hover:bg-red-800 active:bg-red-700 text-white px-8 py-3 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-[1.02] flex-1"
                 />
               </div>
             </div>

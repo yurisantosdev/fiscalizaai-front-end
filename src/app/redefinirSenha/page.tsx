@@ -66,130 +66,152 @@ export default function RedefinirSenha() {
       styleBase={false}
       menu={false}
       adicionarItens={false}>
-      <div className="space-y-6">
-        <InputComponent
-          id="codigo"
-          type="text"
-          placeholder="Digite o código de 6 dígitos"
-          className="mb-4"
-          icon={<Key size={22} className="text-gray-500" />}
-          textLabel="Código de Recuperação"
-          styleLabel="text-gray-600"
-          requiredItem
-          maxLength={6}
-          {...register('codigo', {
-            required: true,
-            minLength: {
-              value: 6,
-              message: 'O código deve ter 6 dígitos'
-            },
-            maxLength: {
-              value: 6,
-              message: 'O código deve ter 6 dígitos'
-            },
-            pattern: {
-              value: /^[0-9]{6}$/,
-              message: 'Digite apenas números'
-            }
-          })}
-          textError={
-            errors.codigo &&
-            (errors.codigo.type === 'minLength' ||
-            errors.codigo.type === 'maxLength' ? (
-              <span className="text-red-500 text-sm">
-                O código deve ter 6 dígitos
-              </span>
-            ) : errors.codigo.type === 'pattern' ? (
-              <span className="text-red-500 text-sm">
-                Digite apenas números
-              </span>
-            ) : (
-              <TextRequired />
-            ))
-          }
-          error={errors.codigo}
-        />
+      <div className="w-full max-w-md m-auto bg-white rounded-2xl shadow-xl overflow-hidden animate-fade-in-up">
+        <div className="p-8">
+          <div className="space-y-6">
+            <InputComponent
+              id="codigo"
+              type="text"
+              placeholder="Digite o código de 6 dígitos"
+              className="w-full bg-gray-50 text-gray-900 transition-all duration-300 focus:ring-2 focus:ring-orange-1000/50"
+              icon={<Key size={22} className="text-gray-500" />}
+              textLabel="Código de Recuperação"
+              styleLabel="text-gray-700 font-medium"
+              requiredItem
+              maxLength={6}
+              {...register('codigo', {
+                required: true,
+                minLength: {
+                  value: 6,
+                  message: 'O código deve ter 6 dígitos'
+                },
+                maxLength: {
+                  value: 6,
+                  message: 'O código deve ter 6 dígitos'
+                },
+                pattern: {
+                  value: /^[0-9]{6}$/,
+                  message: 'Digite apenas números'
+                }
+              })}
+              textError={
+                errors.codigo &&
+                (errors.codigo.type === 'minLength' ||
+                errors.codigo.type === 'maxLength' ? (
+                  <span className="text-red-500 text-sm">
+                    O código deve ter 6 dígitos
+                  </span>
+                ) : errors.codigo.type === 'pattern' ? (
+                  <span className="text-red-500 text-sm">
+                    Digite apenas números
+                  </span>
+                ) : (
+                  <TextRequired />
+                ))
+              }
+              error={errors.codigo}
+            />
 
-        <InputComponent
-          id="novaSenha"
-          type={typeNovaSenha}
-          placeholder="Digite sua nova senha"
-          className="mb-4"
-          icon={<Lock size={22} className="text-gray-500" />}
-          textLabel="Nova Senha"
-          styleLabel="text-gray-600"
-          requiredItem
-          buttonRight={iconNovaSenha}
-          onClickButton={() => {
-            if (typeNovaSenha === 'password') {
-              setTypeNovaSenha('text')
-              setIconNovaSenha(<Eye className="p-1" size={30} />)
-            } else {
-              setTypeNovaSenha('password')
-              setIconNovaSenha(<EyeSlash className="p-1" size={30} />)
-            }
-          }}
-          {...register('novaSenha', { required: true })}
-          textError={
-            errors.novaSenha &&
-            (errors.novaSenha.type === 'minLength' ? (
-              <span className="text-red-500 text-sm">
-                A senha deve ter no mínimo 6 caracteres
-              </span>
-            ) : errors.novaSenha.type === 'pattern' ? (
-              <span className="text-red-500 text-sm">
-                A senha deve conter letras e números
-              </span>
-            ) : (
-              <TextRequired />
-            ))
-          }
-          error={errors.novaSenha}
-        />
+            <InputComponent
+              id="novaSenha"
+              type={typeNovaSenha}
+              placeholder="Digite sua nova senha"
+              className="w-full bg-gray-50 text-gray-900 transition-all duration-300 focus:ring-2 focus:ring-orange-1000/50"
+              icon={<Lock size={22} className="text-gray-500" />}
+              textLabel="Nova Senha"
+              styleLabel="text-gray-700 font-medium"
+              requiredItem
+              buttonRight={iconNovaSenha}
+              onClickButton={() => {
+                if (typeNovaSenha === 'password') {
+                  setTypeNovaSenha('text')
+                  setIconNovaSenha(
+                    <Eye
+                      className="p-1 text-gray-500 hover:text-gray-700 transition-colors"
+                      size={30}
+                    />
+                  )
+                } else {
+                  setTypeNovaSenha('password')
+                  setIconNovaSenha(
+                    <EyeSlash
+                      className="p-1 text-gray-500 hover:text-gray-700 transition-colors"
+                      size={30}
+                    />
+                  )
+                }
+              }}
+              {...register('novaSenha', { required: true })}
+              textError={
+                errors.novaSenha &&
+                (errors.novaSenha.type === 'minLength' ? (
+                  <span className="text-red-500 text-sm">
+                    A senha deve ter no mínimo 6 caracteres
+                  </span>
+                ) : errors.novaSenha.type === 'pattern' ? (
+                  <span className="text-red-500 text-sm">
+                    A senha deve conter letras e números
+                  </span>
+                ) : (
+                  <TextRequired />
+                ))
+              }
+              error={errors.novaSenha}
+            />
 
-        <InputComponent
-          id="confirmarSenha"
-          type={typeConfirmarSenha}
-          placeholder="Confirme sua nova senha"
-          className="mb-4"
-          icon={<Lock size={22} className="text-gray-500" />}
-          textLabel="Confirmar Senha"
-          styleLabel="text-gray-600"
-          requiredItem
-          buttonRight={iconConfirmarSenha}
-          onClickButton={() => {
-            if (typeConfirmarSenha === 'password') {
-              setTypeConfirmarSenha('text')
-              setIconConfirmarSenha(<Eye className="p-1" size={30} />)
-            } else {
-              setTypeConfirmarSenha('password')
-              setIconConfirmarSenha(<EyeSlash className="p-1" size={30} />)
-            }
-          }}
-          {...register('confirmarSenha', {
-            required: true,
-            validate: (value) =>
-              value === watch('novaSenha') || 'As senhas não coincidem'
-          })}
-          textError={
-            errors.confirmarSenha &&
-            (errors.confirmarSenha.type === 'validate' ? (
-              <span className="text-red-500 text-sm">
-                As senhas não coincidem
-              </span>
-            ) : (
-              <TextRequired />
-            ))
-          }
-          error={errors.confirmarSenha}
-        />
+            <InputComponent
+              id="confirmarSenha"
+              type={typeConfirmarSenha}
+              placeholder="Confirme sua nova senha"
+              className="w-full bg-gray-50 text-gray-900 transition-all duration-300 focus:ring-2 focus:ring-orange-1000/50"
+              icon={<Lock size={22} className="text-gray-500" />}
+              textLabel="Confirmar Senha"
+              styleLabel="text-gray-700 font-medium"
+              requiredItem
+              buttonRight={iconConfirmarSenha}
+              onClickButton={() => {
+                if (typeConfirmarSenha === 'password') {
+                  setTypeConfirmarSenha('text')
+                  setIconConfirmarSenha(
+                    <Eye
+                      className="p-1 text-gray-500 hover:text-gray-700 transition-colors"
+                      size={30}
+                    />
+                  )
+                } else {
+                  setTypeConfirmarSenha('password')
+                  setIconConfirmarSenha(
+                    <EyeSlash
+                      className="p-1 text-gray-500 hover:text-gray-700 transition-colors"
+                      size={30}
+                    />
+                  )
+                }
+              }}
+              {...register('confirmarSenha', {
+                required: true,
+                validate: (value) =>
+                  value === watch('novaSenha') || 'As senhas não coincidem'
+              })}
+              textError={
+                errors.confirmarSenha &&
+                (errors.confirmarSenha.type === 'validate' ? (
+                  <span className="text-red-500 text-sm">
+                    As senhas não coincidem
+                  </span>
+                ) : (
+                  <TextRequired />
+                ))
+              }
+              error={errors.confirmarSenha}
+            />
 
-        <div className="flex justify-center mt-8">
-          <Button
-            onClick={handleSubmit(onRedefinirSenha)}
-            title="Redefinir Senha"
-            className="bg-orange-1000 hover:bg-orange-900 text-white px-8 py-3 rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg"
-          />
+            <Button
+              onClick={handleSubmit(onRedefinirSenha)}
+              title="Redefinir Senha"
+              className="w-full bg-orange-1000 hover:bg-orange-900 text-white py-3 rounded-lg transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg font-medium mt-6"
+            />
+          </div>
         </div>
       </div>
     </BaseLayout>
