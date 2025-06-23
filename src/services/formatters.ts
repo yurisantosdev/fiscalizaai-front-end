@@ -56,7 +56,7 @@ export function FormatarDataHora(dataHoraStr: string) {
   return `${dia}/${mes}/${ano} ${hora}`
 }
 
-export function FormatarDataBrasileira(dataISO: string) {
+export function FormatarDataBrasileira(dataISO: any) {
   const data = new Date(dataISO);
 
   const dataFormatada = data.toLocaleString("pt-BR", {

@@ -169,7 +169,7 @@ export default function CardRelato({
                   Data do Relato
                 </p>
                 <p className="text-sm">
-                  {FormatarDataBrasileira(problema.dedata)}
+                  {FormatarDataBrasileira(problema.createdAt)}
                 </p>
               </div>
             </div>
