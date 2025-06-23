@@ -18,7 +18,7 @@ export default function AdicionarItens({}) {
   const [itensMenu, setItensMenu] = useState<Array<ItemAdicionarInterface>>([
     {
       icone: <Warning size={20} className="text-white" />,
-      nome: 'Registrar Problema',
+      nome: 'Registrar Relato',
       link: '/registrarProblema'
     }
   ])

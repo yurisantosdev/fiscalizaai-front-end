@@ -13,13 +13,11 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/Button'
 import {
   Plus,
-  MapPin,
   Calendar,
   ArrowClockwise,
   WarningCircle,
   CheckCircle,
-  Clock,
-  SealQuestion
+  Clock
 } from '@phosphor-icons/react'
 import BaseLayout from '@/templates/BaseLayout'
 import ModalConfirmacaoCancelarProblema from '@/components/ModalConfirmacaoCancelarProblema'
@@ -129,7 +127,7 @@ export default function HomePage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl">
             <div className="bg-gray-100 rounded-xl p-4 flex flex-col items-center shadow hover:shadow-lg transition-all">
               <span className="text-2xl font-bold text-gray-800">{total}</span>
-              <span className="text-sm text-gray-500">Total de problemas</span>
+              <span className="text-sm text-gray-500">Total de relatos</span>
             </div>
             <div className="bg-yellow-100 rounded-xl p-4 flex flex-col items-center shadow hover:shadow-lg transition-all">
               <span className="text-2xl font-bold text-yellow-800">
@@ -160,11 +158,11 @@ export default function HomePage() {
                 Notou algum problema na sua cidade?
               </h2>
               <p className="text-white text-sm md:text-start text-center">
-                Ajude a melhorar sua comunidade registrando um novo problema!
+                Ajude a melhorar sua comunidade registrando um novo relato!
               </p>
             </div>
             <Button
-              title="Registrar Novo Problema"
+              title="Registrar Novo Relato"
               iconLeft={<Plus size={20} />}
               onClick={() => router.push('/registrarProblema')}
               className="bg-white text-orange-1000 font-bold px-6 py-3 rounded-lg shadow hover:bg-orange-1000 hover:text-white transition-all duration-300 mt-4 md:mt-0"
@@ -211,13 +209,13 @@ export default function HomePage() {
                 Situações na sua área e suas contribuições
               </h2>
               <p className="text-gray-600 md:text-start text-center">
-                Visualize problemas reportados e contribua para melhorar sua
+                Visualize relatos reportados e contribua para melhorar sua
                 comunidade
               </p>
             </div>
             <div className="flex items-center gap-2 md:justify-start justify-center bg-orange-1000 p-2 rounded-3xl">
               <div className="text-sm text-white">
-                {problemasFiltrados.length} problemas exibidos
+                {problemasFiltrados.length} relatos exibidos
               </div>
             </div>
           </div>
