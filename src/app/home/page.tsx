@@ -144,7 +144,7 @@ export default function HomePage() {
 
         {/* Banner atenção para revisar relatos */}
         {relatosCorrigirUsuario && (
-          <div className="transition-all animate-slide-up bg-gradient-to-r from-red-700 to-red-600 p-3 rounded-md w-[80%] m-auto">
+          <div className="transition-all animate-slide-up bg-gradient-to-r from-red-700 to-red-600 p-3 rounded-xl md:w-[80%] w-full m-auto mt-5">
             <div className="flex justify-center items-center gap-2 mb-5">
               <h1 className="text-lg text-white text-center font-bold">
                 Atenção
@@ -158,7 +158,7 @@ export default function HomePage() {
               abaixo e nos ajude a complementar essas informações.
             </p>
 
-            <div className="w-[30%] m-auto mt-8">
+            <div className="md:w-[30%] w-[60%] m-auto mt-8">
               <Button
                 title="Revisar Relatos"
                 iconLeft={<MagnifyingGlass size={20} />}

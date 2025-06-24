@@ -272,25 +272,25 @@ export default function RegistrarProblema() {
         <div className="max-w-4xl mx-auto space-y-6">
           {/* Card de Localização */}
           <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-            <div className="bg-blue-1000 p-4 flex justify-between items-center">
+            <div className="bg-blue-1000 p-4 md:flex md:justify-between md:items-center">
               <div>
-                <h2 className="text-white text-lg font-semibold mb-2 flex items-center gap-2">
+                <h2 className="text-white text-lg font-semibold mb-2 flex md:justify-start justify-center items-center gap-2">
                   <NavigationArrow size={24} />
                   Localização Selecionada
                 </h2>
-                <p className="text-white/90 text-base break-words">
+                <p className="text-white/90 text-base break-words md:text-start text-center">
                   {localizacaoAtual}
                 </p>
               </div>
 
-              <div>
+              <div className="md:mt-0 mt-5">
                 <Button
                   title="Usar minha localização"
                   onClick={() => {
                     dispatch(setLoading(true))
                     obterDadosLocalizacao()
                   }}
-                  className="bg-green-800 hover:bg-green-700 active:bg-green-800"
+                  className="bg-green-800 md:w-full w-[60%] m-auto hover:bg-green-700 active:bg-green-800"
                   iconLeft={<Compass size={20} />}
                 />
               </div>
