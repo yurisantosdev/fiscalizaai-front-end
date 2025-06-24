@@ -404,7 +404,7 @@ export default function RegistrarProblema() {
 
           {/* Barra de Ações */}
           <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 md:relative md:border-none md:p-0 md:bg-transparent transition-transform duration-300 transform translate-y-0 hover:shadow-lg md:hover:shadow-none">
-            <div className="max-w-4xl mx-auto flex flex-col md:flex-row gap-3">
+            <div className="max-w-4xl mx-auto flex flex-col-reverse md:flex-row gap-3">
               <Button
                 title="Cancelar"
                 onClick={() => {
