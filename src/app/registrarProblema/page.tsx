@@ -11,6 +11,7 @@ import InputFotos from '@/components/InputFotos'
 import TextRequired from '@/components/TextRequired'
 import {
   ChatTeardropText,
+  Compass,
   NavigationArrow,
   Question,
   SquaresFour
@@ -68,7 +69,6 @@ export default function RegistrarProblema() {
   const user: UsuarioConsultaType = useSelector(
     (state: any) => state.userReducer
   )
-  const [primeiraOpcao, setPrimeiraOpcao] = useState<boolean>(false)
   const [localizacaoAtual, setLocalizacaoAtual] = useState<string>('---')
   const [latitude, setLatitude] = useState<string>('')
   const [longitude, setLongitude] = useState<string>('')
@@ -266,26 +266,34 @@ export default function RegistrarProblema() {
     )
   }
 
-  function cancelarRegistroProblema() {
-    setPosition([-27.1048361, -52.6142228])
-    reset()
-    setPrimeiraOpcao(false)
-  }
-
   return (
     <div>
       <BaseLayout adicionarItens={false}>
         <div className="max-w-4xl mx-auto space-y-6">
           {/* Card de Localização */}
           <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-            <div className="bg-blue-1000 p-4">
-              <h2 className="text-white text-lg font-semibold mb-2 flex items-center gap-2">
-                <NavigationArrow size={24} />
-                Localização Selecionada
-              </h2>
-              <p className="text-white/90 text-base break-words">
-                {localizacaoAtual}
-              </p>
+            <div className="bg-blue-1000 p-4 flex justify-between items-center">
+              <div>
+                <h2 className="text-white text-lg font-semibold mb-2 flex items-center gap-2">
+                  <NavigationArrow size={24} />
+                  Localização Selecionada
+                </h2>
+                <p className="text-white/90 text-base break-words">
+                  {localizacaoAtual}
+                </p>
+              </div>
+
+              <div>
+                <Button
+                  title="Usar minha localização"
+                  onClick={() => {
+                    dispatch(setLoading(true))
+                    obterDadosLocalizacao()
+                  }}
+                  className="bg-green-800 hover:bg-green-700 active:bg-green-800"
+                  iconLeft={<Compass size={20} />}
+                />
+              </div>
             </div>
 
             {position && (
@@ -399,7 +407,9 @@ export default function RegistrarProblema() {
             <div className="max-w-4xl mx-auto flex flex-col md:flex-row gap-3">
               <Button
                 title="Cancelar"
-                onClick={cancelarRegistroProblema}
+                onClick={() => {
+                  router.push('/home')
+                }}
                 className="bg-gray-100 hover:bg-gray-200 active:bg-gray-100 text-gray-700 px-8 py-3 rounded-lg transition-all duration-300 shadow-sm hover:shadow-md w-full md:w-1/2 transform hover:scale-[1.02]"
               />
               <Button
@@ -410,16 +420,6 @@ export default function RegistrarProblema() {
             </div>
           </div>
         </div>
-
-        <Button
-          title="Sim"
-          onClick={() => {
-            setPrimeiraOpcao(true)
-            dispatch(setLoading(true))
-            obterDadosLocalizacao()
-          }}
-          className="bg-green-700 hover:bg-green-800 active:bg-green-700 text-white px-8 py-3 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-[1.02] flex-1"
-        />
       </BaseLayout>
       <ModalLegendaCategorias categorias={categorias} />
     </div>

@@ -187,7 +187,7 @@ export default function HomePage() {
               title="Registrar Novo Relato"
               iconLeft={<Plus size={20} />}
               onClick={() => router.push('/registrarProblema')}
-              className="bg-white text-orange-1000 active:bg-orange-700 font-bold rounded-lg shadow hover:bg-orange-1000 hover:text-white transition-all duration-300 mt-4 md:mt-0 text-sm"
+              className="bg-white text-orange-1000 active:bg-orange-700 font-bold rounded-lg shadow hover:bg-orange-1000 hover:bg-gradient-to-r hover:to-orange-600 hover:from-orange-1000 hover:text-white transition-all duration-700 mt-4 md:mt-0 text-sm"
             />
           </div>
         </div>
@@ -264,7 +264,7 @@ export default function HomePage() {
                 comunidade
               </p>
             </div>
-            <div className="flex items-center gap-2 md:justify-start justify-center bg-orange-1000 p-2 rounded-3xl">
+            <div className="flex items-center gap-2 md:justify-start justify-center bg-gradient-to-r to-orange-1000 from-orange-600 p-2 rounded-3xl">
               <div className="text-sm text-white">
                 {problemasFiltrados.length} relatos exibidos
               </div>
@@ -282,7 +282,7 @@ export default function HomePage() {
                       <MarkerMapa
                         tipoIcone={problema.categoria.cacategoria}
                         childrenPop={
-                          <div className="bg-white p-4 rounded-lg shadow-lg border border-gray-200 max-w-xs">
+                          <div>
                             <div className="flex items-center gap-2 mb-2">
                               <div
                                 className={`w-3 h-3 rounded-full ${
@@ -330,6 +330,40 @@ export default function HomePage() {
               )}
             </Mapa>
           </div>
+          <div className="mt-3 p-3">
+            <h1 className="text-black text-sm text-center font-bold mb-2">
+              Legenda dos Status
+            </h1>
+            <div className="grid md:grid-cols-4 grid-cols-2 gap-3 mt-3">
+              {statusOptions.map((item, index) => {
+                const statusDescriptions = {
+                  TODOS: 'Todos os relatos',
+                  PENDENTE: 'Aguardando análise',
+                  EM_ANDAMENTO: 'Em andamento pela equipe',
+                  RESOLVIDO: 'Problema resolvido'
+                } as const
+                type StatusKey = keyof typeof statusDescriptions
+                const desc = statusDescriptions[item.value as StatusKey] || ''
+                return (
+                  <div
+                    key={index}
+                    className="flex flex-col items-center gap-1 p-2">
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={`w-6 h-6 border-2 border-gray-300 rounded-full flex items-center justify-center ${item.color}`}></span>
+                      <span className="text-sm font-bold text-gray-800 flex items-center gap-1">
+                        {item.icon}
+                        {item.label}
+                      </span>
+                    </div>
+                    <span className="text-xs text-gray-500 text-center mt-1">
+                      {desc}
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
         </div>
       </BaseLayout>
 
@@ -338,9 +372,11 @@ export default function HomePage() {
           decodigo={problemaSelecionadoCancelar.decodigo}
         />
       )}
+
       {problemaSelecionadoCancelar && (
         <ModalAjustarRelato problema={problemaSelecionadoCancelar} />
       )}
+
       <style jsx global>{`
         .animate-slide-up {
           animation: slideUp 0.7s cubic-bezier(0.4, 2, 0.6, 1);

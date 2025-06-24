@@ -18,7 +18,7 @@ export default function BaseApp({
       <div
         className={`${
           styleBase &&
-          'md:w-[80%] w-full md:m-auto bg-gray-1400 rounded-md p-2 '
+          'md:w-[70%] w-full md:m-auto bg-gray-1400 rounded-md p-2 '
         }`}>
         {adicionarItens && <AdicionarItens />}
         {menu && <BarraMenu />}

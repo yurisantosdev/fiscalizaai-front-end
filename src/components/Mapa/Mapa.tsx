@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import 'leaflet/dist/leaflet.css'
 import '@/styles/markercluster.css'
-import { useMapEvents, useMap } from 'react-leaflet'
+import { useMapEvents } from 'react-leaflet'
 
 const MapContainer = dynamic(
   () => import('react-leaflet').then((mod) => mod.MapContainer),
@@ -53,8 +53,6 @@ function MapTypeControl({
   mapType: 'satellite' | 'normal'
   onMapTypeChange: (type: 'satellite' | 'normal') => void
 }) {
-  const map = useMap()
-
   const handleMapTypeChange = () => {
     const newType = mapType === 'satellite' ? 'normal' : 'satellite'
     onMapTypeChange(newType)

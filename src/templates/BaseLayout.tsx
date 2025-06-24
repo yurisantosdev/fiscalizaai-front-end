@@ -31,7 +31,7 @@ export default function BaseLayout({
       menu={menu}
       adicionarItens={adicionarItens}>
       <div className="min-h-screen bg-gradient-to-b from-gray-200 to-gray-300 p-2">
-        <div className="max-w-4xl mx-auto">
+        <div className="md:w-[90%] w-full mx-auto">
           <div className="bg-white/80 backdrop-blur-sm p-3 rounded-xl shadow-lg border border-gray-300">
             {/* Cabeçalho */}
             {buttonVoltar && (
