@@ -280,7 +280,7 @@ export default function HomePage() {
                   return (
                     <div key={index}>
                       <MarkerMapa
-                        tipoIcone={problema.categoria.cacategoria}
+                        status={problema.destatus}
                         childrenPop={
                           <div>
                             <div className="flex items-center gap-2 mb-2">
@@ -330,6 +330,7 @@ export default function HomePage() {
               )}
             </Mapa>
           </div>
+          {/* Legenda do status */}
           <div className="mt-3 p-3">
             <h1 className="text-black text-sm text-center font-bold mb-2">
               Legenda dos Status
@@ -352,7 +353,6 @@ export default function HomePage() {
                       <span
                         className={`w-6 h-6 border-2 border-gray-300 rounded-full flex items-center justify-center ${item.color}`}></span>
                       <span className="text-sm font-bold text-gray-800 flex items-center gap-1">
-                        {item.icon}
                         {item.label}
                       </span>
                     </div>

@@ -3,17 +3,6 @@ import React, { useState } from 'react'
 import dynamic from 'next/dynamic'
 import L from 'leaflet'
 
-delete (L.Icon.Default.prototype as any)._getIconUrl
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: '/icones/iconeSemFundo.png',
-  iconUrl: '/icones/iconeSemFundo.png',
-  shadowUrl: '/icones/iconeSemFundo.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41]
-})
-
 const Marker = dynamic(
   () => import('react-leaflet').then((mod) => mod.Marker),
   {
@@ -25,47 +14,98 @@ const Popup = dynamic(() => import('react-leaflet').then((mod) => mod.Popup), {
   ssr: false
 })
 
+function getStatusColor(status: string) {
+  switch (status) {
+    case 'PENDENTE':
+      return '#FEF08A' 
+    case 'EM_ANDAMENTO':
+      return '#FED7AA'
+    case 'RESOLVIDO':
+      return '#BBF7D0' 
+    case 'TODOS':
+      return '#F3F4F6' 
+    case 'EM_ANALISE':
+      return '#DBEAFE' 
+    case 'CORRIGIR':
+      return '#FCA5A5' 
+    default:
+      return '#A3A3A3' 
+  }
+}
+
+function getStatusSymbol(status: string) {
+  switch (status) {
+    case 'PENDENTE':
+      return '⚠️'
+    case 'EM_ANDAMENTO':
+      return '🚧'
+    case 'RESOLVIDO':
+      return '✅'
+    case 'EM_ANALISE':
+      return '🔍'
+    default:
+      return '•'
+  }
+}
+
+function generateMarkerHTML(color: string, status: string) {
+  const symbol = getStatusSymbol(status)
+  return `
+    <div style="
+      position: relative;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    ">
+      <div style='
+        position: absolute;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: radial-gradient(circle, ${color}33 60%, transparent 100%);
+        box-shadow: 0 2px 8px 0 ${color}55;
+        z-index: 1;
+      '></div>
+      <div style='
+        position: relative;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: linear-gradient(145deg, ${color} 70%, #fff2 100%);
+        border: 2px solid #fff;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: bold;
+        color: #222;
+        z-index: 2;
+      '>${symbol}</div>
+    </div>
+  `
+}
+
 export default function MarkerMapa({
   position,
   dragedFunction,
   childrenPop,
-  tipoIcone
-}: MarkerMapaInterface) {
+  tipoIcone,
+  status
+}: MarkerMapaInterface & { status?: string }) {
   const [showPopup, setShowPopup] = useState(false)
 
-  function defineIconeMapa(tipo: any) {
-    let icone = '/icones/iconeSemFundo.png'
+  const color = getStatusColor(status || '')
+  const html = generateMarkerHTML(color, status || '')
 
-    // switch (tipo) {
-    //   case 'Infraestrutura e Mobilidade Urbana':
-    //     icone = '/icones/iconeBuraco.png'
-    //     break
-
-    //   case 'Iluminação':
-    //     icone = '/icones/iconeLuz.png'
-    //     break
-
-    //   case 'Limpeza Urbana e Coleta de Lixo':
-    //     icone = '/icones/iconeLixo.png'
-    //     break
-
-    //   case 'Casa':
-    //     icone = '/icones/casa.png'
-    //     break
-
-    //   default:
-    //     icone = '/icones/iconeSemFundo.png'
-    //     break
-    // }
-
-    return icone
-  }
-
-  const customIcon = new L.Icon({
-    iconUrl: defineIconeMapa(tipoIcone),
-    iconSize: [40, 40],
-    iconAnchor: [16, 32],
-    popupAnchor: [0, -32]
+  const customIcon = new L.DivIcon({
+    html,
+    className: 'custom-marker-div',
+    iconSize: [50, 50],
+    iconAnchor: [24, 38],
+    popupAnchor: [0, -18]
   })
 
   return position ? (
