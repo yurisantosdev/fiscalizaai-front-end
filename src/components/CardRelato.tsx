@@ -147,6 +147,14 @@ export default function CardRelato({
                   {problema.localizacao.estado &&
                     problema.localizacao.estado.esestado}
                 </p>
+
+                <div className="flex justify-start items-center gap-2 mt-2">
+                  <p className="text-sm font-semibold">Ponto de referência:</p>
+                  <p className="text-sm">
+                    {problema.localizacao &&
+                      problema.localizacao.edpontoreferencia}
+                  </p>
+                </div>
                 {problema.localizacao.edlatitude &&
                   problema.localizacao.edlongitude && (
                     <Button
