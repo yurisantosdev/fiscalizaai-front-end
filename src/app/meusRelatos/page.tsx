@@ -16,7 +16,6 @@ import { selecionarRelato } from '@/redux/relatoSelecionado/actions'
 import { CLickLabel } from '@/services/clickLabel'
 import ModalConfirmacaoCancelarProblema from '@/components/ModalConfirmacaoCancelarProblema'
 import {
-  FunnelSimple,
   WarningCircle,
   CheckCircle,
   Clock,
@@ -39,7 +38,6 @@ export default function MeusRelatos() {
   const [problemaSelecionadoCancelar, setProblemaSelecionadoCancelar] =
     useState<ProblemaLocalizacaoType>()
 
-  // Cálculos para os cards de resumo
   const total = meusRelatos.length
   const pendentes = meusRelatos.filter((p) => p.destatus === 'PENDENTE').length
   const emAndamento = meusRelatos.filter(

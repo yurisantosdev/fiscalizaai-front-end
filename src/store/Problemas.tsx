@@ -64,6 +64,21 @@ export const getRelatosAnalisar = async () => {
     })
 }
 
+export const getRelatosRevisar = async (
+  data: ConsultaProblemasLocalizacaoUsuarioType
+) => {
+  return await api
+    .post(`/problemas/revisar`, data)
+    .then((response) => {
+      return response.data
+    })
+    .catch(() => {
+      toast(
+        'Não foi possível realizar a consulta de seus relatos para analisar, por favor tente novamente!'
+      )
+    })
+}
+
 export const gerRelatosGeral = async () => {
   return await api
     .post(`/problemas/geral`)

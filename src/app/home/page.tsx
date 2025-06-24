@@ -1,11 +1,13 @@
 'use client'
 import { AuthUser } from '@/services/auth'
 import React, { useEffect, useState } from 'react'
-import DadosUsuario from './_components/DadosUsuario'
 import { useDispatch, useSelector } from 'react-redux'
 import { setLoading } from '@/redux/loading/actions'
 import Mapa from '@/components/Mapa/Mapa'
-import { getProblemasLocalizacaoUsuario } from '@/store/Problemas'
+import {
+  getProblemasLocalizacaoUsuario,
+  getRelatosRevisar
+} from '@/store/Problemas'
 import { UsuarioConsultaType } from '@/types/UsuariosType'
 import MarkerMapa from '@/components/Mapa/Marker'
 import { ProblemaLocalizacaoType } from '@/types/ProblemasType'
@@ -17,7 +19,9 @@ import {
   ArrowClockwise,
   WarningCircle,
   CheckCircle,
-  Clock
+  Clock,
+  MagnifyingGlass,
+  Warning
 } from '@phosphor-icons/react'
 import BaseLayout from '@/templates/BaseLayout'
 import ModalConfirmacaoCancelarProblema from '@/components/ModalConfirmacaoCancelarProblema'
@@ -37,6 +41,8 @@ export default function HomePage() {
   const [problemaSelecionadoCancelar, setProblemaSelecionadoCancelar] =
     useState<ProblemaLocalizacaoType>()
   const [filtroStatus, setFiltroStatus] = useState<string>('TODOS')
+  const [relatosCorrigirUsuario, setRelatosCorrigirUsuario] =
+    useState<boolean>(false)
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false)
 
   const total = problemas.length
@@ -78,13 +84,26 @@ export default function HomePage() {
       if (user.uscodigo) {
         dispatch(setLoading(true))
         setIsRefreshing(true)
+
         const responseProblemasLocalizacao =
           await getProblemasLocalizacaoUsuario({
             uscodigo: user.uscodigo
           })
+
         if (responseProblemasLocalizacao != undefined) {
           setProblemas(responseProblemasLocalizacao.problemas)
         }
+
+        const responseProblemasCorrigirUsuario = await getRelatosRevisar({
+          uscodigo: user.uscodigo
+        })
+
+        if (responseProblemasCorrigirUsuario != undefined) {
+          setRelatosCorrigirUsuario(
+            responseProblemasCorrigirUsuario.problemas.length > 0
+          )
+        }
+
         dispatch(setLoading(false))
         setIsRefreshing(false)
       }
@@ -111,7 +130,8 @@ export default function HomePage() {
   return (
     <span>
       <BaseLayout>
-        <div className="mt-4 mb-2 flex flex-col items-center justify-center">
+        {/* Banner boas vindas ao usuário */}
+        <div className="transition-all animate-slide-up mt-4 mb-2 flex flex-col items-center justify-center">
           <h1 className="text-2xl font-bold text-gray-800 mb-1">
             Olá, {nome}!
           </h1>
@@ -120,6 +140,56 @@ export default function HomePage() {
             registrar novos problemas ou acompanhar o que acontece na sua
             região.
           </p>
+        </div>
+
+        {/* Banner atenção para revisar relatos */}
+        {relatosCorrigirUsuario && (
+          <div className="transition-all animate-slide-up bg-gradient-to-r from-red-700 to-red-600 p-3 rounded-md w-[80%] m-auto">
+            <div className="flex justify-center items-center gap-2 mb-5">
+              <h1 className="text-lg text-white text-center font-bold">
+                Atenção
+              </h1>
+              <Warning size={20} className="text-white" />
+            </div>
+
+            <p className="text-md text-center text-white font-light">
+              Temos alguns relatos que precisam da sua atenção! Faltaram
+              detalhes importantes para conseguirmos avançar. Clique no botão
+              abaixo e nos ajude a complementar essas informações.
+            </p>
+
+            <div className="w-[30%] m-auto mt-8">
+              <Button
+                title="Revisar Relatos"
+                iconLeft={<MagnifyingGlass size={20} />}
+                onClick={() => {
+                  dispatch(setLoading(true))
+                  router.push('/revisarRelatos')
+                }}
+                className="bg-white w-full text-red-700 font-bold text-sm rounded-lg shadow hover:bg-red-900 active:bg-red-800 hover:text-white transition-all duration-300 mt-4 md:mt-0"
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Banner de chamada para ação */}
+        <div className="w-full mb-6 flex flex-col mt-6 items-center justify-center transition-all animate-slide-up">
+          <div className="bg-gradient-to-r from-orange-1000 to-orange-600 rounded-xl shadow-lg p-6 flex flex-col md:flex-row items-center justify-between w-full max-w-3xl animate-slide-up">
+            <div className="mb-4 md:mb-0">
+              <h2 className="text-lg font-bold text-white mb-1 md:text-start text-center">
+                Notou algum problema na sua cidade?
+              </h2>
+              <p className="text-white text-sm md:text-start text-center">
+                Ajude a melhorar sua comunidade registrando um novo relato!
+              </p>
+            </div>
+            <Button
+              title="Registrar Novo Relato"
+              iconLeft={<Plus size={20} />}
+              onClick={() => router.push('/registrarProblema')}
+              className="bg-white text-orange-1000 active:bg-orange-700 font-bold rounded-lg shadow hover:bg-orange-1000 hover:text-white transition-all duration-300 mt-4 md:mt-0 text-sm"
+            />
+          </div>
         </div>
 
         {/* Cards de resumo rápido */}
@@ -150,28 +220,8 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Banner de chamada para ação */}
-        <div className="w-full mb-6 flex flex-col items-center justify-center">
-          <div className="bg-gradient-to-r from-orange-1000 to-orange-600 rounded-xl shadow-lg p-6 flex flex-col md:flex-row items-center justify-between w-full max-w-3xl animate-slide-up">
-            <div className="mb-4 md:mb-0">
-              <h2 className="text-lg font-bold text-white mb-1 md:text-start text-center">
-                Notou algum problema na sua cidade?
-              </h2>
-              <p className="text-white text-sm md:text-start text-center">
-                Ajude a melhorar sua comunidade registrando um novo relato!
-              </p>
-            </div>
-            <Button
-              title="Registrar Novo Relato"
-              iconLeft={<Plus size={20} />}
-              onClick={() => router.push('/registrarProblema')}
-              className="bg-white text-orange-1000 font-bold px-6 py-3 rounded-lg shadow hover:bg-orange-1000 hover:text-white transition-all duration-300 mt-4 md:mt-0"
-            />
-          </div>
-        </div>
-
         {/* Filtros rápidos para o mapa */}
-        <div className="flex flex-wrap gap-2 mb-4 items-center justify-center">
+        <div className="transition-all animate-slide-up flex flex-wrap gap-2 mb-4 items-center justify-center">
           {statusOptions.map((status, idx) => (
             <button
               key={idx}
@@ -188,7 +238,8 @@ export default function HomePage() {
             </button>
           ))}
         </div>
-        <div className="flex justify-center items-center mb-3">
+
+        <div className="transition-all animate-slide-up flex justify-center items-center mb-3">
           <button
             onClick={handleRefresh}
             className="ml-2 flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium bg-white border text-black  border-gray-300 shadow hover:bg-gray-100 transition-all duration-300 cursor-pointer"
@@ -202,7 +253,7 @@ export default function HomePage() {
         </div>
 
         {/* Mapa Interativo */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="transition-all animate-slide-up bg-white rounded-xl shadow-lg p-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
             <div>
               <h2 className="text-xl font-bold text-gray-800 mb-2 md:text-start text-center">
@@ -281,6 +332,7 @@ export default function HomePage() {
           </div>
         </div>
       </BaseLayout>
+
       {problemaSelecionadoCancelar && (
         <ModalConfirmacaoCancelarProblema
           decodigo={problemaSelecionadoCancelar.decodigo}

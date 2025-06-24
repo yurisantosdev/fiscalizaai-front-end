@@ -237,7 +237,7 @@ export default function CardRelato({
                 <div className="flex justify-center items-center gap-2">
                   <div className="w-full m-auto mt-5">
                     <Button
-                      title="Ajustar"
+                      title="Revisar"
                       onClick={onClickAjustarRelato}
                       iconLeft={<PencilCircle size={20} />}
                       className="w-full m-auto bg-blue-1000 hover:bg-blue-1000/80 active:bg-blue-1000 text-white px-4 py-2 rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg flex items-center gap-2"
