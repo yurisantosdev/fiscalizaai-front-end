@@ -330,40 +330,6 @@ export default function HomePage() {
               )}
             </Mapa>
           </div>
-          {/* Legenda do status */}
-          <div className="mt-3 p-3">
-            <h1 className="text-black text-sm text-center font-bold mb-2">
-              Legenda dos Status
-            </h1>
-            <div className="grid md:grid-cols-4 grid-cols-2 gap-3 mt-3">
-              {statusOptions.map((item, index) => {
-                const statusDescriptions = {
-                  TODOS: 'Todos os relatos',
-                  PENDENTE: 'Aguardando análise',
-                  EM_ANDAMENTO: 'Em andamento pela equipe',
-                  RESOLVIDO: 'Problema resolvido'
-                } as const
-                type StatusKey = keyof typeof statusDescriptions
-                const desc = statusDescriptions[item.value as StatusKey] || ''
-                return (
-                  <div
-                    key={index}
-                    className="flex flex-col items-center gap-1 p-2">
-                    <div className="flex items-center gap-2">
-                      <span
-                        className={`w-6 h-6 border-2 border-gray-300 rounded-full flex items-center justify-center ${item.color}`}></span>
-                      <span className="text-sm font-bold text-gray-800 flex items-center gap-1">
-                        {item.label}
-                      </span>
-                    </div>
-                    <span className="text-xs text-gray-500 text-center mt-1">
-                      {desc}
-                    </span>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
         </div>
       </BaseLayout>
 
