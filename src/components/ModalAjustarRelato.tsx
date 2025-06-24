@@ -31,6 +31,7 @@ export default function ModalAjustarRelato({
   const dispatch = useDispatch()
   const [position, setPosition] = useState<[number, number]>([0, 0])
   const [localizacaoAtual, setLocalizacaoAtual] = useState<string>('---')
+  const loading = useSelector((state: any) => state.loadingReducer.loading)
 
   const {
     handleSubmit,
@@ -171,7 +172,10 @@ export default function ModalAjustarRelato({
   if (!problema) return null
 
   return (
-    <Modal htmlFor="modalAjusteRelato" name="Ajuste de Relato" loading={false}>
+    <Modal
+      htmlFor="modalAjusteRelato"
+      name="Ajuste de Relato"
+      loading={loading}>
       <div className="space-y-6">
         <div className="mb-3 bg-gray-1200 p-2 rounded-md">
           <p className="text-white text-center mb-3 text-md font-bold">
