@@ -53,7 +53,7 @@ export default function BaseApp({
       />
 
       {loading && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black/60 backdrop-blur-sm flex justify-center items-center z-[9999]">
+        <div className="fixed top-0 left-0 w-full h-full bg-black/60 backdrop-blur-sm flex justify-center items-center z-[99999999]">
           <div className="flex flex-col items-center gap-4">
             <div className="relative">
               <div className="animate-spin rounded-full h-24 w-24 border-4 border-orange-1000/30"></div>
