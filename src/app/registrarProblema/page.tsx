@@ -290,7 +290,7 @@ export default function RegistrarProblema() {
                     dispatch(setLoading(true))
                     obterDadosLocalizacao()
                   }}
-                  className="bg-green-800 md:w-full w-[60%] m-auto hover:bg-green-700 active:bg-green-800"
+                  className="bg-green-800 w-full m-auto hover:bg-green-700 active:bg-green-800"
                   iconLeft={<Compass size={20} />}
                 />
               </div>
