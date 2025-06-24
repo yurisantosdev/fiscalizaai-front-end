@@ -18,7 +18,7 @@ import { setLoading } from '@/redux/loading/actions'
 import { useDispatch, useSelector } from 'react-redux'
 import { CategoriasProblemasType } from '@/types/CategoriasProblemasType'
 import { useRouter } from 'next/navigation'
-import { resetCategoria, setCategoria } from '@/redux/categoria/actions'
+import { resetCategoria } from '@/redux/categoria/actions'
 import { atualizarCategoria, salvarCategoria } from '@/store/Categorias'
 import toast from 'react-hot-toast'
 
@@ -28,8 +28,7 @@ export default function CadastroCategoria() {
     register,
     reset,
     setValue,
-    formState: { errors },
-    watch
+    formState: { errors }
   } = useForm<CategoriasProblemasType>({
     defaultValues: {
       cacategoria: '',

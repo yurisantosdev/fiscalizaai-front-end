@@ -56,7 +56,7 @@ export default function BaseLayout({
 
               <div className="w-[70%] flex justify-center items-center">
                 <div>
-                  <h1 className="text-2xl font-bold text-gray-700 text-center">
+                  <h1 className="text-2xl truncate font-bold text-gray-700 text-center">
                     {title}
                   </h1>
 
