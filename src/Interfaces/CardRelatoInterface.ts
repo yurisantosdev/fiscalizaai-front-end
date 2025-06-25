@@ -16,4 +16,5 @@ export interface CardRelatoInterface extends ComponentProps<'div'> {
   onClickProximaEtapaRelato?: () => void;
   onClickConcluirRelato?: () => void;
   botoesProximaEtapaConcluir?: boolean;
+  historicoRelato?: boolean;
 }

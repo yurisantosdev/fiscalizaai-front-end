@@ -67,6 +67,12 @@ export type ProblemaLocalizacaoType = {
   FotosProblemas: Array<FotosProblemasType>;
   HistoricoCorrecoesProblemas?: Array<HistoricoCorrecoesProblemasType>;
   createdAt?: string;
+  HistoricoRelatos?: Array<HistoricoRelatosType>
+}
+
+export type HistoricoRelatosType = {
+  hrcodigo: string;
+  hrtratativa: string;
 }
 
 export type HistoricoCorrecoesProblemasType = {

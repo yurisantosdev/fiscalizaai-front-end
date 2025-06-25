@@ -13,13 +13,15 @@ import {
   Check,
   X,
   ChatTeardropText,
-  PencilCircle
+  PencilCircle,
+  ClockCounterClockwise
 } from '@phosphor-icons/react'
 import React, { JSX } from 'react'
 import { Button } from './Button'
 import { FormatarDataBrasileira } from '@/services/formatters'
 import { UsuarioConsultaType } from '@/types/UsuariosType'
 import { useSelector } from 'react-redux'
+import { HistoricoRelatosType } from '@/types/ProblemasType'
 
 export default function CardRelato({
   problema,
@@ -35,6 +37,7 @@ export default function CardRelato({
   onClickProximaEtapaRelato,
   onClickConcluirRelato,
   botoesProximaEtapaConcluir = false,
+  historicoRelato = false,
   ordem,
   ...props
 }: CardRelatoInterface) {
@@ -313,6 +316,43 @@ export default function CardRelato({
                 </div>
               )}
             </span>
+          )}
+
+          {historicoRelato && (
+            <div className="mt-4 bg-gray-50 rounded-md p-2">
+              {problema.HistoricoRelatos &&
+              problema.HistoricoRelatos?.length > 0 ? (
+                <div className="mb-3">
+                  <div className="flex justify-center items-center gpa-3">
+                    <ClockCounterClockwise
+                      size={24}
+                      weight="fill"
+                      className="text-orange-1000"
+                    />
+                    <p className="text-center text-sm text-black font-bold">
+                      Histórico sobre o Relato
+                    </p>
+                  </div>
+                  {problema.HistoricoRelatos.map(
+                    (historico: HistoricoRelatosType, index: number) => {
+                      return (
+                        <div
+                          key={index}
+                          className="bg-blue-100 p-2 rounded-md mt-2">
+                          <p className="text-black text-center">
+                            {historico.hrtratativa}
+                          </p>
+                        </div>
+                      )
+                    }
+                  )}
+                </div>
+              ) : (
+                <p className="text-center text-black text-sm italic font-extralight">
+                  Sem histórico registrado
+                </p>
+              )}
+            </div>
           )}
         </div>
       </div>

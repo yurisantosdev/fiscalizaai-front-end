@@ -209,6 +209,7 @@ export default function MeusRelatos() {
                 <div key={index} className="animate-slide-up">
                   <CardRelato
                     problema={relato}
+                    historicoRelato={true}
                     onClickAjustarRelato={() => {
                       dispatch(selecionarRelato(relato))
                       setProblemaSelecionadoCancelar(relato)
