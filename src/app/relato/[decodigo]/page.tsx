@@ -40,6 +40,8 @@ export default function Relato({
       dispatch(setLoading(false))
     }
 
+    window.addEventListener('relatoAtualizado', consultaProblema)
+
     consultaProblema()
   }, [decodigo])
 
