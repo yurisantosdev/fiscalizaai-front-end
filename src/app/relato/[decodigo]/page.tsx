@@ -7,6 +7,8 @@ import {
   FindProblemaType,
   ProblemaLocalizacaoType
 } from '@/types/ProblemasType'
+import { useDispatch } from 'react-redux'
+import { setLoading } from '@/redux/loading/actions'
 
 export default function Relato({
   params
@@ -14,11 +16,12 @@ export default function Relato({
   params: Promise<{ decodigo: string }>
 }) {
   const { decodigo } = use(params)
-
+  const dispatch = useDispatch()
   const [relato, setRelato] = useState<ProblemaLocalizacaoType>()
 
   useEffect(() => {
     const consultaProblema = async () => {
+      dispatch(setLoading(true))
       const data: FindProblemaType = {
         decodigo
       }
@@ -27,6 +30,8 @@ export default function Relato({
       if (response != undefined) {
         setRelato(response.problema)
       }
+
+      dispatch(setLoading(false))
     }
 
     consultaProblema()

@@ -17,19 +17,19 @@ const Popup = dynamic(() => import('react-leaflet').then((mod) => mod.Popup), {
 function getStatusColor(status: string) {
   switch (status) {
     case 'PENDENTE':
-      return '#FEF08A' 
+      return '#FEF08A'
     case 'EM_ANDAMENTO':
       return '#FED7AA'
     case 'RESOLVIDO':
-      return '#BBF7D0' 
+      return '#BBF7D0'
     case 'TODOS':
-      return '#F3F4F6' 
+      return '#F3F4F6'
     case 'EM_ANALISE':
-      return '#DBEAFE' 
+      return '#DBEAFE'
     case 'CORRIGIR':
-      return '#FCA5A5' 
+      return '#FCA5A5'
     default:
-      return '#A3A3A3' 
+      return '#a6cfff'
   }
 }
 
@@ -73,7 +73,7 @@ function generateMarkerHTML(color: string, status: string) {
         width: 20px;
         height: 20px;
         border-radius: 50%;
-        background: linear-gradient(145deg, ${color} 70%, #fff2 100%);
+        background: linear-gradient(145deg, ${color} 70%, #a6cfff 100%);
         border: 2px solid #fff;
         box-shadow: 0 2px 6px rgba(0,0,0,0.15);
         display: flex;
