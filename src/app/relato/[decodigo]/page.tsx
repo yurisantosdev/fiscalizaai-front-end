@@ -9,6 +9,10 @@ import {
 } from '@/types/ProblemasType'
 import { useDispatch } from 'react-redux'
 import { setLoading } from '@/redux/loading/actions'
+import ModalConfirmacaoCancelarProblema from '@/components/ModalConfirmacaoCancelarProblema'
+import ModalAjustarRelato from '@/components/ModalAjustarRelato'
+import { CLickLabel } from '@/services/clickLabel'
+import { selecionarRelato } from '@/redux/relatoSelecionado/actions'
 
 export default function Relato({
   params
@@ -18,6 +22,8 @@ export default function Relato({
   const { decodigo } = use(params)
   const dispatch = useDispatch()
   const [relato, setRelato] = useState<ProblemaLocalizacaoType>()
+  const [problemaSelecionadoCancelar, setProblemaSelecionadoCancelar] =
+    useState<ProblemaLocalizacaoType>()
 
   useEffect(() => {
     const consultaProblema = async () => {
@@ -43,7 +49,18 @@ export default function Relato({
         <div className="max-w-6xl mx-auto">
           {relato ? (
             <div className="animate-slide-up">
-              <CardRelato problema={relato} />
+              <CardRelato
+                problema={relato}
+                onClickAjustarRelato={() => {
+                  dispatch(selecionarRelato(relato))
+                  setProblemaSelecionadoCancelar(relato)
+                  CLickLabel('modalAjusteRelato')
+                }}
+                onClickCancelarRelato={() => {
+                  CLickLabel('modalConfirmacaoCancelarProblema')
+                  setProblemaSelecionadoCancelar(relato)
+                }}
+              />
             </div>
           ) : (
             <p className="text-center text-sm text-gray-600 col-span-full">
@@ -52,6 +69,16 @@ export default function Relato({
           )}
         </div>
       </BaseLayout>
+
+      {problemaSelecionadoCancelar && (
+        <ModalConfirmacaoCancelarProblema
+          decodigo={problemaSelecionadoCancelar.decodigo}
+        />
+      )}
+
+      {problemaSelecionadoCancelar && (
+        <ModalAjustarRelato problema={problemaSelecionadoCancelar} />
+      )}
 
       <style jsx global>{`
         .animate-slide-up {
