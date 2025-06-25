@@ -10,15 +10,13 @@ export default function ModalLegendaCategorias({
     <Modal
       htmlFor="modalLegendaCategorias"
       name="Legenda de Categorias"
-      loading={false}
-    >
+      loading={false}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
         {categorias.map((categoria: SelectValuesType, index: number) => {
           return (
             <div
               key={index}
-              className="border border-gray-400 p-4 rounded-lg hover:border-primary-500 transition-all duration-300 hover:shadow-lg hover:scale-[1.02] bg-gray-1100 group relative overflow-hidden"
-            >
+              className="border border-gray-400 p-4 rounded-lg hover:border-primary-500 transition-all duration-300 hover:shadow-lg hover:scale-[1.02] bg-gray-1100 group relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-primary-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
               <div className="relative z-10">

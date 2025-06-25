@@ -283,6 +283,7 @@ export default function Categorias() {
       </BaseLayout>
 
       <ModalConfirmacaoDesativarCategoria />
+
       <style jsx global>{`
         .animate-slide-up {
           animation: slideUp 0.7s cubic-bezier(0.4, 2, 0.6, 1);

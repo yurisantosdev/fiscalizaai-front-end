@@ -3,6 +3,7 @@ import {
   AtualizarStatusRelatoType,
   CancelarProblemaType,
   ConsultaProblemasLocalizacaoUsuarioType,
+  FindProblemaType,
   ProblemasCriateType
 } from '@/types/ProblemasType'
 import { api } from '../services/api'
@@ -139,5 +140,16 @@ export const atualizarStatusRelato = async (
       toast(
         'Não foi possível alterar o status do relato, por favor tente novamente!'
       )
+    })
+}
+
+export const findProblema = async (data: FindProblemaType) => {
+  return await api
+    .post(`/problemas/find`, data)
+    .then((response) => {
+      return response.data
+    })
+    .catch(() => {
+      toast('Não foi possível consultar o relato, por favor tente novamente!')
     })
 }

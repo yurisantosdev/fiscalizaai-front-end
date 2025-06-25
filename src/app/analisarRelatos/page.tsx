@@ -69,7 +69,6 @@ export default function AnalisarRelatos() {
     consultarDados()
   }, [atualizar])
 
-  // Card de resumo
   const total = relatosAnalisar.length
 
   return (
