@@ -1,11 +1,3 @@
-
-/**
- * Obtém o IP público do usuário.
- * 
- * @returns {Promise<string>} Retorna o IP público do usuário.
- * 
- * @autor Yuri 🇧🇷
- */
 export async function obterIpPublico(): Promise<string> {
   try {
     const response = await fetch('https://api.ipify.org?format=json')

@@ -1,7 +1,6 @@
 import React from 'react'
 import { X } from '@phosphor-icons/react'
 import { ModalInterface } from '@/Interfaces/ModalInterface'
-import Loading from './Loading'
 
 export default function Modal({
   name,

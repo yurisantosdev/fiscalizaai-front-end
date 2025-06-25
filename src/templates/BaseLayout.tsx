@@ -1,6 +1,6 @@
 'use client'
 import BaseApp from '@/components/BaseApp'
-import React, { ReactNode } from 'react'
+import React from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft } from '@phosphor-icons/react'
 import { useSelector } from 'react-redux'

@@ -1,4 +1,4 @@
-import { UsuarioConsultaType, UsuarioType } from '@/types/UsuariosType'
+import { UsuarioConsultaType } from '@/types/UsuariosType'
 import { store } from '@/redux/store'
 import { getNotificacoes } from '@/store/Notificacoes'
 import { setNotificacoes } from '@/redux/notificacoes/actions'

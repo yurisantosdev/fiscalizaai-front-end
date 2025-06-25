@@ -1,10 +1,3 @@
-/**
- * Formata uma data e hora para o formato DD/MM/YYYY HH:MM.
- * 
- * @param {string} dataHora - A data e hora a ser formatada.
- * @returns {string} A data e hora formatada.
- * @autor Yuri 🇧🇷
- */
 export function FormatarData(dataHora: string) {
   const data = new Date(dataHora);
 
@@ -16,39 +9,18 @@ export function FormatarData(dataHora: string) {
   return `${dia}/${mes} ${hora}:${minutos}`;
 }
 
-/**
- * Converte uma data no formato DD-MM-YYYY para o formato DD/MM/YYYY.
- * 
- * @param {string} dataString - A data a ser convertida.
- * @returns {string} A data convertida para o formato DD/MM/YYYY.
- * @autor Yuri 🇧🇷
- */
 export function ConverterDataBrasil(dataString: string) {
   const data = dataString.split('-');
 
   return `${data[2]}/${data[1]}/${data[0]}`;
 }
 
-/**
- * Converte uma data no formato DD-MM-YYYY para o formato DD/MM.
- * 
- * @param {string} dataString - A data a ser convertida.
- * @returns {string} A data convertida para o formato DD/MM.
- * @autor Yuri 🇧🇷
- */
 export function ConverterDataBrasilSemAno(dataString: string) {
   const data = dataString.split('-');
 
   return `${data[2]}/${data[1]}`;
 }
 
-/**
- * Formata uma data e hora para o formato DD/MM/YYYY HH:MM.
- * 
- * @param {string} dataHoraStr - A data e hora a ser formatada.
- * @returns {string} A data e hora formatada.
- * @autor Yuri 🇧🇷
- */
 export function FormatarDataHora(dataHoraStr: string) {
   const [data, hora] = dataHoraStr.split(' ')
   const [ano, mes, dia] = data.split('-')

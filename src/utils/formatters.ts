@@ -1,18 +1,8 @@
-/**
- * Formata um CEP para o padrão 00000-000
- * @param cep - CEP a ser formatado
- * @returns CEP formatado
- */
 export const formatCEP = (cep: string): string => {
   const cepLimpo = cep.replace(/\D/g, '')
   return cepLimpo.replace(/(\d{5})(\d{3})/, '$1-$2')
 }
 
-/**
- * Consulta um CEP na API ViaCEP
- * @param cep - CEP a ser consultado
- * @returns Objeto com os dados do endereço
- */
 export const consultarCEP = async (cep: string) => {
   const cepLimpo = cep.replace(/\D/g, '')
 

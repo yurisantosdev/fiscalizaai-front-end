@@ -3,17 +3,14 @@ import { AuthUser } from '@/services/auth'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { UsuarioConsultaType } from '@/types/UsuariosType'
-import {
-  ConsultaProblemasLocalizacaoUsuarioType,
-  ProblemaLocalizacaoType
-} from '@/types/ProblemasType'
+import { ProblemaLocalizacaoType } from '@/types/ProblemasType'
 import { setLoading } from '@/redux/loading/actions'
 import 'leaflet/dist/leaflet.css'
 import { gerRelatosGeral } from '@/store/Problemas'
 import CardRelato from '@/components/CardRelato'
 import BaseLayout from '@/templates/BaseLayout'
 import { CLickLabel } from '@/services/clickLabel'
-import { FunnelSimple, WarningCircle, Clock } from '@phosphor-icons/react'
+import { WarningCircle, Clock } from '@phosphor-icons/react'
 import ModalProximaEtapaRelato from './_components/ModalProximaEtapaRelato'
 import ModalConcluirRelato from './_components/ModalConcluirRelato'
 

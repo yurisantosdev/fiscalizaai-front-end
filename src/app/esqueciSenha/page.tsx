@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { setLoading } from '@/redux/loading/actions'
 import { useForm } from 'react-hook-form'
 import InputComponent from '@/components/Input'

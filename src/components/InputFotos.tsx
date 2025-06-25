@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react'
-import { Camera, Image, X } from '@phosphor-icons/react'
+import { Image, X } from '@phosphor-icons/react'
 import { Button } from './Button'
-import toast from 'react-hot-toast'
 
 interface InputFotosProps {
   onChange: (fotos: string[]) => void
@@ -18,7 +17,6 @@ export default function InputFotos({
 }: InputFotosProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [isDragging, setIsDragging] = useState(false)
-  const cameraInputRef = useRef<HTMLInputElement>(null)
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files

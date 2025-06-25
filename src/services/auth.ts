@@ -4,14 +4,6 @@ import { useEffect } from "react";
 import { useRouter, usePathname } from 'next/navigation'
 import { UsuarioConsultaType } from "@/types/UsuariosType";
 
-/**
- * Função que autentica o usuário e redireciona para a página correta.
- * - Verifica se o token existe e é válido.
- * - Redireciona para a página de login se o token não estiver presente.
- * - Redireciona para a página inicial se o token estiver presente.
- * 
- * @autor Yuri 🇧🇷
- */
 export function AuthUser() {
   const token: string = useSelector((state: any) => state.userReducer.token);
   const user: UsuarioConsultaType = useSelector((state: any) => state.userReducer);

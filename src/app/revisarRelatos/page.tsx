@@ -8,7 +8,7 @@ import {
 } from '@/types/ProblemasType'
 import { setLoading } from '@/redux/loading/actions'
 import 'leaflet/dist/leaflet.css'
-import { getRelatosAnalisar, getRelatosRevisar } from '@/store/Problemas'
+import { getRelatosRevisar } from '@/store/Problemas'
 import CardRelato from '@/components/CardRelato'
 import BaseLayout from '@/templates/BaseLayout'
 import { ListMagnifyingGlass } from '@phosphor-icons/react'
