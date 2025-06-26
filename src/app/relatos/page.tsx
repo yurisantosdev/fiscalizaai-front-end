@@ -145,7 +145,7 @@ export default function Relatos() {
                   <div key={index} className="animate-slide-up">
                     <CardRelato
                       mostrarFotos={false}
-                      historicoRelato={true}
+                      historicoRelato
                       problema={relato}
                       botoesProximaEtapaConcluir
                       onClickProximaEtapaRelato={() => {

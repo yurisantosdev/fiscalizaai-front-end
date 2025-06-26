@@ -27,7 +27,7 @@ export function ButtonIcon({ icon, ...props }: ButtonIconInterface) {
   return (
     <button
       {...props}
-      className={`flex justify-center items-center bg-gray-50 p-1 max-h-9 min-h-9 rounded-md cursor-pointer ${
+      className={`flex justify-center items-center p-1 max-h-9 min-h-9 rounded-md cursor-pointer ${
         props.className ?? ''
       }`}>
       {icon}

@@ -94,6 +94,7 @@ export default function AnalisarRelatos() {
                   <div key={index} className="animate-slide-up">
                     <CardRelato
                       problema={problema}
+                      historicoRelato
                       aprovarReprovarButtons
                       buttonsAjustarCancelar={false}
                       inputMotivo={
@@ -164,6 +165,7 @@ export default function AnalisarRelatos() {
           </div>
         </div>
       </BaseLayout>
+
       <style jsx global>{`
         .animate-slide-up {
           animation: slideUp 0.7s cubic-bezier(0.4, 2, 0.6, 1);

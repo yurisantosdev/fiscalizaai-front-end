@@ -53,6 +53,7 @@ export default function Relato({
             <div className="animate-slide-up">
               <CardRelato
                 problema={relato}
+                historicoRelato
                 onClickAjustarRelato={() => {
                   dispatch(selecionarRelato(relato))
                   setProblemaSelecionadoCancelar(relato)

@@ -146,38 +146,46 @@ export default function MeusRelatos() {
         <div className="flex justify-center my-6">
           <div className="grid grid-cols-2 md:grid-cols-6 gap-4 max-w-7xl">
             <div className="bg-gray-100 rounded-xl p-4 flex flex-col items-center shadow hover:shadow-lg transition-all">
-              <span className="text-2xl font-bold text-gray-800">{total}</span>
-              <span className="text-sm text-gray-500">Total de relatos</span>
+              <span className="text-5xl font-bold text-gray-800">{total}</span>
+              <span className="text-sm text-gray-500 truncate">
+                Total de relatos
+              </span>
             </div>
             <div className="bg-yellow-100 rounded-xl p-4 flex flex-col items-center shadow hover:shadow-lg transition-all">
-              <span className="text-2xl font-bold text-yellow-800">
+              <span className="text-5xl font-bold text-yellow-800">
                 {pendentes}
               </span>
-              <span className="text-sm text-yellow-800">Pendentes</span>
+              <span className="text-sm text-yellow-800 truncate">
+                Pendentes
+              </span>
             </div>
             <div className="bg-orange-100 rounded-xl p-4 flex flex-col items-center shadow hover:shadow-lg transition-all">
-              <span className="text-2xl font-bold text-orange-800">
+              <span className="text-5xl font-bold text-orange-800">
                 {emAndamento}
               </span>
-              <span className="text-sm text-orange-800">Em andamento</span>
+              <span className="text-sm text-orange-800 truncate">
+                Em andamento
+              </span>
             </div>
             <div className="bg-green-100 rounded-xl p-4 flex flex-col items-center shadow hover:shadow-lg transition-all">
-              <span className="text-2xl font-bold text-green-800">
+              <span className="text-5xl font-bold text-green-800">
                 {resolvidos}
               </span>
-              <span className="text-sm text-green-800">Resolvidos</span>
+              <span className="text-sm text-green-800 truncate">
+                Resolvidos
+              </span>
             </div>
             <div className="bg-blue-100 rounded-xl p-4 flex flex-col items-center shadow hover:shadow-lg transition-all">
-              <span className="text-2xl font-bold text-blue-800">
+              <span className="text-5xl font-bold text-blue-800">
                 {emAnalise}
               </span>
-              <span className="text-sm text-blue-800">Em análise</span>
+              <span className="text-sm text-blue-800 truncate">Em análise</span>
             </div>
             <div className="bg-red-100 rounded-xl p-4 flex flex-col items-center shadow hover:shadow-lg transition-all">
-              <span className="text-2xl font-bold text-red-800">
+              <span className="text-5xl font-bold text-red-800">
                 {corrigir}
               </span>
-              <span className="text-sm text-red-800">Corrigir</span>
+              <span className="text-sm text-red-800 truncate">Corrigir</span>
             </div>
           </div>
         </div>
@@ -209,7 +217,7 @@ export default function MeusRelatos() {
                 <div key={index} className="animate-slide-up">
                   <CardRelato
                     problema={relato}
-                    historicoRelato={true}
+                    historicoRelato
                     onClickAjustarRelato={() => {
                       dispatch(selecionarRelato(relato))
                       setProblemaSelecionadoCancelar(relato)

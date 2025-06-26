@@ -619,6 +619,7 @@ export default function Relatorio() {
                   (problema: ProblemaLocalizacaoType, index: number) => (
                     <div key={problema.decodigo}>
                       <CardRelato
+                        historicoRelato
                         ordem={index + 1}
                         buttonsAjustarCancelar={false}
                         problema={problema}
