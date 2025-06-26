@@ -3,6 +3,7 @@ import {
   AtualizarStatusRelatoType,
   CancelarProblemaType,
   ConsultaProblemasLocalizacaoUsuarioType,
+  ExportarExcelType,
   FindProblemaType,
   ProblemasCriateType
 } from '@/types/ProblemasType'
@@ -151,5 +152,20 @@ export const findProblema = async (data: FindProblemaType) => {
     })
     .catch(() => {
       toast('Não foi possível consultar o relato, por favor tente novamente!')
+    })
+}
+
+export const exportarExcel = async (data: ExportarExcelType) => {
+  return await api
+    .post(`/problemas/excel`, data, {
+      responseType: 'blob'
+    })
+    .then((response) => {
+      return response
+    })
+    .catch(() => {
+      toast(
+        'Não foi possível exportar em excel o relatório, por favor tente novamente!'
+      )
     })
 }

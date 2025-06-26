@@ -16,17 +16,23 @@ import {
   CheckSquare,
   Calendar,
   ChartPie,
-  ChartBar
+  ChartBar,
+  Files,
+  MicrosoftExcelLogo,
+  FilePdf
 } from '@phosphor-icons/react'
 import { getCategorias } from '@/store/Categorias'
 import { SelectValuesType } from '@/types/GeneralTypes'
 import CardRelato from '@/components/CardRelato'
-import { ProblemaLocalizacaoType } from '@/types/ProblemasType'
+import {
+  ExportarExcelType,
+  ProblemaLocalizacaoType
+} from '@/types/ProblemasType'
 import { useDispatch } from 'react-redux'
 import { selecionarRelato } from '@/redux/relatoSelecionado/actions'
 import { CLickLabel } from '@/services/clickLabel'
 import toast from 'react-hot-toast'
-import { Button } from '@/components/Button'
+import { Button, ButtonIcon } from '@/components/Button'
 import { setLoading } from '@/redux/loading/actions'
 import {
   Chart as ChartJS,
@@ -39,6 +45,8 @@ import {
   ArcElement
 } from 'chart.js'
 import { Bar, Pie } from 'react-chartjs-2'
+import { exportarExcel } from '@/store/Problemas'
+import { exibirDataHoraAtual } from '@/services/obterDataHoraAtual'
 
 ChartJS.register(
   CategoryScale,
@@ -154,25 +162,6 @@ export default function Relatorio() {
     }
   }
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'TODOS':
-        return 'bg-gray-100 text-gray-700'
-      case 'EM_ANALISE':
-        return 'bg-blue-100 text-blue-800'
-      case 'RESOLVIDO':
-        return 'bg-green-100 text-green-800'
-      case 'PENDENTE':
-        return 'bg-yellow-100 text-yellow-800'
-      case 'EM_ANDAMENTO':
-        return 'bg-orange-100 text-orange-800'
-      case 'CORRIGIR':
-        return 'bg-red-100 text-red-800'
-      default:
-        return 'bg-gray-100 text-gray-700'
-    }
-  }
-
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'RESOLVIDO':
@@ -244,7 +233,6 @@ export default function Relatorio() {
     filtroStatus === 'TODOS' ? true : problema.destatus === filtroStatus
   )
 
-  // Dados para os gráficos
   const statusData = {
     labels: ['Em Análise', 'Pendente', 'Em Andamento', 'Resolvido', 'Corrigir'],
     datasets: [
@@ -300,6 +288,29 @@ export default function Relatorio() {
     ]
   }
 
+  async function onExportarExcel() {
+    dispatch(setLoading(true))
+
+    const dados: ExportarExcelType = {
+      dados: problemasFiltrados
+    }
+
+    const response = await exportarExcel(dados)
+
+    if (response) {
+      const url = window.URL.createObjectURL(new Blob([response.data]))
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', `relatorio-${exibirDataHoraAtual()}.xlsx`)
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+      window.URL.revokeObjectURL(url)
+    }
+
+    dispatch(setLoading(false))
+  }
+
   if (!user.usmaster) {
     return null
   }
@@ -308,6 +319,7 @@ export default function Relatorio() {
     <BaseLayout title="Relatório">
       <div className="space-y-4">
         <div className="bg-white rounded-lg p-6 shadow-sm">
+          {/* Marcar desmarcar todas as categorias */}
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2 text-gray-700">
               <FunnelSimple size={24} />
@@ -329,6 +341,7 @@ export default function Relatorio() {
             />
           </div>
 
+          {/* Categorias para filtro */}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 mb-6">
             {categorias && categorias.length > 0 ? (
               categorias.map((categoria: SelectValuesType) => (
@@ -348,6 +361,7 @@ export default function Relatorio() {
             )}
           </div>
 
+          {/* Intervalo do relatório */}
           <div className="mb-6">
             <div className="flex items-center gap-2 text-gray-700 mb-4">
               <Calendar size={24} />
@@ -399,20 +413,30 @@ export default function Relatorio() {
             </div>
           </div>
 
+          {/* Botão gerar relatório */}
           <div className="flex justify-center">
             <Button
               onClick={gerarRelatorio}
               disabled={loading || categoriasSelecionadas.length === 0}
-              iconLeft={<ChartLine size={24} />}
-              className="bg-blue-1000 hover:bg-blue-900 px-8 py-3 text-lg font-medium transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 cursor-pointer"
+              iconLeft={<ChartLine size={20} />}
+              className="bg-blue-1000 hover:bg-blue-900 px-8 py-3 text-md font-medium transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 cursor-pointer"
               title={loading ? 'Gerando...' : 'Gerar Relatório'}
             />
           </div>
         </div>
 
+        {/* Relatório */}
         {problemas.length > 0 ? (
           <>
+            {/* Filtro por status */}
             <div className="bg-white rounded-lg p-6 shadow-sm">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+                  <FunnelSimple size={24} />
+                  Filtro por status
+                </h2>
+              </div>
+
               <div className="flex flex-wrap gap-2 mb-4 items-center justify-center">
                 {statusOptions.map((status, idx) => (
                   <button
@@ -432,6 +456,34 @@ export default function Relatorio() {
               </div>
             </div>
 
+            {/* Exportação */}
+            <div className="bg-white rounded-lg p-6 shadow-sm">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+                  <Files size={24} />
+                  Exportação
+                </h2>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div className="tooltip tooltip-bottom w-full" data-tip="Excel">
+                  <ButtonIcon
+                    icon={<MicrosoftExcelLogo size={50} />}
+                    onClick={onExportarExcel}
+                    className="text-green-600 bg-green-50 hover:bg-green-100 rounded-md transition-all duration-300 transform w-full max-h-14"
+                  />
+                </div>
+
+                <div className="tooltip tooltip-bottom w-full" data-tip="PDF">
+                  <ButtonIcon
+                    icon={<FilePdf size={50} />}
+                    className="text-red-600 bg-red-50 hover:bg-red-100 rounded-md transition-all duration-300 transform w-full max-h-14"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Indicadores */}
             <div className="bg-white rounded-lg p-6 shadow-sm">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
@@ -613,6 +665,7 @@ export default function Relatorio() {
               </div>
             </div>
 
+            {/* Listagem dos relatos */}
             <div className="space-y-4">
               {problemasFiltrados.length > 0 ? (
                 problemasFiltrados.map(
