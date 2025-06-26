@@ -25,7 +25,7 @@ import { getCategorias } from '@/store/Categorias'
 import { SelectValuesType } from '@/types/GeneralTypes'
 import CardRelato from '@/components/CardRelato'
 import {
-  ExportarExcelType,
+  ExportarRelatorioType,
   ProblemaLocalizacaoType
 } from '@/types/ProblemasType'
 import { useDispatch } from 'react-redux'
@@ -291,13 +291,13 @@ export default function Relatorio() {
   async function onExportarExcel() {
     dispatch(setLoading(true))
 
-    const dados: ExportarExcelType = {
+    const dados: ExportarRelatorioType = {
       dados: problemasFiltrados
     }
 
     const response = await exportarExcel(dados)
 
-    if (response) {
+    if (response != undefined) {
       const url = window.URL.createObjectURL(new Blob([response.data]))
       const link = document.createElement('a')
       link.href = url
@@ -465,21 +465,12 @@ export default function Relatorio() {
                 </h2>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div className="tooltip tooltip-bottom w-full" data-tip="Excel">
-                  <ButtonIcon
-                    icon={<MicrosoftExcelLogo size={50} />}
-                    onClick={onExportarExcel}
-                    className="text-green-600 bg-green-50 hover:bg-green-100 rounded-md transition-all duration-300 transform w-full max-h-14"
-                  />
-                </div>
-
-                <div className="tooltip tooltip-bottom w-full" data-tip="PDF">
-                  <ButtonIcon
-                    icon={<FilePdf size={50} />}
-                    className="text-red-600 bg-red-50 hover:bg-red-100 rounded-md transition-all duration-300 transform w-full max-h-14"
-                  />
-                </div>
+              <div className="tooltip tooltip-bottom w-full" data-tip="Excel">
+                <ButtonIcon
+                  icon={<MicrosoftExcelLogo size={50} />}
+                  onClick={onExportarExcel}
+                  className="text-green-600 bg-green-50 hover:bg-green-100 rounded-md transition-all duration-300 transform w-full max-h-14"
+                />
               </div>
             </div>
 

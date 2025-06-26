@@ -3,7 +3,7 @@ import {
   AtualizarStatusRelatoType,
   CancelarProblemaType,
   ConsultaProblemasLocalizacaoUsuarioType,
-  ExportarExcelType,
+  ExportarRelatorioType,
   FindProblemaType,
   ProblemasCriateType
 } from '@/types/ProblemasType'
@@ -155,7 +155,7 @@ export const findProblema = async (data: FindProblemaType) => {
     })
 }
 
-export const exportarExcel = async (data: ExportarExcelType) => {
+export const exportarExcel = async (data: ExportarRelatorioType) => {
   return await api
     .post(`/problemas/excel`, data, {
       responseType: 'blob'
