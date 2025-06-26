@@ -1,6 +1,6 @@
 'use client'
 import { AuthUser } from '@/services/auth'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import BaseLayout from '@/templates/BaseLayout'
 import { api } from '@/services/api'
 import { useSelector } from 'react-redux'
@@ -19,7 +19,8 @@ import {
   ChartBar,
   Files,
   MicrosoftExcelLogo,
-  FilePdf
+  FilePdf,
+  ListBullets
 } from '@phosphor-icons/react'
 import { getCategorias } from '@/store/Categorias'
 import { SelectValuesType } from '@/types/GeneralTypes'
@@ -47,6 +48,8 @@ import {
 import { Bar, Pie } from 'react-chartjs-2'
 import { exportarExcel } from '@/store/Problemas'
 import { exibirDataHoraAtual } from '@/services/obterDataHoraAtual'
+import { jsPDF } from 'jspdf'
+import ChartDataLabels from 'chartjs-plugin-datalabels'
 
 ChartJS.register(
   CategoryScale,
@@ -55,7 +58,8 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  ArcElement
+  ArcElement,
+  ChartDataLabels
 )
 
 export default function Relatorio() {
@@ -73,6 +77,8 @@ export default function Relatorio() {
   const [periodoSelecionado, setPeriodoSelecionado] = useState<string>('')
   const [filtroStatus, setFiltroStatus] = useState<string>('TODOS')
   const loading = useSelector((state: any) => state.loadingReducer.loading)
+  const chartStatusRef = useRef(null)
+  const chartCategoriaRef = useRef(null)
 
   const statusOptions = [
     { value: 'TODOS', label: 'Todos', color: 'bg-gray-100 text-gray-700' },
@@ -315,6 +321,64 @@ export default function Relatorio() {
     return null
   }
 
+  function exportarPDFStatus() {
+    const chart: any = chartStatusRef.current
+
+    if (chart) {
+      const canvas = chart.canvas
+      const imgData = canvas.toDataURL('image/png')
+
+      const pdf = new jsPDF({
+        orientation: 'landscape',
+        unit: 'px',
+        format: [canvas.width, canvas.height]
+      })
+
+      pdf.setFontSize(14)
+      pdf.text(`Gerado em: ${exibirDataHoraAtual()}`, canvas.width - 10, 25, {
+        align: 'right'
+      })
+
+      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height)
+
+      pdf.setFontSize(13)
+      pdf.text(`Relatório gerado por: ${user.usnome}`, 10, canvas.height - 15, {
+        align: 'left'
+      })
+
+      pdf.save(`grafico-status-${new Date().toLocaleDateString()}.pdf`)
+    }
+  }
+
+  function exportarPDFCategoria() {
+    const chart: any = chartCategoriaRef.current
+
+    if (chart) {
+      const canvas = chart.canvas
+      const imgData = canvas.toDataURL('image/png')
+
+      const pdf = new jsPDF({
+        orientation: 'landscape',
+        unit: 'px',
+        format: [canvas.width, canvas.height]
+      })
+
+      pdf.setFontSize(14)
+      pdf.text(`Gerado em: ${exibirDataHoraAtual()}`, canvas.width - 10, 25, {
+        align: 'right'
+      })
+
+      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height)
+
+      pdf.setFontSize(13)
+      pdf.text(`Relatório gerado por: ${user.usnome}`, 10, canvas.height - 15, {
+        align: 'left'
+      })
+
+      pdf.save(`grafico-categoria-${new Date().toLocaleDateString()}.pdf`)
+    }
+  }
+
   return (
     <BaseLayout title="Relatório">
       <div className="space-y-4">
@@ -322,8 +386,8 @@ export default function Relatorio() {
           {/* Marcar desmarcar todas as categorias */}
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2 text-gray-700">
-              <FunnelSimple size={24} />
-              <h2 className="text-xl font-bold">Filtros</h2>
+              <FunnelSimple size={20} />
+              <h2 className="text-lg font-bold">Filtros</h2>
             </div>
             <Button
               onClick={selecionarTodasCategorias}
@@ -332,7 +396,7 @@ export default function Relatorio() {
                 categoriasSelecionadas.length === categorias.length
                   ? 'bg-blue-1000 text-white hover:bg-blue-900'
                   : 'bg-gray-200 text-black hover:bg-blue-1000 hover:text-white'
-              } transition-all duration-300 cursor-pointer`}
+              } transition-all duration-300 cursor-pointer text-sm`}
               title={
                 categoriasSelecionadas.length === categorias.length
                   ? 'Desmarcar Todas'
@@ -364,7 +428,7 @@ export default function Relatorio() {
           {/* Intervalo do relatório */}
           <div className="mb-6">
             <div className="flex items-center gap-2 text-gray-700 mb-4">
-              <Calendar size={24} />
+              <Calendar size={20} />
               <h3 className="text-lg font-semibold">Período</h3>
             </div>
             <div className="flex flex-wrap gap-3 mb-4">
@@ -431,8 +495,8 @@ export default function Relatorio() {
             {/* Filtro por status */}
             <div className="bg-white rounded-lg p-6 shadow-sm">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-                  <FunnelSimple size={24} />
+                <h2 className="text-lg font-bold text-gray-800 flex items-center gap-2">
+                  <FunnelSimple size={20} />
                   Filtro por status
                 </h2>
               </div>
@@ -459,8 +523,8 @@ export default function Relatorio() {
             {/* Exportação */}
             <div className="bg-white rounded-lg p-6 shadow-sm">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-                  <Files size={24} />
+                <h2 className="text-lg font-bold text-gray-800 flex items-center gap-2">
+                  <Files size={20} />
                   Exportação
                 </h2>
               </div>
@@ -477,33 +541,49 @@ export default function Relatorio() {
             {/* Indicadores */}
             <div className="bg-white rounded-lg p-6 shadow-sm">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-                  <ChartLine size={24} />
+                <h2 className="text-lg font-bold text-gray-800 flex items-center gap-2">
+                  <ChartLine size={20} />
                   Indicadores
                 </h2>
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 gap-6">
                 <div className="bg-gray-50 rounded-lg p-6 transform transition-all duration-300 hover:shadow-lg">
-                  <div className="flex items-center gap-2 mb-4">
-                    <ChartPie size={24} className="text-gray-700" />
-                    <h3 className="text-lg font-semibold text-gray-700">
-                      Distribuição por Status
-                    </h3>
+                  <div className="flex items-center justify-between gap-2 mb-4">
+                    <div className="flex justify-center items-center">
+                      <ChartPie size={20} className="text-gray-700" />
+                      <h3 className="text-md font-semibold text-gray-700">
+                        Distribuição por Status
+                      </h3>
+                    </div>
+
+                    <div
+                      className="tooltip tooltip-bottom"
+                      data-tip="Exportar PDF">
+                      <ButtonIcon
+                        className="text-red-600 bg-red-100 hover:bg-red-50 rounded-md transition-all duration-300 transform w-full"
+                        icon={<FilePdf size={24} />}
+                        onClick={exportarPDFStatus}
+                      />
+                    </div>
                   </div>
-                  <div className="relative h-[250px] w-full">
+
+                  <div className="relative h-[350px] w-full">
                     <div className="absolute inset-0 flex items-center justify-center">
                       <Pie
+                        ref={chartStatusRef}
+                        width={500}
+                        height={350}
                         data={statusData}
                         options={{
-                          responsive: true,
+                          responsive: false,
                           maintainAspectRatio: false,
                           layout: {
                             padding: {
-                              left: 15,
-                              right: 15,
-                              top: 5,
-                              bottom: 5
+                              left: 30,
+                              right: 30,
+                              top: 10,
+                              bottom: 30
                             }
                           },
                           plugins: {
@@ -511,13 +591,13 @@ export default function Relatorio() {
                               position: 'right',
                               align: 'center',
                               labels: {
-                                boxWidth: 15,
-                                boxHeight: 15,
-                                padding: 15,
+                                boxWidth: 18,
+                                boxHeight: 18,
+                                padding: 20,
                                 font: {
-                                  size: 11,
+                                  size: 14,
                                   family: 'Inter, system-ui, sans-serif',
-                                  weight: 500
+                                  weight: 600
                                 },
                                 usePointStyle: true
                               }
@@ -526,16 +606,16 @@ export default function Relatorio() {
                               enabled: true,
                               backgroundColor: 'rgba(0, 0, 0, 0.8)',
                               titleFont: {
-                                size: 13,
+                                size: 15,
                                 family: 'Inter, system-ui, sans-serif',
-                                weight: 600
+                                weight: 700
                               },
                               bodyFont: {
-                                size: 12,
+                                size: 14,
                                 family: 'Inter, system-ui, sans-serif'
                               },
-                              padding: 12,
-                              cornerRadius: 8,
+                              padding: 14,
+                              cornerRadius: 10,
                               displayColors: true,
                               callbacks: {
                                 label: (context) => {
@@ -550,6 +630,27 @@ export default function Relatorio() {
                                   return ` ${value} (${percentage}%)`
                                 }
                               }
+                            },
+                            datalabels: {
+                              color: '#222',
+                              font: {
+                                size: 14,
+                                weight: 700
+                              },
+                              formatter: (value: number, context: any) => {
+                                const sum =
+                                  context.chart.data.datasets[0].data.reduce(
+                                    (a: number, b: number) => a + b,
+                                    0
+                                  )
+                                const percentage = (
+                                  (value / sum) *
+                                  100
+                                ).toFixed(1)
+                                return value > 0
+                                  ? `${value} (${percentage}%)`
+                                  : ''
+                              }
                             }
                           }
                         }}
@@ -559,25 +660,41 @@ export default function Relatorio() {
                 </div>
 
                 <div className="bg-gray-50 rounded-lg p-6 transform transition-all duration-300 hover:shadow-lg">
-                  <div className="flex items-center gap-2 mb-4">
-                    <ChartBar size={24} className="text-gray-700" />
-                    <h3 className="text-lg font-semibold text-gray-700">
-                      Relatos por Categoria
-                    </h3>
+                  <div className="flex items-center justify-between gap-2 mb-4">
+                    <div className="flex justify-center items-center">
+                      <ChartBar size={20} className="text-gray-700" />
+                      <h3 className="text-md font-semibold text-gray-700">
+                        Relatos por Categoria
+                      </h3>
+                    </div>
+
+                    <div
+                      className="tooltip tooltip-bottom"
+                      data-tip="Exportar PDF">
+                      <ButtonIcon
+                        className="text-red-600 bg-red-100 hover:bg-red-50 rounded-md transition-all duration-300 transform w-full"
+                        icon={<FilePdf size={24} />}
+                        onClick={exportarPDFCategoria}
+                      />
+                    </div>
                   </div>
-                  <div className="relative h-[250px] w-full">
+
+                  <div className="relative h-[350px] w-full">
                     <div className="absolute inset-0 flex items-center justify-center">
                       <Bar
+                        ref={chartCategoriaRef}
+                        width={500}
+                        height={350}
                         data={categoriasData}
                         options={{
-                          responsive: true,
+                          responsive: false,
                           maintainAspectRatio: false,
                           layout: {
                             padding: {
-                              left: 15,
-                              right: 15,
-                              top: 15,
-                              bottom: 5
+                              left: 30,
+                              right: 30,
+                              top: 40,
+                              bottom: 30
                             }
                           },
                           plugins: {
@@ -588,16 +705,16 @@ export default function Relatorio() {
                               enabled: true,
                               backgroundColor: 'rgba(0, 0, 0, 0.8)',
                               titleFont: {
-                                size: 13,
+                                size: 15,
                                 family: 'Inter, system-ui, sans-serif',
-                                weight: 600
+                                weight: 700
                               },
                               bodyFont: {
-                                size: 12,
+                                size: 14,
                                 family: 'Inter, system-ui, sans-serif'
                               },
-                              padding: 12,
-                              cornerRadius: 8,
+                              padding: 14,
+                              cornerRadius: 10,
                               callbacks: {
                                 label: (context) => {
                                   const value = context.raw as number
@@ -611,6 +728,29 @@ export default function Relatorio() {
                                   return ` ${value} problemas (${percentage}%)`
                                 }
                               }
+                            },
+                            datalabels: {
+                              color: '#222',
+                              font: {
+                                size: 14,
+                                weight: 700
+                              },
+                              anchor: 'end',
+                              align: 'top',
+                              formatter: (value: number, context: any) => {
+                                const sum =
+                                  context.chart.data.datasets[0].data.reduce(
+                                    (a: number, b: number) => a + b,
+                                    0
+                                  )
+                                const percentage = (
+                                  (value / sum) *
+                                  100
+                                ).toFixed(1)
+                                return value > 0
+                                  ? `${value} (${percentage}%)`
+                                  : ''
+                              }
                             }
                           },
                           scales: {
@@ -620,9 +760,9 @@ export default function Relatorio() {
                               },
                               ticks: {
                                 font: {
-                                  size: 11,
+                                  size: 13,
                                   family: 'Inter, system-ui, sans-serif',
-                                  weight: 500
+                                  weight: 600
                                 },
                                 maxRotation: 45,
                                 minRotation: 45
@@ -639,12 +779,12 @@ export default function Relatorio() {
                               },
                               ticks: {
                                 font: {
-                                  size: 11,
+                                  size: 13,
                                   family: 'Inter, system-ui, sans-serif',
-                                  weight: 500
+                                  weight: 600
                                 },
                                 stepSize: 1,
-                                padding: 8
+                                padding: 10
                               }
                             }
                           }
@@ -657,7 +797,14 @@ export default function Relatorio() {
             </div>
 
             {/* Listagem dos relatos */}
-            <div className="space-y-4">
+            <div className="space-y-4 bg-white rounded-lg p-6 shadow-sm">
+              <div className="flex items-center gap-2 mb-4">
+                <ListBullets size={20} className="text-gray-700" />
+                <h3 className="text-md font-semibold text-gray-700">
+                  Listagem dos relatos
+                </h3>
+              </div>
+
               {problemasFiltrados.length > 0 ? (
                 problemasFiltrados.map(
                   (problema: ProblemaLocalizacaoType, index: number) => (
