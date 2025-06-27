@@ -66,7 +66,7 @@ export default function RedefinirSenha() {
       styleBase={false}
       menu={false}
       adicionarItens={false}>
-      <div className="w-full max-w-md m-auto bg-white rounded-2xl shadow-xl overflow-hidden animate-fade-in-up">
+      <div className="w-full max-w-md m-auto overflow-hidden animate-fade-in-up">
         <div className="p-8">
           <div className="space-y-6">
             <InputComponent

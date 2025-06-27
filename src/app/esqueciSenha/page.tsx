@@ -47,22 +47,14 @@ export default function EsqueciSenha() {
   return (
     <BaseLayout
       title="Recuperar Senha"
+      description="Digite seu email cadastrado para receber as instruções de
+              recuperação de senha."
       buttonVoltar
       styleBase={false}
       menu={false}
       adicionarItens={false}>
-      <div className="md:w-full max-w-md m-auto bg-white rounded-2xl shadow-xl overflow-hidden animate-fade-in-up">
+      <div className="md:w-full max-w-md m-auto animate-fade-in-up">
         <div className="p-8">
-          <div className="text-center mb-8">
-            <h1 className="text-2xl text-gray-800 font-bold mb-2">
-              Recuperar Senha
-            </h1>
-            <p className="text-gray-500">
-              Digite seu email cadastrado para receber as instruções de
-              recuperação de senha.
-            </p>
-          </div>
-
           <div className="space-y-6">
             <InputComponent
               id="email"
