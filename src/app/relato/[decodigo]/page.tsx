@@ -45,8 +45,6 @@ export default function Relato({
     consultaProblema()
   }, [decodigo])
 
-  console.log(relato)
-
   return (
     <div className="min-h-screen bg-gray-1500">
       <BaseLayout
