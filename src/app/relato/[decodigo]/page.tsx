@@ -45,9 +45,14 @@ export default function Relato({
     consultaProblema()
   }, [decodigo])
 
+  console.log(relato)
+
   return (
     <div className="min-h-screen bg-gray-1500">
-      <BaseLayout title={`Relato - ${relato?.categoria.cacategoria}`}>
+      <BaseLayout
+        title={`Relato${
+          relato != null ? ` - ${relato.categoria.cacategoria}` : ''
+        }`}>
         <div className="max-w-6xl mx-auto">
           {relato ? (
             <div className="animate-slide-up">
