@@ -451,6 +451,7 @@ export default function Relatorio() {
       const visibleStatusIndexes = statusData.labels
         .map((_, idx) => idx)
         .filter((idx) => !hiddenIndexesStatus.includes(idx))
+
       const filteredLabels = visibleStatusIndexes.map(
         (idx) => statusData.labels[idx]
       )
@@ -471,21 +472,21 @@ export default function Relatorio() {
           legend: {
             position: 'bottom' as const,
             labels: {
-              boxWidth: 32,
-              boxHeight: 32,
-              padding: 18,
+              boxWidth: 26,
+              boxHeight: 26,
+              padding: 16,
               font: {
-                size: 22,
+                size: 18,
                 family: 'Inter, system-ui, sans-serif',
-                weight: 700
+                weight: 600
               },
               usePointStyle: true
             }
           },
           datalabels: {
-            color: '#222',
+            color: '#333',
             font: {
-              size: 22,
+              size: 18,
               weight: 700
             },
             formatter: (value: number, context: any) => {
@@ -507,7 +508,7 @@ export default function Relatorio() {
           labels: filteredLabels,
           datasets: [
             {
-              label: 'Status',
+              label: 'Status dos Relatos',
               data: filteredData,
               backgroundColor: filteredColors,
               borderColor: filteredColors,
@@ -519,33 +520,58 @@ export default function Relatorio() {
         options: exportOptions,
         plugins: [ChartDataLabels]
       })
+
       await new Promise((r) => setTimeout(r, 100))
       const imgData = tempCanvas.toDataURL('image/png')
+
       const pdf = new jsPDF({
         orientation: 'landscape',
         unit: 'px',
-        format: [1400, 700]
+        format: [1400, 800]
       })
-      pdf.setFontSize(32)
-      pdf.setTextColor('#0c4ca3')
-      pdf.text('Relatório de Distribuição por Status', 1400 / 2, 60, {
+
+      pdf.setFillColor('#0c4ca3')
+      pdf.rect(0, 0, 1400, 80, 'F')
+
+      pdf.setFontSize(28)
+      pdf.setTextColor('#ffffff')
+      pdf.setFont('helvetica', 'bold')
+      pdf.text('Relatório de Distribuição por Status', 1400 / 2, 50, {
         align: 'center'
       })
+
       pdf.setDrawColor('#0c4ca3')
-      pdf.setLineWidth(2)
-      pdf.line(60, 80, 1400 - 60, 80)
-      pdf.setFontSize(18)
-      pdf.setTextColor('#222')
-      pdf.text(`Gerado em: ${exibirDataHoraAtual()}`, 1400 - 60, 110, {
+      pdf.setLineWidth(1)
+      pdf.line(60, 90, 1340, 90)
+
+      pdf.setFontSize(14)
+      pdf.setTextColor('#666')
+      pdf.setFont('helvetica', 'normal')
+      pdf.text(`Gerado em: ${exibirDataHoraAtual()}`, 1340, 110, {
         align: 'right'
       })
-      pdf.addImage(imgData, 'PNG', 60, 130, 1400 - 120, 700 - 250)
-      pdf.setFontSize(16)
-      pdf.setTextColor('#555')
-      pdf.text(`Relatório gerado por: ${user.usnome}`, 60, 700 - 40, {
+
+      const marginX = 100
+      const chartWidth = 1400 - marginX * 2
+      const chartHeight = 500
+      pdf.addImage(imgData, 'PNG', marginX, 130, chartWidth, chartHeight)
+
+      pdf.setDrawColor('#e0e0e0')
+      pdf.setLineWidth(0.5)
+      pdf.line(60, 730, 1340, 730)
+
+      pdf.setFontSize(12)
+      pdf.setTextColor('#999')
+      pdf.setFont('helvetica', 'italic')
+      pdf.text(`Relatório gerado por: ${user.usnome}`, 60, 755, {
         align: 'left'
       })
-      pdf.save(`grafico-status-${new Date().toLocaleDateString()}.pdf`)
+      pdf.text('Sistema de Gestão Municipal - FiscalizaAi', 1340, 755, {
+        align: 'right'
+      })
+
+      pdf.save(`relatorio-status-${new Date().toLocaleDateString()}.pdf`)
+
       chartInstance.destroy()
       document.body.removeChild(tempCanvas)
     }
@@ -561,10 +587,10 @@ export default function Relatorio() {
       tempCanvas.style.display = 'none'
       document.body.appendChild(tempCanvas)
 
-      // Filtra os dados visíveis conforme os segmentos não ocultos
       const visibleCatIndexes = categoriasData.labels
         .map((_, idx) => idx)
         .filter((idx) => !hiddenIndexesCategorias.includes(idx))
+
       const filteredLabels = visibleCatIndexes.map(
         (idx) => categoriasData.labels[idx]
       )
@@ -585,21 +611,21 @@ export default function Relatorio() {
           legend: {
             position: 'bottom' as const,
             labels: {
-              boxWidth: 32,
-              boxHeight: 32,
-              padding: 18,
+              boxWidth: 26,
+              boxHeight: 26,
+              padding: 16,
               font: {
-                size: 22,
+                size: 18,
                 family: 'Inter, system-ui, sans-serif',
-                weight: 700
+                weight: 600
               },
               usePointStyle: true
             }
           },
           datalabels: {
-            color: '#222',
+            color: '#333',
             font: {
-              size: 22,
+              size: 18,
               weight: 700
             },
             formatter: (value: number, context: any) => {
@@ -633,38 +659,58 @@ export default function Relatorio() {
         options: exportOptions,
         plugins: [ChartDataLabels]
       })
+
       await new Promise((r) => setTimeout(r, 100))
       const imgData = tempCanvas.toDataURL('image/png')
+
       const pdf = new jsPDF({
         orientation: 'landscape',
         unit: 'px',
-        format: [1400, 700]
+        format: [1400, 800]
       })
-      // Título
-      pdf.setFontSize(32)
-      pdf.setTextColor('#0c4ca3') // azul
-      pdf.text('Relatório de Relatos por Categoria', 1400 / 2, 60, {
+
+      pdf.setFillColor('#0c4ca3')
+      pdf.rect(0, 0, 1400, 80, 'F')
+
+      pdf.setFontSize(28)
+      pdf.setTextColor('#ffffff')
+      pdf.setFont('helvetica', 'bold')
+      pdf.text('Relatório de Relatos por Categoria', 1400 / 2, 50, {
         align: 'center'
       })
-      // Linha horizontal
+
       pdf.setDrawColor('#0c4ca3')
-      pdf.setLineWidth(2)
-      pdf.line(60, 80, 1400 - 60, 80)
-      // Data
-      pdf.setFontSize(18)
-      pdf.setTextColor('#222')
-      pdf.text(`Gerado em: ${exibirDataHoraAtual()}`, 1400 - 60, 110, {
+      pdf.setLineWidth(1)
+      pdf.line(60, 90, 1340, 90)
+
+      pdf.setFontSize(14)
+      pdf.setTextColor('#666')
+      pdf.setFont('helvetica', 'normal')
+      pdf.text(`Gerado em: ${exibirDataHoraAtual()}`, 1340, 110, {
         align: 'right'
       })
-      // Gráfico centralizado em alta resolução
-      pdf.addImage(imgData, 'PNG', 60, 130, 1400 - 120, 700 - 250)
-      // Rodapé
-      pdf.setFontSize(16)
-      pdf.setTextColor('#555')
-      pdf.text(`Relatório gerado por: ${user.usnome}`, 60, 700 - 40, {
+
+      const marginX = 100
+      const chartWidth = 1400 - marginX * 2
+      const chartHeight = 500
+      pdf.addImage(imgData, 'PNG', marginX, 130, chartWidth, chartHeight)
+
+      pdf.setDrawColor('#e0e0e0')
+      pdf.setLineWidth(0.5)
+      pdf.line(60, 730, 1340, 730)
+
+      pdf.setFontSize(12)
+      pdf.setTextColor('#999')
+      pdf.setFont('helvetica', 'italic')
+      pdf.text(`Relatório gerado por: ${user.usnome}`, 60, 755, {
         align: 'left'
       })
-      pdf.save(`grafico-categoria-${new Date().toLocaleDateString()}.pdf`)
+      pdf.text('Sistema de Gestão Municipal - FiscalizaAi', 1340, 755, {
+        align: 'right'
+      })
+
+      pdf.save(`relatorio-categoria-${new Date().toLocaleDateString()}.pdf`)
+
       chartInstance.destroy()
       document.body.removeChild(tempCanvas)
     }
@@ -839,9 +885,10 @@ export default function Relatorio() {
               </div>
 
               <div>
-                <div className="bg-gray-50 rounded-lg p-6 transform transition-all duration-300 hover:shadow-lg">
+                {/* Gráfico por Status */}
+                <div className="rounded-lg bg-gray-50 p-6 transform transition-all duration-300">
                   <div className="flex items-center justify-between gap-2 mb-4">
-                    <div className="flex justify-center items-center">
+                    <div className="flex justify-center items-center gap-2">
                       <ChartPie size={20} className="text-gray-700" />
                       <h3 className="text-md font-semibold text-gray-700">
                         Distribuição por Status
@@ -871,44 +918,37 @@ export default function Relatorio() {
                   </div>
 
                   {/* Legenda Status */}
-                  <div className="grid grid-cols-1 gap-2 bg-white p-4 rounded-md shadow-2xl w-full">
-                    <h1 className="text-center text-black text-md mb-3">
-                      Legenda Status
-                    </h1>
+                  <div className="grid grid-cols-1 w-full mt-5">
                     {statusData.labels.map((label, index) => {
                       const isHidden = hiddenIndexesStatus.includes(index)
                       return (
-                        <div
+                        <button
                           key={index}
-                          className="tooltip tooltip-top"
-                          data-tip={label}>
-                          <button
-                            onClick={() => toggleSegmentStatus(index)}
-                            className={`flex items-center gap-2 cursor-pointer ${
-                              isHidden
-                                ? 'opacity-40 line-through text-black'
-                                : ''
-                            }`}>
-                            <span
-                              className="w-4 h-4 rounded-full shrink-0"
-                              style={{
-                                backgroundColor: statusData.datasets[0]
-                                  .backgroundColor[index] as string
-                              }}></span>
-                            <p className="text-sm text-gray-700 text-left">
-                              {label}
-                            </p>
-                          </button>
-                        </div>
+                          data-tip={label}
+                          onClick={() => toggleSegmentStatus(index)}
+                          className={`flex tooltip tooltip-top hover:bg-gray-100 p-2 rounded-md items-center gap-2 cursor-pointer ${
+                            isHidden ? 'opacity-40 line-through text-black' : ''
+                          }`}>
+                          <span
+                            className="w-4 h-4 rounded-full shrink-0"
+                            style={{
+                              backgroundColor: statusData.datasets[0]
+                                .backgroundColor[index] as string
+                            }}></span>
+                          <p className="text-sm text-gray-700 text-left">
+                            {label}
+                          </p>
+                        </button>
                       )
                     })}
                   </div>
                 </div>
 
-                <div className="bg-gray-50 rounded-lg p-6 transform transition-all duration-300 hover:shadow-lg mt-5">
+                {/* Gráfico por Categorias */}
+                <div className=" rounded-lg bg-gray-50 p-6 transform transition-all duration-300 mt-5">
                   <div className="flex items-center justify-between gap-2 mb-4">
-                    <div className="flex justify-center items-center">
-                      <ChartBar size={20} className="text-gray-700" />
+                    <div className="flex justify-center items-center gap-2">
+                      <ChartPie size={20} className="text-gray-700" />
                       <h3 className="text-md font-semibold text-gray-700">
                         Relatos por Categoria
                       </h3>
@@ -936,35 +976,29 @@ export default function Relatorio() {
                     </div>
 
                     {/* Legenda Categorias */}
-                    <div className="grid grid-cols-1 gap-2 bg-white p-4 rounded-md shadow-2xl w-full">
-                      <h1 className="text-center text-black text-md mb-3">
-                        Legenda Categorias
-                      </h1>
+                    <div className="grid grid-cols-1 w-full">
                       {categoriasData.labels.map((label, index) => {
                         const isHidden = hiddenIndexesCategorias.includes(index)
                         return (
-                          <div
+                          <button
                             key={index}
-                            className="tooltip tooltip-top"
-                            data-tip={label}>
-                            <button
-                              onClick={() => toggleSegmentCategoria(index)}
-                              className={`flex items-center gap-2 cursor-pointer ${
-                                isHidden
-                                  ? 'opacity-40 line-through text-black'
-                                  : ''
-                              }`}>
-                              <span
-                                className="w-4 h-4 rounded-full shrink-0"
-                                style={{
-                                  backgroundColor: categoriasData.datasets[0]
-                                    .backgroundColor[index] as string
-                                }}></span>
-                              <p className="text-sm text-gray-700 text-left">
-                                {label}
-                              </p>
-                            </button>
-                          </div>
+                            data-tip={label}
+                            onClick={() => toggleSegmentCategoria(index)}
+                            className={`tooltip tooltip-top flex hover:bg-gray-100 p-2 rounded-md items-center gap-2 cursor-pointer ${
+                              isHidden
+                                ? 'opacity-40 line-through text-black'
+                                : ''
+                            }`}>
+                            <span
+                              className="w-4 h-4 rounded-full shrink-0"
+                              style={{
+                                backgroundColor: categoriasData.datasets[0]
+                                  .backgroundColor[index] as string
+                              }}></span>
+                            <p className="text-sm text-gray-700 text-left">
+                              {label}
+                            </p>
+                          </button>
                         )
                       })}
                     </div>
