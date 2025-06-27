@@ -79,6 +79,10 @@ export default function Relatorio() {
   const loading = useSelector((state: any) => state.loadingReducer.loading)
   const chartStatusRef = useRef(null)
   const chartCategoriaRef = useRef(null)
+  const [hiddenIndexesStatus, setHiddenIndexesStatus] = useState<number[]>([])
+  const [hiddenIndexesCategorias, setHiddenIndexesCategorias] = useState<
+    number[]
+  >([])
 
   const statusOptions = [
     { value: 'TODOS', label: 'Todos', color: 'bg-gray-100 text-gray-700' },
@@ -114,6 +118,102 @@ export default function Relatorio() {
   useEffect(() => {
     carregarCategorias()
   }, [])
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    layout: {
+      padding: {
+        left: 10,
+        right: 10,
+        top: 10,
+        bottom: 10
+      }
+    },
+    plugins: {
+      legend: {
+        display: false
+      },
+      tooltip: {
+        enabled: true,
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        titleFont: {
+          size: 15,
+          family: 'Inter, system-ui, sans-serif',
+          weight: 700
+        },
+        bodyFont: {
+          size: 14,
+          family: 'Inter, system-ui, sans-serif'
+        },
+        padding: 12,
+        cornerRadius: 8,
+        displayColors: true,
+        callbacks: {
+          label: (context: any) => {
+            const value = context.raw as number
+            const sum = (context.dataset.data as number[]).reduce(
+              (a, b) => a + b,
+              0
+            )
+            const percentage = ((value / sum) * 100).toFixed(1)
+            return ` ${value} (${percentage}%)`
+          }
+        }
+      },
+      datalabels: {
+        color: '#222',
+        font: {
+          size: 13,
+          weight: 600
+        },
+        formatter: (value: number, context: any) => {
+          const sum = context.chart.data.datasets[0].data.reduce(
+            (a: number, b: number) => a + b,
+            0
+          )
+          const percentage = ((value / sum) * 100).toFixed(1)
+          return value > 0 ? `${value} (${percentage}%)` : ''
+        }
+      }
+    }
+  }
+
+  const toggleSegmentStatus = (index: number) => {
+    const chart: any = chartStatusRef.current
+    if (!chart) return
+    const meta = chart.getDatasetMeta(0)
+    const item = meta.data[index]
+    if (!item) return
+    const isHidden = hiddenIndexesStatus.includes(index)
+    if (isHidden) {
+      item.hidden = false
+      setHiddenIndexesStatus(hiddenIndexesStatus.filter((i) => i !== index))
+    } else {
+      item.hidden = true
+      setHiddenIndexesStatus([...hiddenIndexesStatus, index])
+    }
+    chart.update()
+  }
+
+  const toggleSegmentCategoria = (index: number) => {
+    const chart: any = chartCategoriaRef.current
+    if (!chart) return
+    const meta = chart.getDatasetMeta(0)
+    const item = meta.data[index]
+    if (!item) return
+    const isHidden = hiddenIndexesCategorias.includes(index)
+    if (isHidden) {
+      item.hidden = false
+      setHiddenIndexesCategorias(
+        hiddenIndexesCategorias.filter((i) => i !== index)
+      )
+    } else {
+      item.hidden = true
+      setHiddenIndexesCategorias([...hiddenIndexesCategorias, index])
+    }
+    chart.update()
+  }
 
   const carregarCategorias = async () => {
     dispatch(setLoading(true))
@@ -272,10 +372,27 @@ export default function Relatorio() {
     ]
   }
 
+  const paletaPasteisSuave = [
+    '#B3D8F7', // azul pastel suave
+    '#C8F7C5', // verde pastel suave
+    '#F7B3B3', // vermelho pastel suave
+    '#FFF9B3', // amarelo pastel suave
+    '#FFD6B3', // laranja pastel suave
+    '#E0C8F7', // roxo pastel suave
+    '#F7C8E0', // rosa pastel suave
+    '#B3F7F4', // turquesa pastel suave
+    '#F0F0F0', // cinza pastel suave
+    '#EAD7C8' // marrom pastel suave
+  ]
+
+  const categoriasCores = categoriasSelecionadas.map(
+    (_, idx) => paletaPasteisSuave[idx % paletaPasteisSuave.length]
+  )
+
   const categoriasData = {
     labels: categoriasSelecionadas.map((catId) => {
       const label = categorias.find((c) => c.value === catId)?.label || ''
-      return label.length > 12 ? label.substring(0, 12) + '...' : label
+      return label
     }),
     datasets: [
       {
@@ -284,12 +401,12 @@ export default function Relatorio() {
           (catId) =>
             problemasFiltrados.filter((p) => p.decategoria === catId).length
         ),
-        backgroundColor: 'rgba(12, 76, 163, 0.7)',
-        borderColor: 'rgb(12, 76, 163)',
+        backgroundColor: categoriasCores,
+        borderColor: categoriasCores,
         borderWidth: 2,
         borderRadius: 6,
         maxBarThickness: 50,
-        hoverBackgroundColor: 'rgba(12, 76, 163, 0.85)'
+        hoverBackgroundColor: categoriasCores
       }
     ]
   }
@@ -321,61 +438,235 @@ export default function Relatorio() {
     return null
   }
 
-  function exportarPDFStatus() {
+  async function exportarPDFStatus() {
     const chart: any = chartStatusRef.current
 
     if (chart) {
-      const canvas = chart.canvas
-      const imgData = canvas.toDataURL('image/png')
+      const tempCanvas = document.createElement('canvas')
+      tempCanvas.width = 1920
+      tempCanvas.height = 768
+      tempCanvas.style.display = 'none'
+      document.body.appendChild(tempCanvas)
 
+      const visibleStatusIndexes = statusData.labels
+        .map((_, idx) => idx)
+        .filter((idx) => !hiddenIndexesStatus.includes(idx))
+      const filteredLabels = visibleStatusIndexes.map(
+        (idx) => statusData.labels[idx]
+      )
+      const filteredData = visibleStatusIndexes.map(
+        (idx) => statusData.datasets[0].data[idx]
+      )
+      const filteredColors = visibleStatusIndexes.map(
+        (idx) => statusData.datasets[0].backgroundColor[idx]
+      )
+
+      const exportOptions = {
+        responsive: false,
+        maintainAspectRatio: false,
+        layout: {
+          padding: { left: 40, right: 40, top: 40, bottom: 40 }
+        },
+        plugins: {
+          legend: {
+            position: 'bottom' as const,
+            labels: {
+              boxWidth: 32,
+              boxHeight: 32,
+              padding: 18,
+              font: {
+                size: 22,
+                family: 'Inter, system-ui, sans-serif',
+                weight: 700
+              },
+              usePointStyle: true
+            }
+          },
+          datalabels: {
+            color: '#222',
+            font: {
+              size: 22,
+              weight: 700
+            },
+            formatter: (value: number, context: any) => {
+              const sum = context.chart.data.datasets[0].data.reduce(
+                (a: number, b: number) => a + b,
+                0
+              )
+              const percentage = ((value / sum) * 100).toFixed(1)
+              return value > 0 ? `${value} (${percentage}%)` : ''
+            }
+          }
+        },
+        animation: false as const
+      }
+
+      const chartInstance = new ChartJS(tempCanvas, {
+        type: 'pie',
+        data: {
+          labels: filteredLabels,
+          datasets: [
+            {
+              label: 'Status',
+              data: filteredData,
+              backgroundColor: filteredColors,
+              borderColor: filteredColors,
+              borderWidth: 2,
+              hoverBackgroundColor: filteredColors
+            }
+          ]
+        },
+        options: exportOptions,
+        plugins: [ChartDataLabels]
+      })
+      await new Promise((r) => setTimeout(r, 100))
+      const imgData = tempCanvas.toDataURL('image/png')
       const pdf = new jsPDF({
         orientation: 'landscape',
         unit: 'px',
-        format: [canvas.width, canvas.height]
+        format: [1400, 700]
       })
-
-      pdf.setFontSize(14)
-      pdf.text(`Gerado em: ${exibirDataHoraAtual()}`, canvas.width - 10, 25, {
+      pdf.setFontSize(32)
+      pdf.setTextColor('#0c4ca3')
+      pdf.text('Relatório de Distribuição por Status', 1400 / 2, 60, {
+        align: 'center'
+      })
+      pdf.setDrawColor('#0c4ca3')
+      pdf.setLineWidth(2)
+      pdf.line(60, 80, 1400 - 60, 80)
+      pdf.setFontSize(18)
+      pdf.setTextColor('#222')
+      pdf.text(`Gerado em: ${exibirDataHoraAtual()}`, 1400 - 60, 110, {
         align: 'right'
       })
-
-      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height)
-
-      pdf.setFontSize(13)
-      pdf.text(`Relatório gerado por: ${user.usnome}`, 10, canvas.height - 15, {
+      pdf.addImage(imgData, 'PNG', 60, 130, 1400 - 120, 700 - 250)
+      pdf.setFontSize(16)
+      pdf.setTextColor('#555')
+      pdf.text(`Relatório gerado por: ${user.usnome}`, 60, 700 - 40, {
         align: 'left'
       })
-
       pdf.save(`grafico-status-${new Date().toLocaleDateString()}.pdf`)
+      chartInstance.destroy()
+      document.body.removeChild(tempCanvas)
     }
   }
 
-  function exportarPDFCategoria() {
+  async function exportarPDFCategoria() {
     const chart: any = chartCategoriaRef.current
 
     if (chart) {
-      const canvas = chart.canvas
-      const imgData = canvas.toDataURL('image/png')
+      const tempCanvas = document.createElement('canvas')
+      tempCanvas.width = 1920
+      tempCanvas.height = 768
+      tempCanvas.style.display = 'none'
+      document.body.appendChild(tempCanvas)
 
+      // Filtra os dados visíveis conforme os segmentos não ocultos
+      const visibleCatIndexes = categoriasData.labels
+        .map((_, idx) => idx)
+        .filter((idx) => !hiddenIndexesCategorias.includes(idx))
+      const filteredLabels = visibleCatIndexes.map(
+        (idx) => categoriasData.labels[idx]
+      )
+      const filteredData = visibleCatIndexes.map(
+        (idx) => categoriasData.datasets[0].data[idx]
+      )
+      const filteredColors = visibleCatIndexes.map(
+        (idx) => categoriasData.datasets[0].backgroundColor[idx]
+      )
+
+      const exportOptions = {
+        responsive: false,
+        maintainAspectRatio: false,
+        layout: {
+          padding: { left: 40, right: 40, top: 40, bottom: 40 }
+        },
+        plugins: {
+          legend: {
+            position: 'bottom' as const,
+            labels: {
+              boxWidth: 32,
+              boxHeight: 32,
+              padding: 18,
+              font: {
+                size: 22,
+                family: 'Inter, system-ui, sans-serif',
+                weight: 700
+              },
+              usePointStyle: true
+            }
+          },
+          datalabels: {
+            color: '#222',
+            font: {
+              size: 22,
+              weight: 700
+            },
+            formatter: (value: number, context: any) => {
+              const sum = context.chart.data.datasets[0].data.reduce(
+                (a: number, b: number) => a + b,
+                0
+              )
+              const percentage = ((value / sum) * 100).toFixed(1)
+              return value > 0 ? `${value} (${percentage}%)` : ''
+            }
+          }
+        },
+        animation: false as const
+      }
+
+      const chartInstance = new ChartJS(tempCanvas, {
+        type: 'pie',
+        data: {
+          labels: filteredLabels,
+          datasets: [
+            {
+              label: 'Problemas por Categoria',
+              data: filteredData,
+              backgroundColor: filteredColors,
+              borderColor: filteredColors,
+              borderWidth: 2,
+              hoverBackgroundColor: filteredColors
+            }
+          ]
+        },
+        options: exportOptions,
+        plugins: [ChartDataLabels]
+      })
+      await new Promise((r) => setTimeout(r, 100))
+      const imgData = tempCanvas.toDataURL('image/png')
       const pdf = new jsPDF({
         orientation: 'landscape',
         unit: 'px',
-        format: [canvas.width, canvas.height]
+        format: [1400, 700]
       })
-
-      pdf.setFontSize(14)
-      pdf.text(`Gerado em: ${exibirDataHoraAtual()}`, canvas.width - 10, 25, {
+      // Título
+      pdf.setFontSize(32)
+      pdf.setTextColor('#0c4ca3') // azul
+      pdf.text('Relatório de Relatos por Categoria', 1400 / 2, 60, {
+        align: 'center'
+      })
+      // Linha horizontal
+      pdf.setDrawColor('#0c4ca3')
+      pdf.setLineWidth(2)
+      pdf.line(60, 80, 1400 - 60, 80)
+      // Data
+      pdf.setFontSize(18)
+      pdf.setTextColor('#222')
+      pdf.text(`Gerado em: ${exibirDataHoraAtual()}`, 1400 - 60, 110, {
         align: 'right'
       })
-
-      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height)
-
-      pdf.setFontSize(13)
-      pdf.text(`Relatório gerado por: ${user.usnome}`, 10, canvas.height - 15, {
+      // Gráfico centralizado em alta resolução
+      pdf.addImage(imgData, 'PNG', 60, 130, 1400 - 120, 700 - 250)
+      // Rodapé
+      pdf.setFontSize(16)
+      pdf.setTextColor('#555')
+      pdf.text(`Relatório gerado por: ${user.usnome}`, 60, 700 - 40, {
         align: 'left'
       })
-
       pdf.save(`grafico-categoria-${new Date().toLocaleDateString()}.pdf`)
+      chartInstance.destroy()
+      document.body.removeChild(tempCanvas)
     }
   }
 
@@ -547,7 +838,7 @@ export default function Relatorio() {
                 </h2>
               </div>
 
-              <div className="grid grid-cols-1 gap-6">
+              <div>
                 <div className="bg-gray-50 rounded-lg p-6 transform transition-all duration-300 hover:shadow-lg">
                   <div className="flex items-center justify-between gap-2 mb-4">
                     <div className="flex justify-center items-center">
@@ -568,98 +859,53 @@ export default function Relatorio() {
                     </div>
                   </div>
 
-                  <div className="relative h-[350px] w-full">
+                  {/* Gráfico */}
+                  <div className="relative w-full max-w-[700px] mx-auto min-h-[250px] h-[350px] sm:h-[350px]">
                     <div className="absolute inset-0 flex items-center justify-center">
                       <Pie
                         ref={chartStatusRef}
-                        width={500}
-                        height={350}
                         data={statusData}
-                        options={{
-                          responsive: false,
-                          maintainAspectRatio: false,
-                          layout: {
-                            padding: {
-                              left: 30,
-                              right: 30,
-                              top: 10,
-                              bottom: 30
-                            }
-                          },
-                          plugins: {
-                            legend: {
-                              position: 'right',
-                              align: 'center',
-                              labels: {
-                                boxWidth: 18,
-                                boxHeight: 18,
-                                padding: 20,
-                                font: {
-                                  size: 14,
-                                  family: 'Inter, system-ui, sans-serif',
-                                  weight: 600
-                                },
-                                usePointStyle: true
-                              }
-                            },
-                            tooltip: {
-                              enabled: true,
-                              backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                              titleFont: {
-                                size: 15,
-                                family: 'Inter, system-ui, sans-serif',
-                                weight: 700
-                              },
-                              bodyFont: {
-                                size: 14,
-                                family: 'Inter, system-ui, sans-serif'
-                              },
-                              padding: 14,
-                              cornerRadius: 10,
-                              displayColors: true,
-                              callbacks: {
-                                label: (context) => {
-                                  const value = context.raw as number
-                                  const sum = (
-                                    context.dataset.data as number[]
-                                  ).reduce((a, b) => a + b, 0)
-                                  const percentage = (
-                                    (value / sum) *
-                                    100
-                                  ).toFixed(1)
-                                  return ` ${value} (${percentage}%)`
-                                }
-                              }
-                            },
-                            datalabels: {
-                              color: '#222',
-                              font: {
-                                size: 14,
-                                weight: 700
-                              },
-                              formatter: (value: number, context: any) => {
-                                const sum =
-                                  context.chart.data.datasets[0].data.reduce(
-                                    (a: number, b: number) => a + b,
-                                    0
-                                  )
-                                const percentage = (
-                                  (value / sum) *
-                                  100
-                                ).toFixed(1)
-                                return value > 0
-                                  ? `${value} (${percentage}%)`
-                                  : ''
-                              }
-                            }
-                          }
-                        }}
+                        options={options}
                       />
                     </div>
                   </div>
+
+                  {/* Legenda Status */}
+                  <div className="grid grid-cols-1 gap-2 bg-white p-4 rounded-md shadow-2xl w-full">
+                    <h1 className="text-center text-black text-md mb-3">
+                      Legenda Status
+                    </h1>
+                    {statusData.labels.map((label, index) => {
+                      const isHidden = hiddenIndexesStatus.includes(index)
+                      return (
+                        <div
+                          key={index}
+                          className="tooltip tooltip-top"
+                          data-tip={label}>
+                          <button
+                            onClick={() => toggleSegmentStatus(index)}
+                            className={`flex items-center gap-2 cursor-pointer ${
+                              isHidden
+                                ? 'opacity-40 line-through text-black'
+                                : ''
+                            }`}>
+                            <span
+                              className="w-4 h-4 rounded-full shrink-0"
+                              style={{
+                                backgroundColor: statusData.datasets[0]
+                                  .backgroundColor[index] as string
+                              }}></span>
+                            <p className="text-sm text-gray-700 text-left">
+                              {label}
+                            </p>
+                          </button>
+                        </div>
+                      )
+                    })}
+                  </div>
                 </div>
 
-                <div className="bg-gray-50 rounded-lg p-6 transform transition-all duration-300 hover:shadow-lg">
+                <div className="bg-gray-50 rounded-lg p-6 transform transition-all duration-300 hover:shadow-lg mt-5">
                   <div className="flex items-center justify-between gap-2 mb-4">
                     <div className="flex justify-center items-center">
                       <ChartBar size={20} className="text-gray-700" />
@@ -679,117 +925,48 @@ export default function Relatorio() {
                     </div>
                   </div>
 
-                  <div className="relative h-[350px] w-full">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <Bar
+                  <div className="flex flex-col lg:flex-row gap-6">
+                    {/* Gráfico */}
+                    <div className="relative w-full max-w-[700px] mx-auto min-h-[250px] h-[350px]">
+                      <Pie
                         ref={chartCategoriaRef}
-                        width={500}
-                        height={350}
                         data={categoriasData}
-                        options={{
-                          responsive: false,
-                          maintainAspectRatio: false,
-                          layout: {
-                            padding: {
-                              left: 30,
-                              right: 30,
-                              top: 40,
-                              bottom: 30
-                            }
-                          },
-                          plugins: {
-                            legend: {
-                              display: false
-                            },
-                            tooltip: {
-                              enabled: true,
-                              backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                              titleFont: {
-                                size: 15,
-                                family: 'Inter, system-ui, sans-serif',
-                                weight: 700
-                              },
-                              bodyFont: {
-                                size: 14,
-                                family: 'Inter, system-ui, sans-serif'
-                              },
-                              padding: 14,
-                              cornerRadius: 10,
-                              callbacks: {
-                                label: (context) => {
-                                  const value = context.raw as number
-                                  const sum = (
-                                    context.dataset.data as number[]
-                                  ).reduce((a, b) => a + b, 0)
-                                  const percentage = (
-                                    (value / sum) *
-                                    100
-                                  ).toFixed(1)
-                                  return ` ${value} problemas (${percentage}%)`
-                                }
-                              }
-                            },
-                            datalabels: {
-                              color: '#222',
-                              font: {
-                                size: 14,
-                                weight: 700
-                              },
-                              anchor: 'end',
-                              align: 'top',
-                              formatter: (value: number, context: any) => {
-                                const sum =
-                                  context.chart.data.datasets[0].data.reduce(
-                                    (a: number, b: number) => a + b,
-                                    0
-                                  )
-                                const percentage = (
-                                  (value / sum) *
-                                  100
-                                ).toFixed(1)
-                                return value > 0
-                                  ? `${value} (${percentage}%)`
-                                  : ''
-                              }
-                            }
-                          },
-                          scales: {
-                            x: {
-                              grid: {
-                                display: false
-                              },
-                              ticks: {
-                                font: {
-                                  size: 13,
-                                  family: 'Inter, system-ui, sans-serif',
-                                  weight: 600
-                                },
-                                maxRotation: 45,
-                                minRotation: 45
-                              }
-                            },
-                            y: {
-                              beginAtZero: true,
-                              grid: {
-                                color: 'rgba(0, 0, 0, 0.1)',
-                                display: true
-                              },
-                              border: {
-                                display: false
-                              },
-                              ticks: {
-                                font: {
-                                  size: 13,
-                                  family: 'Inter, system-ui, sans-serif',
-                                  weight: 600
-                                },
-                                stepSize: 1,
-                                padding: 10
-                              }
-                            }
-                          }
-                        }}
+                        options={options}
                       />
+                    </div>
+
+                    {/* Legenda Categorias */}
+                    <div className="grid grid-cols-1 gap-2 bg-white p-4 rounded-md shadow-2xl w-full">
+                      <h1 className="text-center text-black text-md mb-3">
+                        Legenda Categorias
+                      </h1>
+                      {categoriasData.labels.map((label, index) => {
+                        const isHidden = hiddenIndexesCategorias.includes(index)
+                        return (
+                          <div
+                            key={index}
+                            className="tooltip tooltip-top"
+                            data-tip={label}>
+                            <button
+                              onClick={() => toggleSegmentCategoria(index)}
+                              className={`flex items-center gap-2 cursor-pointer ${
+                                isHidden
+                                  ? 'opacity-40 line-through text-black'
+                                  : ''
+                              }`}>
+                              <span
+                                className="w-4 h-4 rounded-full shrink-0"
+                                style={{
+                                  backgroundColor: categoriasData.datasets[0]
+                                    .backgroundColor[index] as string
+                                }}></span>
+                              <p className="text-sm text-gray-700 text-left">
+                                {label}
+                              </p>
+                            </button>
+                          </div>
+                        )
+                      })}
                     </div>
                   </div>
                 </div>
@@ -836,7 +1013,7 @@ export default function Relatorio() {
           </>
         ) : (
           <div className="bg-white rounded-lg p-6 text-center shadow-sm">
-            <p className="text-gray-700 text-lg">
+            <p className="text-gray-700 text-md">
               {loading
                 ? 'Gerando relatório...'
                 : 'Selecione as categorias e clique em "Gerar Relatório"'}
