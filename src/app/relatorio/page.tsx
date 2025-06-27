@@ -352,11 +352,11 @@ export default function Relatorio() {
           problemasFiltrados.filter((p) => p.destatus === 'CORRIGIR').length
         ],
         backgroundColor: [
-          'rgba(59, 130, 246, 0.7)', // Azul
-          'rgba(234, 179, 8, 0.7)', // Amarelo
-          'rgba(249, 115, 22, 0.7)', // Laranja
-          'rgba(34, 197, 94, 0.7)', // Verde
-          'rgba(239, 68, 68, 0.7)' // Vermelho
+          'rgba(59, 130, 246, 0.7)',
+          'rgba(234, 179, 8, 0.7)',
+          'rgba(249, 115, 22, 0.7)',
+          'rgba(34, 197, 94, 0.7)',
+          'rgba(239, 68, 68, 0.7)'
         ],
         borderColor: [
           'rgb(59, 130, 246)',
@@ -372,21 +372,28 @@ export default function Relatorio() {
     ]
   }
 
-  const paletaPasteisSuave = [
-    '#B3D8F7', // azul pastel suave
-    '#C8F7C5', // verde pastel suave
-    '#F7B3B3', // vermelho pastel suave
-    '#FFF9B3', // amarelo pastel suave
-    '#FFD6B3', // laranja pastel suave
-    '#E0C8F7', // roxo pastel suave
-    '#F7C8E0', // rosa pastel suave
-    '#B3F7F4', // turquesa pastel suave
-    '#F0F0F0', // cinza pastel suave
-    '#EAD7C8' // marrom pastel suave
+  const paletaCores = [
+    '#f8840e', // Laranja principal
+    '#ffa94d', // Laranja médio
+    '#ffd8b0', // Laranja claro
+    '#cc6c0c', // Laranja escuro
+
+    '#0c4ca3', // Azul escuro principal
+    '#1e66c7', // Azul médio forte
+    '#4789e8', // Azul médio
+    '#a9cfff', // Azul claro
+    '#c8e1fe', // Azul muito claro
+    '#e9f3fe', // Azul quase branco
+
+    '#f86c6c', // Vermelho alaranjado
+    '#ffc36a', // Amarelo queimado (análogo do laranja)
+    '#ffe5b4', // Bege pastel (suavização do laranja)
+    '#82b4f9', // Azul médio vibrante
+    '#5a83c7' // Azul acinzentado médio
   ]
 
   const categoriasCores = categoriasSelecionadas.map(
-    (_, idx) => paletaPasteisSuave[idx % paletaPasteisSuave.length]
+    () => paletaCores[Math.floor(Math.random() * paletaCores.length)]
   )
 
   const categoriasData = {
@@ -965,43 +972,39 @@ export default function Relatorio() {
                     </div>
                   </div>
 
-                  <div className="flex flex-col lg:flex-row gap-6">
-                    {/* Gráfico */}
-                    <div className="relative w-full max-w-[700px] mx-auto min-h-[250px] h-[350px]">
-                      <Pie
-                        ref={chartCategoriaRef}
-                        data={categoriasData}
-                        options={options}
-                      />
-                    </div>
+                  {/* Gráfico */}
+                  <div className="relative w-full max-w-[700px] mx-auto min-h-[250px] h-[350px] sm:h-[350px]">
+                    <Pie
+                      ref={chartCategoriaRef}
+                      data={categoriasData}
+                      options={options}
+                    />
+                  </div>
 
-                    {/* Legenda Categorias */}
-                    <div className="grid grid-cols-1 w-full">
-                      {categoriasData.labels.map((label, index) => {
-                        const isHidden = hiddenIndexesCategorias.includes(index)
-                        return (
-                          <button
-                            key={index}
-                            data-tip={label}
-                            onClick={() => toggleSegmentCategoria(index)}
-                            className={`tooltip tooltip-top flex hover:bg-gray-100 p-2 rounded-md items-center gap-2 cursor-pointer ${
-                              isHidden
-                                ? 'opacity-40 line-through text-black'
-                                : ''
-                            }`}>
-                            <span
-                              className="w-4 h-4 rounded-full shrink-0"
-                              style={{
-                                backgroundColor: categoriasData.datasets[0]
-                                  .backgroundColor[index] as string
-                              }}></span>
-                            <p className="text-sm text-gray-700 text-left">
-                              {label}
-                            </p>
-                          </button>
-                        )
-                      })}
-                    </div>
+                  {/* Legenda Categorias */}
+                  <div className="grid grid-cols-1 w-full mt-5">
+                    {categoriasData.labels.map((label, index) => {
+                      const isHidden = hiddenIndexesCategorias.includes(index)
+                      return (
+                        <button
+                          key={index}
+                          data-tip={label}
+                          onClick={() => toggleSegmentCategoria(index)}
+                          className={`tooltip tooltip-top flex hover:bg-gray-100 p-2 rounded-md items-center gap-2 cursor-pointer ${
+                            isHidden ? 'opacity-40 line-through text-black' : ''
+                          }`}>
+                          <span
+                            className="w-4 h-4 rounded-full shrink-0"
+                            style={{
+                              backgroundColor: categoriasData.datasets[0]
+                                .backgroundColor[index] as string
+                            }}></span>
+                          <p className="text-sm text-gray-700 text-left">
+                            {label}
+                          </p>
+                        </button>
+                      )
+                    })}
                   </div>
                 </div>
               </div>

@@ -68,7 +68,7 @@ export default function CardRelato({
         }`}>
         <div className="p-6">
           {ordem && (
-            <div className="relative top-0 left-0 w-6 h-6 flex justify-center items-center text-center text-sn rounded-full bg-gray-100 p-2">
+            <div className="relative top-0 left-0 w-6 mb-3 h-6 flex justify-center items-center text-center text-sn rounded-full bg-gray-100 p-2">
               <p className="text-gray-400 text-xs">{ordem}</p>
             </div>
           )}
