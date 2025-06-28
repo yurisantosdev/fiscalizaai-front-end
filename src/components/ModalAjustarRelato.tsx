@@ -81,7 +81,6 @@ export default function ModalAjustarRelato({
   async function atualizarLocalizacao(lat: number, lng: number) {
     try {
       setLocalizacaoAtual('Carregando...')
-      dispatch(setLoading(true))
 
       const response = await fetch(
         `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
@@ -194,38 +193,46 @@ export default function ModalAjustarRelato({
       name="Ajuste de Relato"
       loading={loading}>
       <div className="space-y-6">
-        <div className="mb-3 bg-gray-1200 p-2 rounded-md">
-          <p className="text-white text-center mb-3 text-md font-bold">
-            Localização selecionada
-          </p>
-          <p className="text-white text-center text-lg">{localizacaoAtual}</p>
-        </div>
-
-        {position && (
-          <div className="md:h-[300px] h-[200px] relative rounded-lg overflow-hidden">
-            <Mapa
-              className="w-full h-full"
-              locAtual={true}
-              position={position}
-              onLocationRequest={handleLocationRequest}>
-              <MarkerMapa
-                position={position}
-                dragedFunction={(e: any) => {
-                  const marker = e.target
-                  const newPosition: [number, number] = [
-                    marker.getLatLng().lat,
-                    marker.getLatLng().lng
-                  ]
-                  setPosition(newPosition)
-                  atualizarLocalizacao(
-                    marker.getLatLng().lat,
-                    marker.getLatLng().lng
-                  )
-                }}
-              />
-            </Mapa>
+        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+          <div className="bg-blue-1000 p-4 md:flex md:justify-between md:items-center">
+            <div>
+              <h2 className="text-white text-lg font-semibold mb-2 flex md:justify-start justify-center items-center gap-2">
+                <NavigationArrow size={24} />
+                Localização Selecionada
+              </h2>
+              <p className="text-white/90 text-base break-words md:text-start text-center">
+                {localizacaoAtual}
+              </p>
+            </div>
           </div>
-        )}
+
+          {position && (
+            <div className="md:h-[300px] h-[200px] relative">
+              <Mapa
+                className="w-full h-full"
+                locAtual={true}
+                fraseLocalizacaoMapa="Usar minha localização atual"
+                position={position}
+                onLocationRequest={handleLocationRequest}>
+                <MarkerMapa
+                  position={position}
+                  dragedFunction={(e: any) => {
+                    const marker = e.target
+                    const newPosition: [number, number] = [
+                      marker.getLatLng().lat,
+                      marker.getLatLng().lng
+                    ]
+                    setPosition(newPosition)
+                    atualizarLocalizacao(
+                      marker.getLatLng().lat,
+                      marker.getLatLng().lng
+                    )
+                  }}
+                />
+              </Mapa>
+            </div>
+          )}
+        </div>
 
         <div className="space-y-4">
           <h2 className="text-gray-600 text-lg font-semibold mb-4">
