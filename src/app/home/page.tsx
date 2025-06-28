@@ -34,6 +34,7 @@ export default function HomePage() {
   const [position, setPosition] = useState<[number, number]>([
     -27.1048361, -52.6142228
   ])
+  const [mapKey, setMapKey] = useState<number>(0)
   const dispatch = useDispatch()
   const [problemas, setProblemas] = useState<Array<any>>([])
   const user: UsuarioConsultaType = useSelector(
@@ -127,7 +128,12 @@ export default function HomePage() {
 
   const handleRefresh = () => {
     setIsRefreshing(true)
+    obterDadosLocalizacao()
     window.dispatchEvent(new Event('relatoAtualizado'))
+  }
+
+  const handleLocationRequest = () => {
+    obterDadosLocalizacao()
   }
 
   function obterDadosLocalizacao() {
@@ -141,6 +147,7 @@ export default function HomePage() {
         try {
           const { latitude, longitude } = position.coords
           setPosition([latitude, longitude])
+          setMapKey((prev) => prev + 1)
         } catch (error: any) {
           if (error.code === 1) {
             toast.error('Permissão negada para acessar sua localização.')
@@ -331,9 +338,11 @@ export default function HomePage() {
           </div>
           <div className="h-[600px] rounded-lg overflow-hidden border border-gray-200 shadow-lg relative">
             <Mapa
+              fraseLocalizacaoMapa="Localização atual"
               className="w-full h-full"
               locAtual={false}
-              position={position}>
+              position={position}
+              onLocationRequest={handleLocationRequest}>
               <MarkerMapa
                 position={position}
                 childrenPop={

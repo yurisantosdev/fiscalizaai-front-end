@@ -131,6 +131,23 @@ export default function ModalAjustarRelato({
     }
   }
 
+  const handleLocationRequest = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords
+          setPosition([latitude, longitude])
+          atualizarLocalizacao(latitude, longitude)
+        },
+        (error) => {
+          toast.error('Erro ao obter localização atual')
+        }
+      )
+    } else {
+      toast.error('Geolocalização não suportada')
+    }
+  }
+
   async function onAjustarRelatoFunction(data: FormData) {
     if (!problema) {
       return
@@ -186,7 +203,11 @@ export default function ModalAjustarRelato({
 
         {position && (
           <div className="md:h-[300px] h-[200px] relative rounded-lg overflow-hidden">
-            <Mapa className="w-full h-full" locAtual={true} position={position}>
+            <Mapa
+              className="w-full h-full"
+              locAtual={true}
+              position={position}
+              onLocationRequest={handleLocationRequest}>
               <MarkerMapa
                 position={position}
                 dragedFunction={(e: any) => {

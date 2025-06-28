@@ -161,7 +161,6 @@ export default function RegistrarProblema() {
   async function atualizarLocalizacao(lat: number, lng: number) {
     try {
       setLocalizacaoAtual('Carregando...')
-      dispatch(setLoading(true))
       setLatitude(lat.toString())
       setLongitude(lng.toString())
       setValue('edlatitude', lat.toString())
@@ -217,7 +216,6 @@ export default function RegistrarProblema() {
 
   function obterDadosLocalizacao() {
     if (!navigator.geolocation) {
-      setLocalizacaoAtual('---')
       dispatch(setLoading(false))
       return
     }
@@ -266,6 +264,10 @@ export default function RegistrarProblema() {
     )
   }
 
+  const handleLocationRequest = () => {
+    obterDadosLocalizacao()
+  }
+
   return (
     <div>
       <BaseLayout adicionarItens={false}>
@@ -282,18 +284,6 @@ export default function RegistrarProblema() {
                   {localizacaoAtual}
                 </p>
               </div>
-
-              <div className="md:mt-0 mt-5">
-                <Button
-                  title="Usar minha localização"
-                  onClick={() => {
-                    dispatch(setLoading(true))
-                    obterDadosLocalizacao()
-                  }}
-                  className="bg-green-800 w-full m-auto hover:bg-green-700 active:bg-green-800"
-                  iconLeft={<Compass size={20} />}
-                />
-              </div>
             </div>
 
             {position && (
@@ -301,7 +291,9 @@ export default function RegistrarProblema() {
                 <Mapa
                   className="w-full h-full"
                   locAtual={true}
-                  position={position}>
+                  fraseLocalizacaoMapa="Usar minha localização atual"
+                  position={position}
+                  onLocationRequest={handleLocationRequest}>
                   <MarkerMapa
                     position={position}
                     dragedFunction={(e: any) => {

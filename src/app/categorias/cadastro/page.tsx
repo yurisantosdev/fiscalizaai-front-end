@@ -96,7 +96,7 @@ export default function CadastroCategoria() {
         />
       }>
       <div className="max-w-2xl mx-auto">
-        <div className="bg-white rounded-lg shadow-sm p-6 space-y-6">
+        <div className="p-6 space-y-6">
           <InputComponent
             styleLabel="text-gray-600"
             id="cacategoria"

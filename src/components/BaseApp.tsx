@@ -26,11 +26,10 @@ export default function BaseApp({
   }, [loading])
 
   return (
-    <div className="bg-white">
+    <div className="bg-gray-100">
       <div
         className={`${
-          styleBase &&
-          'md:w-[70%] w-full md:m-auto bg-gray-1400 rounded-md p-2 '
+          styleBase && 'md:w-[65%] w-full md:m-auto bg-gray-100 p-2 '
         }`}>
         {adicionarItens && <AdicionarItens />}
         {menu && <BarraMenu />}

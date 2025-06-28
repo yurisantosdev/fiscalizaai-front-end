@@ -30,7 +30,7 @@ export default function BaseLayout({
       styleBase={styleBase}
       menu={menu}
       adicionarItens={adicionarItens}>
-      <div className="md:w-[90%] w-full mx-auto mt-2">
+      <div className="md:w-[92%] w-full mx-auto mt-2">
         <div className="bg-white/80 backdrop-blur-sm p-2 rounded-xl shadow-lg border border-gray-300">
           {/* Cabeçalho */}
           {buttonVoltar && (

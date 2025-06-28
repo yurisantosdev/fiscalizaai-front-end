@@ -5,4 +5,5 @@ export interface MapaInterface extends ComponentProps<'div'> {
   dragedFunction?: any;
   children?: ReactNode;
   locAtual: boolean;
+  onLocationRequest?: () => void;
 }

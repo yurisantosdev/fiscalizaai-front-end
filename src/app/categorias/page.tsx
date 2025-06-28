@@ -134,13 +134,13 @@ export default function Categorias() {
 
           {/* Filtros */}
           <div className="bg-white rounded-lg p-6 shadow-sm">
-            <div className="md:flex md:items-center md:gap-4 mb-4">
-              <div className="flex items-center justify-center gap-2 text-gray-700 md:mb-0 mb-2">
+            <div>
+              <div className="flex items-center justify-center gap-2 text-gray-700 mb-3">
                 <FunnelSimple size={20} />
                 <span className="font-medium">Filtrar por:</span>
               </div>
 
-              <div className="flex justify-center items-center w-full gap-2">
+              <div className="flex justify-center items-center w-[40%] m-auto gap-2">
                 <button
                   onClick={() => setFiltroStatus('todas')}
                   className={`px-4 py-2 rounded-lg text-sm w-full cursor-pointer font-medium transition-all duration-300 transform hover:scale-105 ${
