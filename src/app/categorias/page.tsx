@@ -7,7 +7,7 @@ import 'leaflet/dist/leaflet.css'
 import { SelectValuesType } from '@/types/GeneralTypes'
 import { getCategorias } from '@/store/Categorias'
 import BaseLayout from '@/templates/BaseLayout'
-import { ButtonIcon } from '@/components/Button'
+import { Button, ButtonIcon } from '@/components/Button'
 import { useRouter } from 'next/navigation'
 import {
   SquaresFour,
@@ -140,10 +140,10 @@ export default function Categorias() {
                 <span className="font-medium">Filtrar por:</span>
               </div>
 
-              <div className="md:flex gap-2 grid grid-cols-3">
+              <div className="flex justify-center items-center w-full gap-2">
                 <button
                   onClick={() => setFiltroStatus('todas')}
-                  className={`px-4 py-2 rounded-lg text-sm cursor-pointer font-medium transition-all duration-300 transform hover:scale-105 ${
+                  className={`px-4 py-2 rounded-lg text-sm w-full cursor-pointer font-medium transition-all duration-300 transform hover:scale-105 ${
                     filtroStatus === 'todas'
                       ? 'bg-blue-100 text-blue-700 shadow-md'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -153,9 +153,10 @@ export default function Categorias() {
                     <span>Todas</span>
                   </div>
                 </button>
+
                 <button
                   onClick={() => setFiltroStatus('ativas')}
-                  className={`px-4 py-2 rounded-lg text-sm cursor-pointer font-medium transition-all duration-300 transform hover:scale-105 ${
+                  className={`px-4 py-2 rounded-lg text-sm w-full cursor-pointer font-medium transition-all duration-300 transform hover:scale-105 ${
                     filtroStatus === 'ativas'
                       ? 'bg-green-100 text-green-700 shadow-md'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -165,14 +166,15 @@ export default function Categorias() {
                     <span>Ativas</span>
                   </div>
                 </button>
+
                 <button
                   onClick={() => setFiltroStatus('inativas')}
-                  className={`px-4 py-2 rounded-lg text-sm cursor-pointer font-medium transition-all duration-300 transform hover:scale-105 ${
+                  className={`px-4 py-2 rounded-lg text-sm w-full cursor-pointer font-medium transition-all duration-300 transform hover:scale-105 ${
                     filtroStatus === 'inativas'
                       ? 'bg-red-100 text-red-700 shadow-md'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center justify-center gap-2">
                     <X size={18} />
                     <span>Inativas</span>
                   </div>
@@ -189,9 +191,9 @@ export default function Categorias() {
                   <div
                     key={index}
                     className="bg-white rounded-lg shadow-sm transition-all duration-300 transform animate-slide-up">
-                    <div className="p-6">
+                    <div className="p-3">
                       <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center space-x-4">
+                        <div className="flex items-center space-x-4 w-[100%]">
                           <div className="p-2 bg-orange-100 rounded-lg">
                             <SquaresFour
                               size={24}
@@ -199,7 +201,7 @@ export default function Categorias() {
                               className="text-orange-1000"
                             />
                           </div>
-                          <div>
+                          <div className="w-[80%] h-[120px]">
                             <div className="flex items-center justify-between gap-2">
                               <div
                                 className="tooltip max-w-[80%]"
@@ -220,7 +222,7 @@ export default function Categorias() {
                             <div
                               className="tooltip tooltip-bottom"
                               data-tip={categoria.description}>
-                              <p className="text-sm text-gray-500 break-words line-clamp-3">
+                              <p className="text-sm text-gray-500 break-words line-clamp-4">
                                 {categoria.description}
                               </p>
                             </div>

@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { BaseAppInterface } from '@/Interfaces/BaseAppInterface'
 import BarraMenu from './BarraMenu/BarraMenu'
@@ -13,6 +13,18 @@ export default function BaseApp({
   menu = true,
   extraComponentTitle
 }: BaseAppInterface) {
+  useEffect(() => {
+    if (loading) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+
+    return () => {
+      document.body.style.overflow = 'unset'
+    }
+  }, [loading])
+
   return (
     <div className="bg-white">
       <div
@@ -23,7 +35,6 @@ export default function BaseApp({
         {adicionarItens && <AdicionarItens />}
         {menu && <BarraMenu />}
         {extraComponentTitle && extraComponentTitle}
-
         {children}
       </div>
 
@@ -53,7 +64,7 @@ export default function BaseApp({
       />
 
       {loading && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black/60 backdrop-blur-sm flex justify-center items-center z-[99999999]">
+        <div className="fixed top-0 left-0 w-full h-full bg-black/60 backdrop-blur-xs flex justify-center items-center z-[99999999]">
           <div className="flex flex-col items-center gap-4">
             <div className="relative">
               <div className="animate-spin rounded-full h-24 w-24 border-4 border-orange-1000/30"></div>

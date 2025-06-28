@@ -26,6 +26,7 @@ import {
 import BaseLayout from '@/templates/BaseLayout'
 import ModalConfirmacaoCancelarProblema from '@/components/ModalConfirmacaoCancelarProblema'
 import ModalAjustarRelato from '@/components/ModalAjustarRelato'
+import toast from 'react-hot-toast'
 
 export default function HomePage() {
   AuthUser()
@@ -82,6 +83,8 @@ export default function HomePage() {
   useEffect(() => {
     const handleRelatoAtualizado = async () => {
       if (user.uscodigo) {
+        obterDadosLocalizacao()
+
         dispatch(setLoading(true))
         setIsRefreshing(true)
 
@@ -125,6 +128,54 @@ export default function HomePage() {
   const handleRefresh = () => {
     setIsRefreshing(true)
     window.dispatchEvent(new Event('relatoAtualizado'))
+  }
+
+  function obterDadosLocalizacao() {
+    if (!navigator.geolocation) {
+      dispatch(setLoading(false))
+      return
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords
+          setPosition([latitude, longitude])
+        } catch (error: any) {
+          if (error.code === 1) {
+            toast.error('Permissão negada para acessar sua localização.')
+          } else if (error.code === 2) {
+            toast.error(
+              'Localização indisponível no momento. Verifique seu GPS ou conexão.'
+            )
+          } else if (error.code === 3) {
+            toast.error(
+              'Tempo limite para obter a localização. Tente novamente.'
+            )
+          } else {
+            console.log(error)
+            toast.error('Erro desconhecido ao obter localização.')
+          }
+
+          dispatch(setLoading(false))
+        }
+      },
+      (error) => {
+        if (error.code === 1) {
+          toast.error('Permissão negada para acessar sua localização.')
+        } else if (error.code === 2) {
+          toast.error(
+            'Localização indisponível no momento. Verifique seu GPS ou conexão.'
+          )
+        } else if (error.code === 3) {
+          toast.error('Tempo limite para obter a localização. Tente novamente.')
+        } else {
+          toast.error('Erro desconhecido ao obter localização.')
+        }
+
+        dispatch(setLoading(false))
+      }
+    )
   }
 
   return (
@@ -261,7 +312,7 @@ export default function HomePage() {
         </div>
 
         {/* Mapa Interativo */}
-        <div className="transition-all animate-slide-up bg-white rounded-xl shadow-lg p-6">
+        <div className="transition-all animate-slide-up p-2">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
             <div>
               <h2 className="text-xl font-bold text-gray-800 mb-2 md:text-start text-center">
@@ -283,6 +334,15 @@ export default function HomePage() {
               className="w-full h-full"
               locAtual={false}
               position={position}>
+              <MarkerMapa
+                position={position}
+                childrenPop={
+                  <div>
+                    <p className="text-black text-sm">Localização Atual</p>
+                  </div>
+                }
+              />
+
               {problemasFiltrados.map(
                 (problema: ProblemaLocalizacaoType, index: number) => {
                   return (
