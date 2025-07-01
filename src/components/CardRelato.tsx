@@ -269,22 +269,33 @@ export default function CardRelato({
           ) : null}
 
           {aprovarReprovarButtons && (
-            <div>
-              {inputMotivo}
-              <div className="mt-10 flex justify-center items-center gap-2">
-                <Button
-                  title="Reprovar"
-                  className="bg-red-800 hover:bg-red-800/80 active:bg-red-800 text-white px-4 py-2 rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg flex items-center gap-2 w-full"
-                  iconLeft={<X size={20} />}
-                  onClick={onCLickReprovar}
-                />
+            <div className="flex flex-col gap-6">
+              {/* Campo de motivo (se aplicável) */}
+              {inputMotivo && <div className="w-full">{inputMotivo}</div>}
 
-                <Button
-                  title="Aprovar"
-                  className="bg-green-800 hover:bg-green-800/80 active:bg-green-800 text-white px-4 py-2 rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg flex items-center gap-2 w-full"
-                  iconLeft={<Check size={20} />}
-                  onClick={onCLickAprovar}
-                />
+              {/* Botões */}
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div
+                  className="w-full tooltip tooltip-bottom"
+                  data-tip="Reprovar">
+                  <Button
+                    title="Reprovar"
+                    className="bg-red-600 hover:bg-red-700 active:bg-red-800 text-white px-5 py-3 rounded-xl transition-all duration-300 shadow-sm hover:shadow-lg flex items-center justify-center gap-2 w-full"
+                    iconLeft={<X size={20} />}
+                    onClick={onCLickReprovar}
+                  />
+                </div>
+
+                <div
+                  className="w-full tooltip tooltip-bottom"
+                  data-tip="Aprovar">
+                  <Button
+                    title="Aprovar"
+                    className="bg-green-600 hover:bg-green-700 active:bg-green-800 text-white px-5 py-3 rounded-xl transition-all duration-300 shadow-sm hover:shadow-lg flex items-center justify-center gap-2 w-full"
+                    iconLeft={<Check size={20} />}
+                    onClick={onCLickAprovar}
+                  />
+                </div>
               </div>
             </div>
           )}
