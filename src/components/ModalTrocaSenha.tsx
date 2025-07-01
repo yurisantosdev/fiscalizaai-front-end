@@ -62,7 +62,6 @@ export default function ModalTrocaSenha() {
     if (response.status) {
       CLickLabel('modalTrocarSenha')
       toast.success('Senha alterada com sucesso!')
-      dispatch(setLoading(true))
       dispatch(logoutUser())
     } else {
       dispatch(setLoading(false))

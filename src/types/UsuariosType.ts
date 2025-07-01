@@ -58,6 +58,10 @@ export type CriarUsuario = {
   endereco: EnderecosType;
 };
 
+export type TrocarEnderecoUsuarioType = EnderecosType & {
+  uscodigo: string;
+};
+
 export type CriarUsuarioType = UsuarioType & EnderecosType & {
   confirmarSenha?: string;
 };

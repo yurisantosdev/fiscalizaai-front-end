@@ -9,15 +9,20 @@ import {
   MapTrifold
 } from '@phosphor-icons/react'
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { UsuarioConsultaType } from '@/types/UsuariosType'
+import { useSelector, useDispatch } from 'react-redux'
+import {
+  TrocarEnderecoUsuarioType,
+  UsuarioConsultaType
+} from '@/types/UsuariosType'
 import { Button } from '../Button'
 import { CLickLabel } from '@/services/clickLabel'
+import { resetEndereco, setEndereco } from '@/redux/endereco/actions'
 
 export default function AbaPerfil() {
   const user: UsuarioConsultaType = useSelector(
     (state: any) => state.userReducer
   )
+  const dispatch = useDispatch()
 
   return (
     <div className="drawer z-[9999999]">
@@ -126,6 +131,7 @@ export default function AbaPerfil() {
 
                 {/* Botão troca de senha e endereço */}
                 <div className="mt-14 flex justify-center items-center gap-2">
+                  {/* Botão trocar senha */}
                   <div
                     className="tooltip tooltip-bottom w-full"
                     data-tip="Trocar de Senha">
@@ -140,12 +146,26 @@ export default function AbaPerfil() {
                     />
                   </div>
 
+                  {/* Botão trocar de endereço */}
                   <div
                     className="tooltip tooltip-bottom w-full"
                     data-tip="Troca de endereço">
                     <Button
                       iconLeft={<MapTrifold size={20} />}
                       onClick={() => {
+                        const objEndereco: TrocarEnderecoUsuarioType = {
+                          uscodigo: user.uscodigo,
+                          ednumero: user.endereco.ednumero,
+                          edbairro: user.endereco.edbairro,
+                          edcep: user.endereco.edcep,
+                          edcomplemento: user.endereco.edcomplemento,
+                          edestado: user.endereco.edestado,
+                          edmunicipio: user.endereco.edmunicipio,
+                          edpontoreferencia: user.endereco.edpontoreferencia,
+                          edrua: user.endereco.edrua,
+                          edcodigo: user.endereco.edcodigo
+                        }
+                        dispatch(setEndereco(objEndereco))
                         CLickLabel('abaLateralPerfil')
                         CLickLabel('modalTrocarEndereco')
                       }}

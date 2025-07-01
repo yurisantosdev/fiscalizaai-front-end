@@ -403,8 +403,9 @@ export default function CadastrarUsuario() {
               <InputComponent
                 id="edmunicipio"
                 type="text"
+                disabled
                 placeholder="Município"
-                className="w-full bg-gray-50 text-gray-900 transition-all duration-300 focus:ring-2 focus:ring-orange-1000/50"
+                className="w-full bg-zinc-300 cursor-not-allowed text-gray-900 transition-all duration-300 focus:ring-2 focus:ring-orange-1000/50"
                 textLabel="Município"
                 styleLabel="text-gray-700 font-medium"
                 icon={<Buildings size={22} className="text-gray-500" />}
@@ -419,8 +420,9 @@ export default function CadastrarUsuario() {
               <InputComponent
                 id="edestado"
                 type="text"
+                disabled
                 placeholder="Estado"
-                className="w-full bg-gray-50 text-gray-900 transition-all duration-300 focus:ring-2 focus:ring-orange-1000/50"
+                className="w-full bg-zinc-300 cursor-not-allowed text-gray-900 transition-all duration-300 focus:ring-2 focus:ring-orange-1000/50"
                 textLabel="Estado"
                 styleLabel="text-gray-700 font-medium"
                 icon={<Compass size={22} className="text-gray-500" />}

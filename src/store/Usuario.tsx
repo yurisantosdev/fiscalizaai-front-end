@@ -1,7 +1,8 @@
 import {
   CriarUsuario,
   EsqueciSenhaType,
-  RedefinirSenhaType
+  RedefinirSenhaType,
+  TrocarEnderecoUsuarioType
 } from '@/types/UsuariosType'
 import { api } from '../services/api'
 import toast from 'react-hot-toast'
@@ -52,5 +53,18 @@ export const trocarSenha = async (data: TrocaSenhaType) => {
     })
     .catch((error) => {
       return error.response.data
+    })
+}
+
+export const atualizarEndereco = async (data: TrocarEnderecoUsuarioType) => {
+  return await api
+    .post(`/usuarios/atualizar/endereco`, data)
+    .then((response) => {
+      return response.data
+    })
+    .catch(() => {
+      toast(
+        'Não foi possível atualizar seu endereço, por favor tente novamente!'
+      )
     })
 }
