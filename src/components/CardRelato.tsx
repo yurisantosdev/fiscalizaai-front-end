@@ -205,11 +205,11 @@ export default function CardRelato({
                     (foto: FotosProblemasType, fotoIndex: number) => (
                       <div
                         key={fotoIndex}
-                        className="w-[90px] h-[90px] relative aspect-square rounded-md overflow-hidden group cursor-pointer hover:shadow-lg transition-all duration-300">
+                        className="w-[90px] h-[90px] relative aspect-square rounded-md overflow-hidden group cursor-pointer transition-all duration-300 active:scale-200">
                         <img
                           src={`data:image/jpeg;base64,${foto.fdfoto}`}
                           alt={`Foto do problema ${fotoIndex + 1}`}
-                          className="w-[90px] h-[90px] object-cover group-hover:scale-105 transition-transform duration-300"
+                          className=" w-[90px] h-[90px] object-cover group-hover:scale-105 transition-transform duration-300"
                           loading="lazy"
                         />
                       </div>
