@@ -62,7 +62,7 @@ export default function RevisarRelatos() {
 
   return (
     <>
-      <BaseLayout title={'Revisar Relatos'}>
+      <BaseLayout title="Revisar Relatos">
         <div className="space-y-6">
           {/* Card de Resumo */}
           <div className="flex justify-center my-6">
@@ -81,6 +81,7 @@ export default function RevisarRelatos() {
                   <div key={index} className="animate-slide-up">
                     <CardRelato
                       problema={relato}
+                      historicoRelato
                       onClickAjustarRelato={() => {
                         dispatch(selecionarRelato(relato))
                         setProblemaSelecionadoCancelar(relato)

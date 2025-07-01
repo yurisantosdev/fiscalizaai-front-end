@@ -1,17 +1,18 @@
 import { UsuarioConsultaType } from '@/types/UsuariosType'
 import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import {
   NotificacoesSimplesConsultaType,
   NotificacoesType
 } from '@/types/NotificacoesType'
-import { X, Bell, CheckCircle } from '@phosphor-icons/react'
+import { X, Bell, CheckCircle, ArrowClockwise } from '@phosphor-icons/react'
 import { FormatarData } from '@/services/formatters'
-import { letTodasNotificacoes } from '@/store/Notificacoes'
+import { getNotificacoes, letTodasNotificacoes } from '@/store/Notificacoes'
 import toast from 'react-hot-toast'
 import { CLickLabel } from '@/services/clickLabel'
 import { atualizarNotificacoes } from '@/services/atualizarNotificacoes'
 import { useRouter } from 'next/navigation'
+import { setNotificacoes } from '@/redux/notificacoes/actions'
 
 export default function AbaNotificacoes() {
   const user: UsuarioConsultaType = useSelector(
@@ -21,6 +22,7 @@ export default function AbaNotificacoes() {
     (state: any) => state.notificacoesReducer
   )
   const router = useRouter()
+  const dispatch = useDispatch()
 
   async function onLerNotificacoes() {
     if (user.uscodigo) {
@@ -41,6 +43,16 @@ export default function AbaNotificacoes() {
 
     consultaDados()
   }, [user])
+
+  async function onGetNotificacoes() {
+    if (user.uscodigo) {
+      const reponse = await getNotificacoes({ uscodigo: user.uscodigo })
+
+      if (reponse !== undefined) {
+        dispatch(setNotificacoes(reponse.notificacoes))
+      }
+    }
+  }
 
   return (
     <div className="drawer drawer-end">
@@ -73,6 +85,13 @@ export default function AbaNotificacoes() {
 
           {/* Lista de notificações */}
           <div className="flex-1 overflow-y-auto px-4 py-4 custom-scrollbar bg-gray-50 dark:bg-gray-1100">
+            <div className="mb-4" onClick={onGetNotificacoes}>
+              <div className="text-center bg-zinc-800 rounded-md p-2 hover:bg-zinc-700 active:bg-zinc-900 duration-300 cursor-pointer flex justify-center items-center gap-2">
+                <ArrowClockwise size={20} />
+                <p className="text-white">Atualizar</p>
+              </div>
+            </div>
+
             {notificacoes && notificacoes.todas.length > 0 ? (
               notificacoes.todas.map(
                 (notificacao: NotificacoesType, index: number) => (
