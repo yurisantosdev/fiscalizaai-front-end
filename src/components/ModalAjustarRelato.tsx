@@ -182,8 +182,9 @@ export default function ModalAjustarRelato({
       toast.success('Relato ajustado com sucesso!')
       window.dispatchEvent(new Event('relatoAtualizado'))
       CLickLabel('modalAjusteRelato')
-      dispatch(setLoading(false))
     }
+
+    dispatch(setLoading(false))
   }
 
   if (!problema) return null
