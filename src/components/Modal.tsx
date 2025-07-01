@@ -7,11 +7,17 @@ export default function Modal({
   htmlFor,
   children,
   loading,
+  functioReset,
   ...props
 }: ModalInterface) {
   return (
     <div {...props}>
-      <input type="checkbox" id={htmlFor} className="modal-toggle" />
+      <input
+        type="checkbox"
+        id={htmlFor}
+        onClick={functioReset}
+        className="modal-toggle"
+      />
       <div className="modal backdrop-blur-sm z-[99999]" role="dialog">
         <div
           className={`modal-box bg-white w-11/12 max-w-3xl max-h-[90vh] ${

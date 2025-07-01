@@ -4,6 +4,8 @@ import { Toaster } from 'react-hot-toast'
 import { BaseAppInterface } from '@/Interfaces/BaseAppInterface'
 import BarraMenu from './BarraMenu/BarraMenu'
 import AdicionarItens from './AdicionarItens'
+import ModalTrocaSenha from './ModalTrocaSenha'
+import ModalTrocaEndereco from './ModalTrocaEndereco'
 
 export default function BaseApp({
   children,
@@ -73,6 +75,9 @@ export default function BaseApp({
           </div>
         </div>
       )}
+
+      <ModalTrocaSenha />
+      <ModalTrocaEndereco />
     </div>
   )
 }

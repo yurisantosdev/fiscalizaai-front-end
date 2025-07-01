@@ -37,6 +37,7 @@ export default function ModalAjustarRelato({
     handleSubmit,
     register,
     setValue,
+    reset,
     formState: { errors },
     watch
   } = useForm<FormData>({
@@ -191,7 +192,10 @@ export default function ModalAjustarRelato({
     <Modal
       htmlFor="modalAjusteRelato"
       name="Ajuste de Relato"
-      loading={loading}>
+      loading={loading}
+      functioReset={() => {
+        reset()
+      }}>
       <div className="space-y-6">
         <div className="bg-white rounded-lg shadow-sm overflow-hidden">
           <div className="bg-blue-1000 p-4 md:flex md:justify-between md:items-center">

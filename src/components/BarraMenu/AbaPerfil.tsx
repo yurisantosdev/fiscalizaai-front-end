@@ -4,11 +4,15 @@ import {
   Envelope,
   MapPin,
   Shield,
-  Calendar
+  Calendar,
+  LockKey,
+  MapTrifold
 } from '@phosphor-icons/react'
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { UsuarioConsultaType } from '@/types/UsuariosType'
+import { Button } from '../Button'
+import { CLickLabel } from '@/services/clickLabel'
 
 export default function AbaPerfil() {
   const user: UsuarioConsultaType = useSelector(
@@ -119,6 +123,37 @@ export default function AbaPerfil() {
                     </div>
                   </div>
                 )}
+
+                {/* Botão troca de senha e endereço */}
+                <div className="mt-14 flex justify-center items-center gap-2">
+                  <div
+                    className="tooltip tooltip-bottom w-full"
+                    data-tip="Trocar de Senha">
+                    <Button
+                      title="Trocar senha"
+                      onClick={() => {
+                        CLickLabel('abaLateralPerfil')
+                        CLickLabel('modalTrocarSenha')
+                      }}
+                      iconLeft={<LockKey size={20} />}
+                      className="w-full m-auto bg-blue-1000 hover:bg-blue-1000/80 active:bg-blue-1000 text-white rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg flex items-center gap-2 p-3"
+                    />
+                  </div>
+
+                  <div
+                    className="tooltip tooltip-bottom w-full"
+                    data-tip="Troca de endereço">
+                    <Button
+                      iconLeft={<MapTrifold size={20} />}
+                      onClick={() => {
+                        CLickLabel('abaLateralPerfil')
+                        CLickLabel('modalTrocarEndereco')
+                      }}
+                      title="Trocar endereço"
+                      className="w-full m-auto bg-orange-1000 hover:bg-orange-1000/80 active:bg-orange-1000 text-white rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg flex items-center gap-2 p-3"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
