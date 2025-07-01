@@ -60,6 +60,8 @@ export default function Categorias() {
       setAtualizar((prev) => prev + 1)
     }
 
+    handleAtualizacao()
+
     window.addEventListener('categoriasAtualizar', handleAtualizacao)
 
     return () => {
