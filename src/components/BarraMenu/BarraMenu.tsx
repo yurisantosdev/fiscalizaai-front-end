@@ -14,7 +14,7 @@ import {
   UserCircle,
   ChartLine,
   ListChecks,
-  ChatTeardropDots
+  Brain
 } from '@phosphor-icons/react'
 import { useRouter } from 'next/navigation'
 import { setLoading } from '@/redux/loading/actions'
@@ -184,7 +184,7 @@ export default function BarraMenu() {
                           <p className="text-md font-bold">Kauane AI</p>
                         </div>
                         <div>
-                          <ChatTeardropDots size={20} />
+                          <Brain size={20} />
                         </div>
                       </div>
                     </li>
