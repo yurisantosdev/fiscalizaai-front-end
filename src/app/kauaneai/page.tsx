@@ -35,7 +35,10 @@ export default function KauaneAi() {
     setMensagem('')
     setCarregando(true)
     try {
-      const data = await enviarMensagemKauane(msg)
+      const data = await enviarMensagemKauane(msg, [
+        ...historico,
+        { autor: 'user', texto: msg }
+      ])
       setHistorico((h) => [...h, { autor: 'gpt', texto: data.message }])
     } catch (err) {
       setHistorico((h) => [
