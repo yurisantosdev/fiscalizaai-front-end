@@ -50,7 +50,7 @@ export default function KauaneAi() {
   }
 
   return (
-    <BaseLayout>
+    <BaseLayout adicionarItens={false}>
       <div className="flex flex-col h-[80vh]">
         <div
           ref={chatRef}
