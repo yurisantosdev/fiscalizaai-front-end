@@ -105,10 +105,12 @@ export default function KauaneAi() {
             value={mensagem}
             icon={<ChatsCircle size={20} />}
             iconLeft={
-              <PaperPlaneTilt
-                size={30}
-                className="bg-orange-1000 rounded-full text-white p-1 hover:scale-110 active:scale-95 duration-300 hover:shadow-orange-1000 cursor-pointer"
-              />
+              <span onClick={enviarMensagem}>
+                <PaperPlaneTilt
+                  size={30}
+                  className="bg-orange-1000 rounded-full text-white p-1 hover:scale-110 active:scale-95 duration-300 hover:shadow-orange-1000 cursor-pointer"
+                />
+              </span>
             }
             onChange={(e) => setMensagem(e.target.value)}
             className="resize-none w-full border-none focus:outline-none focus:ring-0 shadow-none bg-gray-100"

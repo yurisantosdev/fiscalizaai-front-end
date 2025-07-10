@@ -100,7 +100,7 @@ export default function Input({
 
         {iconLeft && (
           <span
-            className={`absolute top-[12px] text-center right-2 pl-3 flex items-center ${
+            className={`absolute top-[12px] z-40 text-center right-2 pl-3 flex items-center ${
               error ? 'text-red-600' : 'text-gray-400'
             }`}>
             {iconLeft}

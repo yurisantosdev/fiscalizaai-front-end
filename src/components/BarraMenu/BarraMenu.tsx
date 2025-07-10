@@ -181,7 +181,7 @@ export default function BarraMenu() {
                           handleMenuItemClick(() => router.push('/kauaneai'))
                         }>
                         <div>
-                          <p className="text-md font-bold">ChatGptPage</p>
+                          <p className="text-md font-bold">Kauane AI</p>
                         </div>
                         <div>
                           <ChatTeardropDots size={20} />
