@@ -178,7 +178,7 @@ export default function BarraMenu() {
                       <div
                         className="flex justify-between items-center"
                         onClick={() =>
-                          handleMenuItemClick(() => router.push('/chatgpt'))
+                          handleMenuItemClick(() => router.push('/kauaneai'))
                         }>
                         <div>
                           <p className="text-md font-bold">ChatGptPage</p>
