@@ -4,6 +4,7 @@ import { X } from '@phosphor-icons/react'
 
 export default function Input({
   icon,
+  iconLeft,
   textLabel,
   textError,
   error,
@@ -55,7 +56,7 @@ export default function Input({
                   className={`${icon ? 'pl-10' : ''} ${
                     error
                       ? 'bg-red-400 border border-red-600 text-red-600 hover:bg-red-300'
-                      : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-100'
+                      : 'border border-gray-300 text-gray-700 hover:bg-gray-100'
                   } rounded-md w-full h-12 px-5 text-left cursor-pointer flex justify-between items-center mb-6`}>
                   <p className="w-[80%] truncate">{fraseInputFile}</p>
                 </button>
@@ -75,7 +76,7 @@ export default function Input({
               className={`${icon ? 'px-11' : 'px-5'} ${
                 error
                   ? 'bg-red-400 border border-red-600 placeholder:text-red-600 focus:outline-red-500'
-                  : 'bg-white border border-gray-300 placeholder:text-gray-300 focus:bg-gray-100 focus:outline-blue-1000'
+                  : 'border border-gray-300 placeholder:text-gray-300 focus:bg-gray-100 focus:outline-blue-1000'
               }  rounded-md w-full h-12 text-black focus:border-none ${
                 props.className ?? ''
               }`}
@@ -96,6 +97,15 @@ export default function Input({
 
           {textError && textError}
         </div>
+
+        {iconLeft && (
+          <span
+            className={`absolute top-[12px] text-center right-2 pl-3 flex items-center ${
+              error ? 'text-red-600' : 'text-gray-400'
+            }`}>
+            {iconLeft}
+          </span>
+        )}
       </div>
     </div>
   )

@@ -13,7 +13,8 @@ import {
   SquaresFour,
   UserCircle,
   ChartLine,
-  ListChecks
+  ListChecks,
+  ChatTeardropDots
 } from '@phosphor-icons/react'
 import { useRouter } from 'next/navigation'
 import { setLoading } from '@/redux/loading/actions'
@@ -169,6 +170,21 @@ export default function BarraMenu() {
                         </div>
                         <div>
                           <ChartLine size={20} />
+                        </div>
+                      </div>
+                    </li>
+
+                    <li className="py-2">
+                      <div
+                        className="flex justify-between items-center"
+                        onClick={() =>
+                          handleMenuItemClick(() => router.push('/chatgpt'))
+                        }>
+                        <div>
+                          <p className="text-md font-bold">ChatGptPage</p>
+                        </div>
+                        <div>
+                          <ChatTeardropDots size={20} />
                         </div>
                       </div>
                     </li>

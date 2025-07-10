@@ -2,7 +2,8 @@ import { ComponentProps, ReactNode } from "react";
 
 export interface InputInterface extends ComponentProps<'input'> {
   textLabel?: string,
-  icon?: any,
+  icon?: ReactNode,
+  iconLeft?: ReactNode,
   textError?: ReactNode,
   error?: any,
   onClickButton?: () => void,
