@@ -3,16 +3,19 @@ import React, { useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { BaseAppInterface } from '@/Interfaces/BaseAppInterface'
 import BarraMenu from './BarraMenu/BarraMenu'
-import AdicionarItens from './AdicionarItens'
+import KauaneAi from './KauaneAI'
 import ModalTrocaSenha from './ModalTrocaSenha'
 import ModalTrocaEndereco from './ModalTrocaEndereco'
+import Feedbacks from './Feedbacks'
+import ModalFeedbackUsuario from './ModalFeedbackUsuario'
 
 export default function BaseApp({
   children,
   loading,
   styleBase = true,
-  adicionarItens = true,
+  kauaneAi = true,
   menu = true,
+  feedbacks = true,
   extraComponentTitle
 }: BaseAppInterface) {
   useEffect(() => {
@@ -33,7 +36,9 @@ export default function BaseApp({
         className={`${
           styleBase && 'md:w-[65%] w-full md:m-auto bg-gray-100 p-2 '
         }`}>
-        {adicionarItens && <AdicionarItens />}
+        {kauaneAi && <KauaneAi />}
+        {feedbacks && <Feedbacks />}
+        {feedbacks && <ModalFeedbackUsuario />}
         {menu && <BarraMenu />}
         {extraComponentTitle && extraComponentTitle}
         {children}

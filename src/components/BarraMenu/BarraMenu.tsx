@@ -14,7 +14,8 @@ import {
   UserCircle,
   ChartLine,
   ListChecks,
-  Brain
+  Brain,
+  ChatsCircle
 } from '@phosphor-icons/react'
 import { useRouter } from 'next/navigation'
 import { setLoading } from '@/redux/loading/actions'
@@ -200,6 +201,21 @@ export default function BarraMenu() {
                         </div>
                         <div>
                           <ListChecks size={20} />
+                        </div>
+                      </div>
+                    </li>
+
+                    <li className="py-2">
+                      <div
+                        className="flex justify-between items-center"
+                        onClick={() =>
+                          handleMenuItemClick(() => router.push('/feedbacks'))
+                        }>
+                        <div>
+                          <p className="text-md font-bold">Feedbacks</p>
+                        </div>
+                        <div>
+                          <ChatsCircle size={20} />
                         </div>
                       </div>
                     </li>

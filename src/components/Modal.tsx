@@ -7,6 +7,7 @@ export default function Modal({
   htmlFor,
   children,
   loading,
+  descricao,
   functioReset,
   ...props
 }: ModalInterface) {
@@ -36,6 +37,11 @@ export default function Modal({
           )}
 
           <h3 className="text-lg font-bold text-center text-black">{name}</h3>
+          {descricao && (
+            <p className="text-center text-gray-500 text-sm mt-1 font-extralight">
+              {descricao}"
+            </p>
+          )}
 
           <label
             htmlFor={htmlFor}

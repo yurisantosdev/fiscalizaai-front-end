@@ -84,7 +84,7 @@ export default function KauaneAi() {
   }
 
   return (
-    <BaseLayout adicionarItens={false}>
+    <BaseLayout kauaneAi={false}>
       <div className="flex flex-col h-[80vh]">
         {historico.length > 0 && (
           <div className="flex justify-end mb-2">

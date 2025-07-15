@@ -11,8 +11,9 @@ export interface BaseLayoutInterface {
   buttonVoltar?: boolean
   styleBase?: boolean
   menu?: boolean
-  adicionarItens?: boolean,
+  kauaneAi?: boolean,
   extraComponentLeft?: ReactNode,
   extraComponentRigth?: ReactNode,
   description?: string,
+  feedbacks?: boolean,
 }

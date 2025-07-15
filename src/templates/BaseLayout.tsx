@@ -16,7 +16,8 @@ export default function BaseLayout({
   buttonVoltar = false,
   styleBase = true,
   menu = true,
-  adicionarItens = true,
+  kauaneAi = true,
+  feedbacks = true,
   extraComponentLeft,
   extraComponentRigth,
   description
@@ -29,7 +30,8 @@ export default function BaseLayout({
       loading={loading}
       styleBase={styleBase}
       menu={menu}
-      adicionarItens={adicionarItens}>
+      kauaneAi={kauaneAi}
+      feedbacks={feedbacks}>
       <div className="md:w-[92%] w-full mx-auto mt-2">
         <div className="bg-white/80 backdrop-blur-sm p-2 rounded-xl shadow-lg border border-gray-300">
           {/* Cabeçalho */}

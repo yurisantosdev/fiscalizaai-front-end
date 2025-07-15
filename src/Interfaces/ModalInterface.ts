@@ -6,4 +6,5 @@ export interface ModalInterface extends ComponentProps<'div'> {
   children: ReactNode;
   loading: boolean;
   functioReset?: () => void;
+  descricao?: string;
 }
