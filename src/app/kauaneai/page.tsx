@@ -163,9 +163,19 @@ export default function KauaneAi() {
             </div>
           ))}
           {carregando && (
-            <div className="flex justify-start">
-              <div className="rounded-lg px-4 py-2 max-w-[80%] text-sm shadow-sm bg-gray-100 text-gray-800 self-start animate-pulse">
-                Kauane está digitando...
+            <div className="flex justify-start items-center gap-3">
+              <div className="flex-shrink-0 flex items-center justify-center">
+                <div className="bg-orange-1000 rounded-full w-9 h-9 flex items-center justify-center">
+                  <Brain size={28} className="text-white" />
+                </div>
+              </div>
+
+              <div className="flex justify-start">
+                <div className="flex justify-between items-center gap-1 bg-gray-100 rounded-lg p-2 shadow-sm">
+                  <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:0ms]"></span>
+                  <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:150ms]"></span>
+                  <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:300ms]"></span>
+                </div>
               </div>
             </div>
           )}
