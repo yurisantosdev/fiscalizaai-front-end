@@ -10,7 +10,8 @@ import {
   SealQuestion,
   CheckCircle,
   XCircle,
-  ListChecks
+  ListChecks,
+  Star
 } from '@phosphor-icons/react'
 import toast from 'react-hot-toast'
 
@@ -155,6 +156,25 @@ export default function Feedbacks() {
                     <p className="text-black font-medium text-md">
                       {feedback.fufeedback}
                     </p>
+                    {/* Estrelas de avaliação */}
+                    <div className="flex items-center gap-0.5 mt-1 mb-1">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Star
+                          key={star}
+                          size={18}
+                          weight={
+                            feedback.fuestrelas && feedback.fuestrelas >= star
+                              ? 'fill'
+                              : 'regular'
+                          }
+                          className={
+                            feedback.fuestrelas && feedback.fuestrelas >= star
+                              ? 'text-yellow-400'
+                              : 'text-gray-300'
+                          }
+                        />
+                      ))}
+                    </div>
                     <p className="text-black text-md font-extralight mt-1">
                       {feedback.fuquando}
                     </p>
