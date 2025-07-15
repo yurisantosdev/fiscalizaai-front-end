@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import Modal from './Modal'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
@@ -32,6 +32,8 @@ export default function ModalAjustarRelato({
   const [position, setPosition] = useState<[number, number]>([0, 0])
   const [localizacaoAtual, setLocalizacaoAtual] = useState<string>('---')
   const loading = useSelector((state: any) => state.loadingReducer.loading)
+  const [modalAberto, setModalAberto] = useState(false)
+  const modalRef = useRef<any>(null)
 
   const {
     handleSubmit,
@@ -47,21 +49,40 @@ export default function ModalAjustarRelato({
       fotos:
         problema?.FotosProblemas?.map((foto: any) => ({
           fdfoto: foto.fdfoto
-        })) || []
+        })) || [],
+      edrua: problema?.localizacao?.edrua || '',
+      edestado: problema?.localizacao?.edestado || '',
+      edmunicipio: problema?.localizacao?.edmunicipio || '',
+      ednumero: problema?.localizacao?.ednumero || '',
+      edcomplemento: problema?.localizacao?.edcomplemento || '',
+      edcep: problema?.localizacao?.edcep || '',
+      edbairro: problema?.localizacao?.edbairro || '',
+      edlatitude: problema?.localizacao?.edlatitude || '',
+      edlongitude: problema?.localizacao?.edlongitude || ''
     }
   })
 
   useEffect(() => {
-    const consultarDados = async () => {
+    const handleOpen = () => {
+      setModalAberto(true)
       dispatch(setLoading(true))
-
-      setValue(
-        'fotos',
-        problema?.FotosProblemas?.map((foto: any) => ({
-          fdfoto: foto.fdfoto
-        })) || []
-      )
-
+      reset({
+        edpontoreferencia: problema?.localizacao?.edpontoreferencia || '',
+        dedescricao: problema?.dedescricao || '',
+        fotos:
+          problema?.FotosProblemas?.map((foto: any) => ({
+            fdfoto: foto.fdfoto
+          })) || [],
+        edrua: problema?.localizacao?.edrua || '',
+        edestado: problema?.localizacao?.edestado || '',
+        edmunicipio: problema?.localizacao?.edmunicipio || '',
+        ednumero: problema?.localizacao?.ednumero || '',
+        edcomplemento: problema?.localizacao?.edcomplemento || '',
+        edcep: problema?.localizacao?.edcep || '',
+        edbairro: problema?.localizacao?.edbairro || '',
+        edlatitude: problema?.localizacao?.edlatitude || '',
+        edlongitude: problema?.localizacao?.edlongitude || ''
+      })
       if (
         problema.localizacao?.edlatitude &&
         problema.localizacao?.edlongitude
@@ -69,14 +90,27 @@ export default function ModalAjustarRelato({
         const lat = parseFloat(problema.localizacao.edlatitude)
         const lng = parseFloat(problema.localizacao.edlongitude)
         setPosition([lat, lng])
-
         atualizarLocalizacao(lat, lng)
+      } else {
+        setPosition([0, 0])
+        setLocalizacaoAtual('---')
       }
-
       dispatch(setLoading(false))
     }
-
-    consultarDados()
+    const handleClose = () => {
+      setModalAberto(false)
+    }
+    const modal = document.getElementById('modalAjusteRelato')
+    if (modal) {
+      modal.addEventListener('showModal', handleOpen)
+      modal.addEventListener('close', handleClose)
+    }
+    return () => {
+      if (modal) {
+        modal.removeEventListener('showModal', handleOpen)
+        modal.removeEventListener('close', handleClose)
+      }
+    }
   }, [problema])
 
   async function atualizarLocalizacao(lat: number, lng: number) {
@@ -187,17 +221,54 @@ export default function ModalAjustarRelato({
     dispatch(setLoading(false))
   }
 
-  if (!problema) return null
-
   return (
     <Modal
       htmlFor="modalAjusteRelato"
       name="Ajuste de Relato"
       loading={loading}
       functioReset={() => {
-        reset()
+        setModalAberto(false)
+        reset({
+          edpontoreferencia: problema?.localizacao?.edpontoreferencia || '',
+          dedescricao: problema?.dedescricao || '',
+          fotos:
+            problema?.FotosProblemas?.map((foto: any) => ({
+              fdfoto: foto.fdfoto
+            })) || [],
+          edrua: problema?.localizacao?.edrua || '',
+          edestado: problema?.localizacao?.edestado || '',
+          edmunicipio: problema?.localizacao?.edmunicipio || '',
+          ednumero: problema?.localizacao?.ednumero || '',
+          edcomplemento: problema?.localizacao?.edcomplemento || '',
+          edcep: problema?.localizacao?.edcep || '',
+          edbairro: problema?.localizacao?.edbairro || '',
+          edlatitude: problema?.localizacao?.edlatitude || '',
+          edlongitude: problema?.localizacao?.edlongitude || ''
+        })
+        if (
+          problema.localizacao?.edlatitude &&
+          problema.localizacao?.edlongitude
+        ) {
+          const lat = parseFloat(problema.localizacao.edlatitude)
+          const lng = parseFloat(problema.localizacao.edlongitude)
+          setPosition([lat, lng])
+          atualizarLocalizacao(lat, lng)
+        } else {
+          setPosition([0, 0])
+          setLocalizacaoAtual('---')
+        }
       }}>
       <div className="space-y-6">
+        {/* Campos hidden para localização */}
+        <input type="hidden" {...register('edrua')} />
+        <input type="hidden" {...register('edestado')} />
+        <input type="hidden" {...register('edmunicipio')} />
+        <input type="hidden" {...register('ednumero')} />
+        <input type="hidden" {...register('edcomplemento')} />
+        <input type="hidden" {...register('edcep')} />
+        <input type="hidden" {...register('edbairro')} />
+        <input type="hidden" {...register('edlatitude')} />
+        <input type="hidden" {...register('edlongitude')} />
         <div className="bg-white rounded-lg shadow-sm overflow-hidden">
           <div className="bg-blue-1000 p-4 md:flex md:justify-between md:items-center">
             <div>
