@@ -141,7 +141,8 @@ export default function CadastrarUsuario() {
       buttonVoltar
       styleBase={false}
       menu={false}
-      kauaneAi={false}>
+      kauaneAi={false}
+      feedbacks={false}>
       <div className="w-full bg-white rounded-2xl shadow-xl overflow-hidden animate-fade-in-up">
         <div className="p-8">
           {/* Dados Pessoais */}

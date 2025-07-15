@@ -52,7 +52,8 @@ export default function EsqueciSenha() {
       buttonVoltar
       styleBase={false}
       menu={false}
-      kauaneAi={false}>
+      kauaneAi={false}
+      feedbacks={false}>
       <div className="md:w-full max-w-md m-auto animate-fade-in-up">
         <div className="p-8">
           <div className="space-y-6">
