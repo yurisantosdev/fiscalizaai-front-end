@@ -179,10 +179,10 @@ export default function BarraMenu() {
                       <div
                         className="flex justify-between items-center"
                         onClick={() =>
-                          handleMenuItemClick(() => router.push('/kauaneai'))
+                          handleMenuItemClick(() => router.push('/fiscalizaAI'))
                         }>
                         <div>
-                          <p className="text-md font-bold">Kauane AI</p>
+                          <p className="text-md font-bold">FiscalizaAI</p>
                         </div>
                         <div>
                           <Brain size={20} />

@@ -11,7 +11,7 @@ export interface BaseLayoutInterface {
   buttonVoltar?: boolean
   styleBase?: boolean
   menu?: boolean
-  kauaneAi?: boolean,
+  fiscalizaAI?: boolean,
   extraComponentLeft?: ReactNode,
   extraComponentRigth?: ReactNode,
   description?: string,

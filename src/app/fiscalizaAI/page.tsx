@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useRef, useEffect } from 'react'
 import BaseLayout from '@/templates/BaseLayout'
-import { enviarMensagemKauane } from '@/services/kauane'
+import { enviarMensagemFiscalizaAI } from '@/services/fiscalizaAI'
 import {
   UserCircle,
   Brain,
@@ -16,7 +16,7 @@ interface Mensagem {
   texto: string
 }
 
-export default function KauaneAi() {
+export default function FiscalizaAI() {
   const [mensagem, setMensagem] = useState('')
   const [historico, setHistorico] = useState<Mensagem[]>([])
   const [carregando, setCarregando] = useState(false)
@@ -44,7 +44,7 @@ export default function KauaneAi() {
     setMensagem('')
     setCarregando(true)
     try {
-      const data = await enviarMensagemKauane(msg, [
+      const data = await enviarMensagemFiscalizaAI(msg, [
         ...historico,
         { autor: 'user', texto: msg }
       ])
@@ -66,7 +66,7 @@ export default function KauaneAi() {
     setCarregando(true)
     setHistorico((h) => [...h, { autor: 'user', texto: message }])
     try {
-      const data = await enviarMensagemKauane(message, [
+      const data = await enviarMensagemFiscalizaAI(message, [
         ...historico,
         { autor: 'user', texto: message }
       ])
@@ -84,7 +84,7 @@ export default function KauaneAi() {
   }
 
   return (
-    <BaseLayout kauaneAi={false}>
+    <BaseLayout fiscalizaAI={false}>
       <div className="flex flex-col h-[80vh]">
         {historico.length > 0 && (
           <div className="flex justify-end mb-2">

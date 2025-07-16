@@ -4,7 +4,7 @@ export interface BaseAppInterface extends ComponentProps<'div'> {
   children?: ReactNode;
   loading: boolean,
   styleBase?: boolean,
-  kauaneAi?: boolean,
+  fiscalizaAI?: boolean,
   menu?: boolean,
   extraComponentTitle?: ReactNode,
   feedbacks?: boolean,
