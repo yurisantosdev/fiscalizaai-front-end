@@ -5,7 +5,7 @@ import { CLickLabel } from '@/services/clickLabel'
 export default function Feedbacks() {
   return (
     <div
-      className="bottom-[2%] md:left-[2%] left-[6%] fixed z-40 tooltip"
+      className="bottom-[2%] md:left-[2%] left-[6%] fixed z-40 tooltip tooltip-right"
       data-tip="Feedback">
       <span
         onClick={() => {

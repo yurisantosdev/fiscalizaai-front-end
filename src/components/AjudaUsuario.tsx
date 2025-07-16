@@ -1,13 +1,12 @@
 import React from 'react'
 import { Info } from '@phosphor-icons/react'
 import { AuthUser } from '@/services/auth'
-import { useRouter } from 'next/navigation'
 import { UsuarioConsultaType } from '@/types/UsuariosType'
 import { useSelector } from 'react-redux'
+import { CLickLabel } from '@/services/clickLabel'
 
 export default function AjudaUsuario() {
   AuthUser()
-  const router = useRouter()
   const user: UsuarioConsultaType = useSelector(
     (state: any) => state.userReducer
   )
@@ -15,11 +14,11 @@ export default function AjudaUsuario() {
   return (
     user.usmaster && (
       <div
-        className="bottom-[2%] md:right-[2%] right-[6%] fixed z-40 tooltip"
-        data-tip="Ajuda">
+        className="bottom-[2%] md:right-[2%] right-[6%] fixed z-40 tooltip tooltip-left"
+        data-tip="Ajuda e informações">
         <span
           onClick={() => {
-            router.push('/fiscalizaAI')
+            CLickLabel('modalAjudaUsuario')
           }}
           className="m-1 bg-orange-1000 rounded-full w-14 h-14 flex justify-center items-center bg-gradient-to-r to-orange-1000 from-orange-600 hover:to-orange-600 hover:from-orange-1000 hover:text-white transition-all duration-700 cursor-pointer">
           <Info className="text-white" size={40} />

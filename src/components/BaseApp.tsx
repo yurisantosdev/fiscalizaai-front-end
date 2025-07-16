@@ -8,6 +8,7 @@ import ModalTrocaSenha from './ModalTrocaSenha'
 import ModalTrocaEndereco from './ModalTrocaEndereco'
 import Feedbacks from './Feedbacks'
 import ModalFeedbackUsuario from './ModalFeedbackUsuario'
+import ModalAjudaUsuario from './ModalAjudaUsuario'
 
 export default function BaseApp({
   children,
@@ -39,6 +40,7 @@ export default function BaseApp({
         {ajudaUsuario && <AjudaUsuario />}
         {feedbacks && <Feedbacks />}
         {feedbacks && <ModalFeedbackUsuario />}
+        <ModalAjudaUsuario />
         {menu && <BarraMenu />}
         {extraComponentTitle && extraComponentTitle}
         {children}

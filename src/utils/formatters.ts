@@ -21,7 +21,6 @@ export const consultarCEP = async (cep: string) => {
       }
       return null
     } catch (error) {
-      console.error('Erro ao consultar CEP:', error)
       return null
     }
   }

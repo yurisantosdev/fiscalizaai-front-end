@@ -160,7 +160,6 @@ export default function HomePage() {
               'Tempo limite para obter a localização. Tente novamente.'
             )
           } else {
-            console.log(error)
             toast.error('Erro desconhecido ao obter localização.')
           }
 
