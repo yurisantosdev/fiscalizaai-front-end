@@ -11,7 +11,6 @@ import BaseApp from '@/components/BaseApp'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginUser, logoutUser } from '@/redux/user/actions'
 import { useRouter } from 'next/navigation'
-import { AuthUser } from '@/services/auth'
 import { setLoading } from '@/redux/loading/actions'
 
 export default function Home() {
