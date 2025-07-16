@@ -16,7 +16,7 @@ export default function BaseLayout({
   buttonVoltar = false,
   styleBase = true,
   menu = true,
-  fiscalizaAI = true,
+  ajudaUsuario = true,
   feedbacks = true,
   extraComponentLeft,
   extraComponentRigth,
@@ -30,7 +30,7 @@ export default function BaseLayout({
       loading={loading}
       styleBase={styleBase}
       menu={menu}
-      fiscalizaAI={fiscalizaAI}
+      ajudaUsuario={ajudaUsuario}
       feedbacks={feedbacks}>
       <div className="md:w-[92%] w-full mx-auto mt-2">
         <div className="bg-white/80 backdrop-blur-sm p-2 rounded-xl shadow-lg border border-gray-300">

@@ -11,7 +11,7 @@ export default function Feedbacks() {
         onClick={() => {
           CLickLabel('modalFeedbackUsuario')
         }}
-        className="m-1 rounded-full w-14 h-14 flex justify-center items-center bg-gradient-to-r from-cyan-600 to-teal-500 hover:from-teal-500 hover:to-cyan-600 hover:text-white transition-all duration-700 cursor-pointer active:scale-90 transform hover:scale-110">
+        className="m-1 rounded-full w-14 h-14 flex justify-center items-center bg-gradient-to-r from-cyan-600 to-teal-500 hover:from-teal-500 hover:to-cyan-600 hover:text-white transition-all duration-700 cursor-pointer">
         <ChatTeardropDots className="text-white" size={40} />
       </span>
     </div>

@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { BaseAppInterface } from '@/Interfaces/BaseAppInterface'
 import BarraMenu from './BarraMenu/BarraMenu'
-import FiscalizaAI from './FiscalizaAI'
+import AjudaUsuario from './AjudaUsuario'
 import ModalTrocaSenha from './ModalTrocaSenha'
 import ModalTrocaEndereco from './ModalTrocaEndereco'
 import Feedbacks from './Feedbacks'
@@ -13,7 +13,7 @@ export default function BaseApp({
   children,
   loading,
   styleBase = true,
-  fiscalizaAI = true,
+  ajudaUsuario = true,
   menu = true,
   feedbacks = true,
   extraComponentTitle
@@ -36,7 +36,7 @@ export default function BaseApp({
         className={`${
           styleBase && 'md:w-[65%] w-full md:m-auto bg-gray-100 p-2 '
         }`}>
-        {fiscalizaAI && <FiscalizaAI />}
+        {ajudaUsuario && <AjudaUsuario />}
         {feedbacks && <Feedbacks />}
         {feedbacks && <ModalFeedbackUsuario />}
         {menu && <BarraMenu />}

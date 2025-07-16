@@ -270,7 +270,7 @@ export default function RegistrarProblema() {
 
   return (
     <div>
-      <BaseLayout fiscalizaAI={false}>
+      <BaseLayout>
         <div className="max-w-4xl mx-auto space-y-6">
           {/* Card de Localização */}
           <div className="bg-white rounded-lg shadow-sm overflow-hidden">

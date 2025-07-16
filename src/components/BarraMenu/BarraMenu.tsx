@@ -249,6 +249,17 @@ export default function BarraMenu() {
         </div>
 
         <div className="navbar-end">
+          {user.usmaster && (
+            <span
+              data-tip="FiscalizaAI"
+              onClick={() => {
+                router.push('/fiscalizaAI')
+              }}
+              className="mr-2 bg-orange-1000 rounded-full w-9 h-9 flex justify-center items-center bg-gradient-to-r to-orange-1000 from-orange-600 hover:to-orange-600 hover:from-orange-1000 hover:text-white transition-all duration-700 cursor-pointer transform tooltip tooltip-bottom z-[99999999]">
+              <Brain className="text-white" size={25} />
+            </span>
+          )}
+
           <label className="relative" htmlFor="abaLateralNotificacoes">
             <Bell
               size={30}
