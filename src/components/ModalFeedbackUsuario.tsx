@@ -59,7 +59,7 @@ export default function ModalFeedbackUsuario() {
       descricao="Ajude-nos a melhorar ainda mais! Utilize o campo abaixo para enviar sugestões, relatar problemas ou compartilhar sua experiência com nosso sistema. Sua opinião é muito importante para nós."
       loading={loading}>
       {/* Campo de estrelas */}
-      <div className="flex flex-col items-start mb-4">
+      <div className="flex flex-col items-start justify-center mb-4">
         <label className="text-gray-600 font-medium mb-1">Avaliação</label>
         <div className="flex gap-1">
           {[1, 2, 3, 4, 5].map((star) => (
@@ -82,7 +82,7 @@ export default function ModalFeedbackUsuario() {
           <button
             type="button"
             onClick={() => handleSetEstrelas(0)}
-            className="ml-2 text-xs text-gray-500 underline">
+            className="ml-2 text-xs text-gray-500 cursor-pointer hover:underline">
             Limpar
           </button>
         </div>
