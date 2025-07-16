@@ -14,8 +14,10 @@ import {
   Star
 } from '@phosphor-icons/react'
 import toast from 'react-hot-toast'
+import { AuthUser } from '@/services/auth'
 
 export default function Feedbacks() {
+  AuthUser()
   const [feedbacks, setFeedbacks] = useState<Array<FeedbacksUsuariosType>>()
   const [atualizar, setAtualizar] = useState<number>(0)
   const [filtro, setFiltro] = useState<'todos' | 'lidos' | 'naoLidos'>('todos')

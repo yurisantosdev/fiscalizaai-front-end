@@ -6,7 +6,6 @@ import { Check, ChatCircleText, X } from '@phosphor-icons/react'
 import { CLickLabel } from '@/services/clickLabel'
 import toast from 'react-hot-toast'
 import { setLoading } from '@/redux/loading/actions'
-import InputComponent from './Input'
 import TextRequired from './TextRequired'
 import { FeedbacksUsuariosType } from '@/types/FeedbacksUsuariosType'
 import { useForm } from 'react-hook-form'
@@ -45,7 +44,6 @@ export default function ModalFeedbackUsuario() {
     }
   }
 
-  // Controle das estrelas
   const estrelas = watch('fuestrelas') || 0
   const handleSetEstrelas = (valor: number) => {
     setValue('fuestrelas', valor)

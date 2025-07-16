@@ -60,12 +60,7 @@ export default function Home() {
   }
 
   return (
-    <BaseApp
-      loading={loading}
-      styleBase={false}
-      menu={false}
-      kauaneAi={false}
-      feedbacks={false}>
+    <BaseApp loading={loading} styleBase={false} menu={false} kauaneAi={false}>
       <main className="min-h-screen flex flex-col justify-center items-center px-4 py-8">
         <div className="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden animate-fade-in-up">
           <div className="p-8 pt-4">
