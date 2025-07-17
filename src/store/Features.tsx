@@ -1,5 +1,19 @@
+import { FeaturesCreateType } from '@/types/FeaturesType'
 import { api } from '../services/api'
 import toast from 'react-hot-toast'
+
+export const createFeature = async (data: FeaturesCreateType) => {
+  return await api
+    .post(`/features/create`, data)
+    .then((response) => {
+      return response.data
+    })
+    .catch(() => {
+      toast(
+        'Não foi possível realizar a registrar a feature, por favor tente novamente!'
+      )
+    })
+}
 
 export const findAllFeatures = async () => {
   return await api

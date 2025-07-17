@@ -71,16 +71,19 @@ export default function Features() {
           {/* Lista de Features */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {features.length > 0 ? (
-              features.map((feature: FeaturesConsultaType, index: number) => (
-                <CardFeature
-                  ftcodigo={feature.ftcodigo}
-                  fttitulo={feature.fttitulo}
-                  ftdescricao={feature.ftdescricao}
-                  ftquando={feature.ftquando}
-                  usuario={feature.usuario}
-                  listagem
-                />
-              ))
+              features.map((feature: FeaturesConsultaType, index: number) => {
+                return (
+                  <CardFeature
+                    key={index}
+                    ftcodigo={feature.ftcodigo}
+                    fttitulo={feature.fttitulo}
+                    ftdescricao={feature.ftdescricao}
+                    ftquando={feature.ftquando}
+                    usuario={feature.usuario}
+                    listagem
+                  />
+                )
+              })
             ) : (
               <div className="col-span-full">
                 <div className="bg-white rounded-lg p-6 text-center shadow-sm">

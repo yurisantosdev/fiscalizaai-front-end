@@ -111,7 +111,7 @@ export default function InputFotos({
         <Button
           title="Anexar"
           onClick={() => fileInputRef.current?.click()}
-          className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition-colors duration-300 w-full"
+          className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition-colors duration-300 w-full active:bg-gray-200"
           iconLeft={<Image size={20} />}
         />
       </div>

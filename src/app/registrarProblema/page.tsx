@@ -11,7 +11,6 @@ import InputFotos from '@/components/InputFotos'
 import TextRequired from '@/components/TextRequired'
 import {
   ChatTeardropText,
-  Compass,
   NavigationArrow,
   Question,
   SquaresFour
