@@ -24,6 +24,7 @@ export type FeaturesConsultaType = {
   ftdescricao: string;
   ftquando: string;
   usuario: UsuarioSimplesType;
-  fotosFeatures: FotosFeaturesSimplesType,
+  fotosFeatures?: FotosFeaturesSimplesType,
   completa?: boolean;
+  listagem?: boolean;
 };

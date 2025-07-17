@@ -1,9 +1,18 @@
 import { FeaturesConsultaType } from '@/types/FeaturesType'
-import { ArrowRight, Clock, Lightbulb, User } from '@phosphor-icons/react'
+import {
+  ArrowRight,
+  Clock,
+  Lightbulb,
+  PencilSimple,
+  User,
+  X
+} from '@phosphor-icons/react'
 import React from 'react'
-import { Button } from './Button'
+import { Button, ButtonIcon } from './Button'
 import { useRouter } from 'next/navigation'
 import { CLickLabel } from '@/services/clickLabel'
+import { useDispatch } from 'react-redux'
+import { setFeature } from '@/redux/feature/actions'
 
 export default function CardFeature({
   fotosFeatures,
@@ -12,9 +21,11 @@ export default function CardFeature({
   ftquando,
   fttitulo,
   usuario,
-  completa = false
+  completa = false,
+  listagem = false
 }: FeaturesConsultaType) {
   const router = useRouter()
+  const dispatch = useDispatch()
 
   return (
     <div className="bg-white mt-3 p-4 rounded-xl shadow-md hover:shadow-lg transition-all flex flex-col gap-2 border border-gray-200">
@@ -31,20 +42,22 @@ export default function CardFeature({
         {ftdescricao}
       </p>
 
-      <div className="flex justify-center items-center gap-2 mt-2 text-xs text-gray-500">
-        <span className="flex items-center gap-1">
+      <div className="md:flex md:justify-center md:items-center md:gap-2 mt-2 text-xs text-gray-500">
+        <div className="truncate flex justify-center items-center gap-2">
           <Clock size={24} />
           {ftquando}
-        </span>
-        <span>-</span>
-        <span className="font-semibold text-gray-700 flex items-center gap-1">
+        </div>
+
+        <div className="md:flex hidden">-</div>
+
+        <div className="font-semibold text-gray-700 truncate  md:mt-0 mt-2 flex justify-center items-center gap-2">
           <User size={24} />
           {usuario.usnome}
-        </span>
+        </div>
       </div>
 
       {/* Botão acessar */}
-      {!completa && (
+      {!listagem && !completa && (
         <Button
           title="Acessar"
           className="mt-3"
@@ -54,6 +67,55 @@ export default function CardFeature({
             router.push(`feature/${ftcodigo}`)
           }}
         />
+      )}
+
+      {listagem && (
+        <div className="flex justify-center items-center gap-2 mt-5">
+          <div className="w-full tooltip tooltip-bottom" data-tip="Editar">
+            <ButtonIcon
+              className="p-2 text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-full transition-all duration-300 transform w-full"
+              icon={<PencilSimple size={20} />}
+              onClick={() => {
+                dispatch(
+                  setFeature({
+                    fotosFeatures,
+                    ftcodigo,
+                    ftdescricao,
+                    ftquando,
+                    fttitulo,
+                    usuario,
+                    completa,
+                    listagem
+                  })
+                )
+
+                router.push('/features/cadastro')
+              }}
+            />
+          </div>
+
+          <div className="w-full tooltip tooltip-bottom" data-tip="Deletar">
+            <ButtonIcon
+              onClick={() => {
+                dispatch(
+                  setFeature({
+                    fotosFeatures,
+                    ftcodigo,
+                    ftdescricao,
+                    ftquando,
+                    fttitulo,
+                    usuario,
+                    completa,
+                    listagem
+                  })
+                )
+                CLickLabel('modalConfirmarDeletarFeature')
+              }}
+              className="w-full p-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-full transition-all duration-300 transform"
+              icon={<X size={20} />}
+            />
+          </div>
+        </div>
       )}
 
       {/* Imagens da feature, se completa, no final do card */}

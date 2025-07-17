@@ -14,8 +14,8 @@ export function AuthUser() {
     if (token != null) {
       api.defaults.headers.common["Authorization"] = "Bearer " + token;
 
-      if (pathname == '/feedbacks' || pathname == '/fiscalizaAI' ||
-        pathname == '/analisarRelatos' || pathname == '/categorias' || pathname == '/relatorio' || pathname == '/relatos') {
+      if (pathname == '/features' || pathname == '/features/cadastro' || pathname == '/feedbacks' || pathname == '/fiscalizaAI' ||
+        pathname == '/analisarRelatos' || pathname == '/categorias/cadastro' || pathname == '/categorias' || pathname == '/relatorio' || pathname == '/relatos') {
         if (!user.usmaster) {
           router.push('/home')
         }

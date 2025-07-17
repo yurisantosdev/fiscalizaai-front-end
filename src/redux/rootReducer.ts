@@ -5,6 +5,7 @@ import notificacoesReducer from './notificacoes/reduce';
 import relatoSelecionadoReducer from './relatoSelecionado/reduce';
 import categoriaReducer from './categoria/reduce';
 import enderecoReducer from './endereco/reduce';
+import featureReducer from './feature/reduce';
 
 const rootReducer = combineReducers({
     userReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
     relatoSelecionadoReducer,
     categoriaReducer,
     enderecoReducer,
+    featureReducer,
 });
 
 export default rootReducer;

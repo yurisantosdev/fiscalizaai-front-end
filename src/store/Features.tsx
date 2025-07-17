@@ -26,3 +26,14 @@ export const findFeature = async (ftcodigo: string) => {
       )
     })
 }
+
+export const deleteFeature = async (ftcodigo: string) => {
+  return await api
+    .delete(`/features/delete/${ftcodigo}`)
+    .then((response) => {
+      return response.data
+    })
+    .catch(() => {
+      toast('Não foi possível deletar a feature, por favor tente novamente!')
+    })
+}

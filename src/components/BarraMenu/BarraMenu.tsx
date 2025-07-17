@@ -15,7 +15,8 @@ import {
   ChartLine,
   ListChecks,
   Brain,
-  ChatsCircle
+  ChatsCircle,
+  Files
 } from '@phosphor-icons/react'
 import { useRouter } from 'next/navigation'
 import { setLoading } from '@/redux/loading/actions'
@@ -216,6 +217,21 @@ export default function BarraMenu() {
                         </div>
                         <div>
                           <ChatsCircle size={20} />
+                        </div>
+                      </div>
+                    </li>
+
+                    <li className="py-2">
+                      <div
+                        className="flex justify-between items-center"
+                        onClick={() =>
+                          handleMenuItemClick(() => router.push('/features'))
+                        }>
+                        <div>
+                          <p className="text-md font-bold">Features</p>
+                        </div>
+                        <div>
+                          <Files size={20} />
                         </div>
                       </div>
                     </li>
