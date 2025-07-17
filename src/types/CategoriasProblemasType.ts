@@ -1,3 +1,5 @@
+import { SelectValuesType } from "./GeneralTypes";
+
 export type CategoriasProblemasType = {
   cacodigo?: string;
   cacategoria: string;
@@ -5,4 +7,10 @@ export type CategoriasProblemasType = {
   caativa?: boolean;
   createdAt?: string;
   updatedAt?: string;
+};
+
+export type CardCategoriaType = {
+  functionEditar: () => void,
+  functionAtivarDesativar: () => void,
+  categoria: SelectValuesType
 };
