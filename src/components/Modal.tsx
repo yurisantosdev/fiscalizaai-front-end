@@ -19,7 +19,9 @@ export default function Modal({
         onClick={functioReset}
         className="modal-toggle"
       />
-      <div className="modal backdrop-blur-sm z-[99999]" role="dialog">
+      <div
+        className="modal backdrop-blur-sm bg-black/30 z-[99999]"
+        role="dialog">
         <div
           className={`modal-box bg-white w-11/12 max-w-3xl max-h-[90vh] ${
             loading && 'overflow-hidden'
