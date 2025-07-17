@@ -129,7 +129,7 @@ export default function CardFeature({
                 <img
                   src={`data:image/jpeg;base64,${foto.fffoto}`}
                   alt={foto.ffdescricao || 'Imagem da feature'}
-                  className="w-max object-cover"
+                  className="w-max object-cover rounded-md"
                 />
                 {foto.ffdescricao && (
                   <span className="text-md text-gray-600 mt-2 text-center">
