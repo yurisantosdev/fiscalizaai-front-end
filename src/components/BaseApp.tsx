@@ -38,9 +38,9 @@ export default function BaseApp({
           styleBase && 'md:w-[65%] w-full md:m-auto bg-gray-100 p-2 '
         }`}>
         {ajudaUsuario && <AjudaUsuario />}
+        {ajudaUsuario && <ModalAjudaUsuario />}
         {feedbacks && <Feedbacks />}
         {feedbacks && <ModalFeedbackUsuario />}
-        <ModalAjudaUsuario />
         {menu && <BarraMenu />}
         {extraComponentTitle && extraComponentTitle}
         {children}
