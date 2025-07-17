@@ -32,7 +32,7 @@ export default function BaseApp({
   }, [loading])
 
   return (
-    <div className="bg-gray-100">
+    <div className="bg-gray-100 h-screen">
       <div
         className={`${
           styleBase && 'md:w-[65%] w-full md:m-auto bg-gray-100 p-2 '
